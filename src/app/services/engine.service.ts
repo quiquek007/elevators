@@ -5,11 +5,7 @@ import {
     OnDestroy,
     NgZone
 } from '@angular/core';
-// import { OrbitControls } from '../../../node_modules/three-orbitcontrols-ts';
-// import { OrbitControls } from './jsm/controls/OrbitControls.js';
 import * as OrbitControls from 'three-orbitcontrols';
-
-// TODO: create service to Create, remove, contain objects
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {
@@ -19,6 +15,7 @@ export class EngineService implements OnDestroy {
     private scene: THREE.Scene;
     private light: THREE.AmbientLight;
     private controls: any;
+    private container: HTMLElement;
 
     private frameId: number = null;
 
@@ -38,9 +35,10 @@ export class EngineService implements OnDestroy {
             }
         );
         this.renderer.setSize(container.nativeElement.clientWidth, container.nativeElement.clientHeight);
+        this.container = container.nativeElement;
         this.scene = new THREE.Scene();
 
-        this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera = new THREE.PerspectiveCamera(50, this.container.clientWidth / this.container.clientHeight, 0.1, 1000);
         this.camera.position.x = 2;
 
         // soft white light
@@ -78,6 +76,7 @@ export class EngineService implements OnDestroy {
 
     public render(): void {
         this.frameId = requestAnimationFrame(() => this.render());
+        // animation
         // this.cube.rotation.x += 0.01;
         // this.cube.rotation.y += 0.01;
         this.controls.update();
@@ -85,8 +84,8 @@ export class EngineService implements OnDestroy {
     }
 
     public resize(): void {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        const width = this.container.clientWidth;
+        const height = this.container.clientHeight;
 
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();

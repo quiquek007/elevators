@@ -1,17 +1,18 @@
 import {
     Component,
     ElementRef,
-    OnInit,
-    ViewChild
+    ViewChild,
+    AfterViewInit
 } from '@angular/core';
 import { EngineService } from '../services/engine.service';
 import { ObjectManagerService } from '../services/object-manager.service';
 
 @Component({
     selector: 'app-engine',
-    templateUrl: './engine.component.html'
+    templateUrl: './engine.component.html',
+    styleUrls: ['./engine.component.less']
 })
-export class EngineComponent implements OnInit {
+export class EngineComponent implements AfterViewInit {
 
     @ViewChild('rendererCanvas', {static: true})
     public rendererCanvas: ElementRef <HTMLCanvasElement>;
@@ -23,7 +24,12 @@ export class EngineComponent implements OnInit {
         private engServ: EngineService,
         private objectManager: ObjectManagerService) {}
 
-    public ngOnInit(): void {
+    public ngAfterViewInit(): void {
+        if (!this.rendererCanvas) {
+            console.warn('Error: rendererCanvas missed!');
+            return;
+        }
+
         this.engServ.createScene(this.rendererCanvas, this.canvasContainer);
         this.engServ.animate();
         this.objectManager.createCube();

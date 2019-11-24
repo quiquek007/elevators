@@ -1,1 +1,40 @@
+<!-- canvas three.js -->
 <app-engine></app-engine>
+
+<kendo-drawer-container [ngClass]="{'right-side': panelOnRightSide}">
+    <!-- mini buttons of control panel -->
+    <kendo-drawer #miniPanel
+        [position]="getTooltipPosition()"
+        [items]="items"
+        [mode]="'push'"
+        [mini]="true"
+        [autoCollapse]="true"
+        (select)="onSelect($event)">
+    </kendo-drawer>
+
+    <!-- content of control panel -->
+    <kendo-drawer-content *ngIf="contentExpanded">
+        <settings-panel [selectedItem]="selected"></settings-panel>
+    </kendo-drawer-content>
+
+    <!-- buttons which manage state of control panel -->
+    <div kendoTooltip
+        class="form-controllers"
+        [position]="getTooltipPosition()"
+        >
+        <button title="Panel side"
+            class="k-button"
+            (click)="changeContolPanelSide()">
+            <span [ngClass]="{'k-flip-h': panelOnRightSide}"
+                class="k-icon k-i-indent-increase">
+            </span>
+        </button>
+        <button title="Toggle content"
+            class="k-button"
+            (click)="onHideContent()">
+            <span [ngClass]="{
+                'k-flip-h': (contentExpanded && !panelOnRightSide) || (!contentExpanded && panelOnRightSide)}"
+                class="k-icon k-i-logout"></span>
+        </button>
+    </div>
+</kendo-drawer-container>
