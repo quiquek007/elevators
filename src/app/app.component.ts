@@ -3,6 +3,9 @@ import {
     DrawerItem,
     DrawerSelectEvent,
 } from '@progress/kendo-angular-layout';
+import { Store } from '@ngrx/store';
+import * as BackgroundActions from './redux/background/background.actions';
+import { AppState } from './redux/root-interface';
 
 @Component({
     selector: 'app-root',
@@ -40,6 +43,12 @@ export class AppComponent {
             icon: 'k-i-star-outline'
         }
     ];
+
+    constructor(private store: Store<AppState>) {
+        this.store.select('background').subscribe(item => console.log('1', item));
+        setTimeout(() => this.store.dispatch(new BackgroundActions.SetColor('rgb(3,3,3)')), 3000);
+        setTimeout(() => this.store.dispatch(new BackgroundActions.SetColor('rgb(9,9,9)')), 5000);
+    }
 
     public getTooltipPosition(): string {
         return this.panelOnRightSide ? 'left' : 'right';

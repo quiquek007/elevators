@@ -1,14 +1,6 @@
 <div id="Inbox" *ngIf="selectedItem === 'Inbox'">
-    <ul class="inboxList">
-        <li>
-            <h6>Monday meeting</h6>
-            <p>Hi Tom, Since Monday I'll be out of office, I'm rescheduling the meeting for Tuesday.</p>
-        </li>
-        <li>
-            <h6>I'm sorry, Tom</h6>
-            <p>Hi Tom, my aunt comes for a visit this Saturday, so I can't come back to St. Pete...</p>
-        </li>
-    </ul>
+    <h2>Background Settings</h2>
+    <kendo-colorpicker [value]="selectedColor"></kendo-colorpicker>
 </div>
 <div id="Notifications" *ngIf="selectedItem === 'Notifications'">
     <ul>

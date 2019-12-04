@@ -1,17 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'settings-panel',
   templateUrl: './settings-panel.component.html',
   styleUrls: ['./settings-panel.component.less']
 })
-export class SettingsPanelComponent implements OnInit {
+export class SettingsPanelComponent {
+  public selectedColor: string = '#f9d9ab';
 
   @Input() selectedItem: string;
-  
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }
