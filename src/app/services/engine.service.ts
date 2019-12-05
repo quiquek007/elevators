@@ -19,7 +19,7 @@ export class EngineService implements OnDestroy {
 
     private frameId: number = null;
 
-    public constructor(private ngZone: NgZone) {}
+    constructor(private ngZone: NgZone) {}
 
     public ngOnDestroy(): void {
         if (this.frameId != null) cancelAnimationFrame(this.frameId);
@@ -29,11 +29,10 @@ export class EngineService implements OnDestroy {
         // The first step is to get the reference of the canvas element from our HTML document
         this.canvas = canvas.nativeElement;
         this.renderer = new THREE.WebGLRenderer({
-                canvas: this.canvas,
-                alpha: true, // transparent background
-                antialias: true // smooth edges
-            }
-        );
+            canvas: this.canvas,
+            alpha: true, // transparent background
+            antialias: true // smooth edges
+        });
         this.renderer.setSize(container.nativeElement.clientWidth, container.nativeElement.clientHeight);
         this.container = container.nativeElement;
         this.scene = new THREE.Scene();
@@ -44,7 +43,6 @@ export class EngineService implements OnDestroy {
         // soft white light
         this.light = new THREE.AmbientLight(0x404040);
         this.light.position.z = 10;
-        this.scene.background = new THREE.Color(0x404040);
 
         // mouse control
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -91,6 +89,10 @@ export class EngineService implements OnDestroy {
         this.camera.updateProjectionMatrix();
 
         this.renderer.setSize(width, height);
+    }
+
+    public setColorBackground(color: string): void {
+        this.scene.background = new THREE.Color(color);
     }
     
     public addToScene(obj: any): void {

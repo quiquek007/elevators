@@ -8,7 +8,7 @@ const defaultState: Background = {
 export function backgroundReducer(state: Background = defaultState, action: any) {
 	switch (action.type) {
   		case BackgroundActions.SET_COLOR:
-  			return action.payload ;
+  			return { ...state, color: action.payload };
 
   		case BackgroundActions.RESET_COLOR:
   			return defaultState;

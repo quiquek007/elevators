@@ -44,11 +44,7 @@ export class AppComponent {
         }
     ];
 
-    constructor(private store: Store<AppState>) {
-        this.store.select('background').subscribe(item => console.log('1', item));
-        setTimeout(() => this.store.dispatch(new BackgroundActions.SetColor('rgb(3,3,3)')), 3000);
-        setTimeout(() => this.store.dispatch(new BackgroundActions.SetColor('rgb(9,9,9)')), 5000);
-    }
+    constructor(private store: Store<AppState>) {}
 
     public getTooltipPosition(): string {
         return this.panelOnRightSide ? 'left' : 'right';

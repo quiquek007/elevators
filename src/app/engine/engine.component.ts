@@ -2,17 +2,23 @@ import {
     Component,
     ElementRef,
     ViewChild,
-    AfterViewInit
+    AfterViewInit,
+    OnInit,
+    OnDestroy
 } from '@angular/core';
 import { EngineService } from '../services/engine.service';
 import { ObjectManagerService } from '../services/object-manager.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../redux/root-interface';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-engine',
     templateUrl: './engine.component.html',
     styleUrls: ['./engine.component.less']
 })
-export class EngineComponent implements AfterViewInit {
+export class EngineComponent implements OnInit, OnDestroy {
+    private subscribtions: Subscription[] = [];
 
     @ViewChild('rendererCanvas', {static: true})
     public rendererCanvas: ElementRef <HTMLCanvasElement>;
@@ -22,17 +28,25 @@ export class EngineComponent implements AfterViewInit {
 
     constructor(
         private engServ: EngineService,
-        private objectManager: ObjectManagerService) {}
+        private objectManager: ObjectManagerService,
+        private store: Store<AppState>) {}
 
-    public ngAfterViewInit(): void {
+    public ngOnInit(): void {
         if (!this.rendererCanvas) {
-            console.warn('Error: rendererCanvas missed!');
-            return;
+            throw new Error("rendererCanvas not implemented.");
         }
 
         this.engServ.createScene(this.rendererCanvas, this.canvasContainer);
         this.engServ.animate();
         this.objectManager.createCube();
         this.objectManager.createGrid();
+
+        this.subscribtions.push(
+            this.store.select('background').subscribe(({ color }) => this.engServ.setColorBackground(color)),
+        );
+    }
+
+    public ngOnDestroy(): void {
+        this.subscribtions.forEach(sub => sub.unsubscribe());
     }
 }

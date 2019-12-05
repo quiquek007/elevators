@@ -1,6 +1,10 @@
 <div id="Inbox" *ngIf="selectedItem === 'Inbox'">
     <h2>Background Settings</h2>
-    <kendo-colorpicker [value]="selectedColor"></kendo-colorpicker>
+    <kendo-colorpicker [value]="selectedColor"
+        [format]="'hex'"
+        [gradientSettings]="{opacity: false}"
+        (valueChange)="onBackgroundColorChange($event)">
+    </kendo-colorpicker>
 </div>
 <div id="Notifications" *ngIf="selectedItem === 'Notifications'">
     <ul>
