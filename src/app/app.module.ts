@@ -13,12 +13,14 @@ import { AppComponent } from './app.component';
 import { EngineComponent } from './engine/engine.component';
 import { ObjectManagerService } from './services/object-manager.service';
 import { rootReducer } from './redux/root-reducer';
+import { BackgroundSettingsComponent } from './settings-panel/background-settings/background-settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EngineComponent,
     SettingsPanelComponent,
+    BackgroundSettingsComponent,
   ],
   imports: [
     BrowserModule,

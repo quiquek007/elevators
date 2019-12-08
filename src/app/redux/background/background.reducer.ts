@@ -1,4 +1,4 @@
-import * as BackgroundActions from './background.actions';
+import BackgroundActions from './background.actions';
 import { Background } from './background.model'
 
 const defaultState: Background = {

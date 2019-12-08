@@ -1,12 +1,8 @@
-<div id="Inbox" *ngIf="selectedItem === 'Inbox'">
-    <h2>Background Settings</h2>
-    <kendo-colorpicker [value]="selectedColor"
-        [format]="'hex'"
-        [gradientSettings]="{opacity: false}"
-        (valueChange)="onBackgroundColorChange($event)">
-    </kendo-colorpicker>
+<div *ngIf="selectedOption === 'background'">
+    <h2 class="option-title">Background Settings</h2>
+    <background-settings></background-settings>
 </div>
-<div id="Notifications" *ngIf="selectedItem === 'Notifications'">
+<div id="Notifications" *ngIf="selectedOption === 'Notifications'">
     <ul>
         <li>Monday meeting</li>
         <li>Regarding org chart changes</li>
@@ -15,7 +11,7 @@
         <li>Out tonight with collegues?</li>
     </ul>
 </div>
-<div id="Calendar" *ngIf="selectedItem === 'Calendar'">
+<div id="Calendar" *ngIf="selectedOption === 'Calendar'">
     <ul>
         <li>
             <h6>11/5 Monday</h6>
@@ -27,7 +23,7 @@
         </li>
     </ul>
 </div>
-<div id="Attachments" *ngIf="selectedItem === 'Attachments'">
+<div id="Attachments" *ngIf="selectedOption === 'Attachments'">
     <ul>
         <li>Build enterprise apps</li>
         <li>Fw: Regarding Multiline textbox</li>
@@ -36,7 +32,7 @@
         <li>Update completed</li>
     </ul>
 </div>
-<div id="Favourites" *ngIf="selectedItem === 'Favourites'">
+<div id="Favourites" *ngIf="selectedOption === 'Favourites'">
     <ul>
         <li>70% Discount!</li>
         <li>90% Discount!</li>

@@ -14,14 +14,13 @@
 
     <!-- content of control panel -->
     <kendo-drawer-content *ngIf="contentExpanded">
-        <settings-panel [selectedItem]="selected"></settings-panel>
+        <settings-panel [selectedOption]="selected"></settings-panel>
     </kendo-drawer-content>
 
     <!-- buttons which manage state of control panel -->
     <div kendoTooltip
         class="form-controllers"
-        [position]="getTooltipPosition()"
-        >
+        [position]="getTooltipPosition()">
         <button title="Panel side"
             class="k-button"
             (click)="changeContolPanelSide()">
@@ -34,7 +33,8 @@
             (click)="onHideContent()">
             <span [ngClass]="{
                 'k-flip-h': (contentExpanded && !panelOnRightSide) || (!contentExpanded && panelOnRightSide)}"
-                class="k-icon k-i-logout"></span>
+                class="k-icon k-i-logout">
+            </span>
         </button>
     </div>
 </kendo-drawer-container>

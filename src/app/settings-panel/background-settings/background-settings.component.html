@@ -1,0 +1,17 @@
+<section class="option-line">
+    <span>Background color:</span>
+    <div>
+        <kendo-colorpicker [value]="selectedColor"
+            [format]="'hex'"
+            [gradientSettings]="{opacity: false}"
+            (valueChange)="onBackgroundColorChange($event)">
+        </kendo-colorpicker>
+        <button kendoButton
+            kendoTooltip
+            title="Default color"
+            [position]="getTooltipPosition()"
+            (click)="onBackgroundColorReset()"
+            [iconClass]="'k-icon k-i-reset-color'">
+        </button>
+    </div>
+</section>

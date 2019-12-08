@@ -1,11 +1,12 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import {
     DrawerItem,
     DrawerSelectEvent,
 } from '@progress/kendo-angular-layout';
 import { Store } from '@ngrx/store';
-import * as BackgroundActions from './redux/background/background.actions';
 import { AppState } from './redux/root-interface';
+import { Subscription } from 'rxjs';
+import SettingsFormActions from './redux/settings-form/settings-form.actions';
 
 @Component({
     selector: 'app-root',
@@ -13,14 +14,16 @@ import { AppState } from './redux/root-interface';
     styleUrls: ['./app.component.less'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy{
     public contentExpanded: boolean = false;
     public panelOnRightSide: boolean = false;
-    public selected: string = 'Inbox';
+    public selected: string = 'background';
+
+    private subscribtions: Subscription[] = [];
 
     public items: Array <DrawerItem> = [{
-            text: 'Inbox',
-            icon: 'k-i-inbox',
+            text: 'background',
+            icon: 'k-i-gear',
             selected: true
         },
         {
@@ -46,6 +49,17 @@ export class AppComponent {
 
     constructor(private store: Store<AppState>) {}
 
+    public ngOnInit(): void {
+        this.subscribtions.push(
+            this.store.select('settingsForm').subscribe(({ position }) => this.panelOnRightSide = position === 'right'),
+            this.store.select('settingsForm').subscribe(({ formOpened }) => this.contentExpanded = formOpened),
+        );
+    }
+
+    public ngOnDestroy(): void {
+        this.subscribtions.forEach(sub => sub.unsubscribe());
+    }
+
     public getTooltipPosition(): string {
         return this.panelOnRightSide ? 'left' : 'right';
     }
@@ -55,11 +69,11 @@ export class AppComponent {
     }
 
     public onHideContent(): void {
-        this.contentExpanded = !this.contentExpanded;
+        this.store.dispatch(new SettingsFormActions.SetFormOpened(!this.contentExpanded));
     }
 
     public changeContolPanelSide(): void {
-        this.panelOnRightSide = !this.panelOnRightSide;
+        this.store.dispatch(new SettingsFormActions.SetPosition(this.getTooltipPosition()));
     }
 
 }
