@@ -1,12 +1,13 @@
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, HostListener } from '@angular/core';
 import {
     DrawerItem,
     DrawerSelectEvent,
 } from '@progress/kendo-angular-layout';
 import { Store } from '@ngrx/store';
-import { AppState } from './redux/root-interface';
 import { Subscription } from 'rxjs';
+import { AppState } from './redux/root-interface';
 import SettingsFormActions from './redux/settings-form/settings-form.actions';
+import localStorageProject from './constants/project.constants';
 
 @Component({
     selector: 'app-root',
@@ -46,6 +47,11 @@ export class AppComponent implements OnInit, OnDestroy{
             icon: 'k-i-star-outline'
         }
     ];
+
+    @HostListener('window:beforeunload', ['$event'])
+    publiccanDeactivate(event: any) {
+        localStorage.setItem(localStorageProject, JSON.stringify((this.store.source as any).value));
+    }
 
     constructor(private store: Store<AppState>) {}
 

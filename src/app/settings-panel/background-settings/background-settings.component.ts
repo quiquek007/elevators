@@ -44,5 +44,4 @@ export class BackgroundSettingsComponent implements OnInit, OnDestroy {
         this.store.dispatch(new BackgroundActions.ResetColor());
         this.selectedColor = (this.store.source as any).value.background.color;
     }
-
 }
