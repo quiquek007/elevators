@@ -1,13 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit, OnDestroy } from '@angular/core';
 import * as THREE from 'three';
 import { EngineService } from './engine.service';
+import { Subscription } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class ObjectManagerService {
+export class ObjectManagerService implements OnInit, OnDestroy {
     public store: any[] = [];
-    public defaultColor = new THREE.Color("rgb(0, 0, 255)");
+    public defaultColor = new THREE.Color('rgb(0, 0, 255)');
+    private subscriptions: Subscription[] = [];
 
     constructor(private engine: EngineService) {}
+
+    public ngOnInit(): void {
+
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
 
     public createCube(
         geometry: THREE.BoxGeometry = new THREE.BoxGeometry(1, 1, 1)

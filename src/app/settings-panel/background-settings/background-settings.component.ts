@@ -14,7 +14,8 @@ import { Subscription } from 'rxjs';
 	styleUrls: ['./background-settings.component.less']
 })
 export class BackgroundSettingsComponent implements OnInit, OnDestroy {
-    public selectedColor: string = 'rgb(64,64,64)';
+    public backgroundColor: string;
+    public gridColor: string;
     public tooltipPosition: string = 'right'
     private subscriptions: Subscription[] = [];
 
@@ -23,7 +24,8 @@ export class BackgroundSettingsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.subscriptions.push(
             this.store.select('settingsForm').subscribe(({ position }) => this.tooltipPosition = position),
-            this.store.select('background').subscribe(({ color }) => this.selectedColor = color),
+            this.store.select('background').subscribe(({ backgroundColor }) => this.backgroundColor = backgroundColor),
+            this.store.select('background').subscribe(({ gridColor }) => this.gridColor = gridColor),
         );
     }
 
@@ -36,12 +38,22 @@ export class BackgroundSettingsComponent implements OnInit, OnDestroy {
     }
 
     public onBackgroundColorChange(color: string): void {
-		this.selectedColor = color;
-        this.store.dispatch(new BackgroundActions.SetColor(color));
+		this.backgroundColor = color;
+        this.store.dispatch(new BackgroundActions.SetBackgroundColor(color));
 	}
 	
     public onBackgroundColorReset(): void {
-        this.store.dispatch(new BackgroundActions.ResetColor());
-        this.selectedColor = (this.store.source as any).value.background.color;
+        this.store.dispatch(new BackgroundActions.ResetBackgroundColor());
+        this.backgroundColor = (this.store.source as any).value.background.backgroundColor;
+    }
+
+    public onGridColorChange(color: string): void {
+		this.gridColor = color;
+        this.store.dispatch(new BackgroundActions.SetGridColor(color));
+	}
+	
+    public onGridColorReset(): void {
+        this.store.dispatch(new BackgroundActions.ResetGridColor());
+        this.gridColor = (this.store.source as any).value.background.gridColor;
     }
 }

@@ -1,3 +1,4 @@
 export interface Background {
-    color: string;
+    backgroundColor: string;
+    gridColor: string;
 }

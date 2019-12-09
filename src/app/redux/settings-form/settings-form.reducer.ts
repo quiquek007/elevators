@@ -1,9 +1,13 @@
 import { SettingsForm } from './settings-form.model';
 import SettingsFormReducer from './settings-form.actions';
+import SETTINGSFORM from 'src/app/constants/settings-form.constants';
+import DefaultState from '../default-state.provider';
 
-const defaultState: SettingsForm = {
-    position: 'left',
-    formOpened: false
+let defaultState = new DefaultState().getState();
+if (!defaultState) {
+	defaultState = SETTINGSFORM
+} else {
+	defaultState = defaultState[SETTINGSFORM.key];
 }
 
 export function settingsFormReducer(state: SettingsForm = defaultState, action: any) {

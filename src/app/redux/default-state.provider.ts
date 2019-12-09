@@ -1,5 +1,6 @@
+import localStorageProject from '../constants/project.constants';
+
 export default class DefaultState {
-    private nameStorage: string = 'elevatorsProject'
     private state = null;
 
     constructor() {
@@ -11,10 +12,10 @@ export default class DefaultState {
     }
 
     public setState(state) {
-        localStorage.setItem(this.nameStorage, JSON.stringify(state));
+        localStorage.setItem(localStorageProject, JSON.stringify(state));
     }
 
     private getLocalStorage() {
-        return JSON.parse(localStorage.getItem(this.nameStorage));
+        return JSON.parse(localStorage.getItem(localStorageProject));
     }
 }

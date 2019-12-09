@@ -1,7 +1,8 @@
+<h2 class="option-title">Background Settings</h2>
 <section class="option-line">
     <span>Background color:</span>
     <div>
-        <kendo-colorpicker [value]="selectedColor"
+        <kendo-colorpicker [value]="backgroundColor"
             [format]="'hex'"
             [gradientSettings]="{opacity: false}"
             (valueChange)="onBackgroundColorChange($event)">
@@ -11,6 +12,23 @@
             title="Default color"
             [position]="getTooltipPosition()"
             (click)="onBackgroundColorReset()"
+            [iconClass]="'k-icon k-i-reset-color'">
+        </button>
+    </div>
+</section>
+<section class="option-line">
+    <span>Grid color:</span>
+    <div>
+        <kendo-colorpicker [value]="gridColor"
+            [format]="'hex'"
+            [gradientSettings]="{opacity: false}"
+            (valueChange)="onGridColorChange($event)">
+        </kendo-colorpicker>
+        <button kendoButton
+            kendoTooltip
+            title="Default color"
+            [position]="getTooltipPosition()"
+            (click)="onGridColorReset()"
             [iconClass]="'k-icon k-i-reset-color'">
         </button>
     </div>

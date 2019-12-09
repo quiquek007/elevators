@@ -38,15 +38,21 @@ export class EngineComponent implements OnInit, OnDestroy {
 
         this.engServ.createScene(this.rendererCanvas, this.canvasContainer);
         this.engServ.animate();
+
         this.objectManager.createCube();
         this.objectManager.createGrid();
 
-        this.subscribtions.push(
-            this.store.select('background').subscribe(({ color }) => this.engServ.setColorBackground(color)),
-        );
+        this.initSubscribtions();
     }
 
     public ngOnDestroy(): void {
         this.subscribtions.forEach(sub => sub.unsubscribe());
+    }
+
+    private initSubscribtions(): void {
+        this.subscribtions.push(
+            this.store.select('background')
+                .subscribe(({ backgroundColor }) => this.engServ.setColorBackground(backgroundColor)),
+        );
     }
 }

@@ -1,6 +1,7 @@
 const BACKGROUND = {
     key: 'background',
-    defaultColor: 'rgb(64,64,64)'
+    backgroundColor: 'rgb(64, 64, 64)',
+    gridColor: 'rgb(255, 255, 255)',
 }
 
 export default BACKGROUND;

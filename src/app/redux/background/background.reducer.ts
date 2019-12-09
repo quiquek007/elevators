@@ -3,23 +3,26 @@ import { Background } from './background.model'
 import DefaultState from '../default-state.provider';
 import BACKGROUND from 'src/app/constants/background.constants';
 
-
 let defaultState = new DefaultState().getState();
 if (!defaultState) {
-	defaultState = {
-		color: BACKGROUND.defaultColor
-	}
+	defaultState = BACKGROUND
 } else {
 	defaultState = defaultState[BACKGROUND.key];
 }
 
 export function backgroundReducer(state: Background = defaultState, action: any) {
 	switch (action.type) {
-  		case BackgroundActions.SET_COLOR:
-  			return { ...state, color: action.payload };
+  		case BackgroundActions.SET_BACKGROUND_COLOR:
+  			return { ...state, backgroundColor: action.payload };
 
-  		case BackgroundActions.RESET_COLOR:
-  			return { ...state, color: BACKGROUND.defaultColor };
+  		case BackgroundActions.RESET_BACKGROUND_COLOR:
+			  return { ...state, backgroundColor: BACKGROUND.backgroundColor };
+			  
+		case BackgroundActions.SET_GRID_COLOR:
+  			return { ...state, gridColor: action.payload };
+
+		case BackgroundActions.RESET_GRID_COLOR:
+			return { ...state, gridColor: BACKGROUND.gridColor };
 
   		default:
   			return state;
