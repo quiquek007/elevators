@@ -4,9 +4,9 @@ import {
     OnDestroy,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { AppState } from 'src/app/redux/root-interface';
 import BackgroundActions from '../../redux/background/background.actions';
-import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'background-settings',

@@ -1,4 +1,4 @@
-import localStorageProject from '../constants/project.constants';
+import { localStorageProject } from '../constants/project.constants';
 
 export default class DefaultState {
     private state = null;

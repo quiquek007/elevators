@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from './redux/root-interface';
 import SettingsFormActions from './redux/settings-form/settings-form.actions';
-import localStorageProject from './constants/project.constants';
+import { localStorageProject } from './constants/project.constants';
 
 @Component({
     selector: 'app-root',

@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
 
 const SET_BACKGROUND_COLOR = 'SET_BACKGROUND_COLOR';
-const SET_GRID_COLOR = 'SET_GRID_COLOR';
 const RESET_BACKGROUND_COLOR = 'RESET_BACKGROUND_COLOR';
+const SET_GRID_COLOR = 'SET_GRID_COLOR';
 const RESET_GRID_COLOR = 'RESET_GRID_COLOR';
 
 class SetBackgroundColor implements Action {

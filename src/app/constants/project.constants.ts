@@ -1,3 +1,7 @@
 const localStorageProject: string = 'elevatorsProject';
+const gridUniqueName: string = 'grid';
 
-export default localStorageProject;
+export {
+    localStorageProject,
+    gridUniqueName
+}

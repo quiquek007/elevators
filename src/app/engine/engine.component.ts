@@ -11,6 +11,7 @@ import { ObjectManagerService } from '../services/object-manager.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../redux/root-interface';
 import { Subscription } from 'rxjs';
+import * as THREE from 'three';
 
 @Component({
     selector: 'app-engine',
@@ -19,6 +20,7 @@ import { Subscription } from 'rxjs';
 })
 export class EngineComponent implements OnInit, OnDestroy {
     private subscribtions: Subscription[] = [];
+    private grid: THREE.GridHelper = null;
 
     @ViewChild('rendererCanvas', {static: true})
     public rendererCanvas: ElementRef <HTMLCanvasElement>;
@@ -40,7 +42,6 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.engServ.animate();
 
         this.objectManager.createCube();
-        this.objectManager.createGrid();
 
         this.initSubscribtions();
     }
@@ -51,8 +52,24 @@ export class EngineComponent implements OnInit, OnDestroy {
 
     private initSubscribtions(): void {
         this.subscribtions.push(
-            this.store.select('background')
-                .subscribe(({ backgroundColor }) => this.engServ.setColorBackground(backgroundColor)),
+            this.store.select(state => state.background.backgroundColor)
+                .subscribe(backgroundColor => this.engServ.setColorBackground(backgroundColor)),
+            this.store.select(state => state.background.gridColor)
+                .subscribe(gridColor => this.updateGrid(gridColor)),
         );
+    }
+
+    /**
+     * grid lifecyrcle:
+     * require to create new grid for change color
+     * @param color - string || THREE.Color
+     */
+    private updateGrid(color: string): void{
+        if (this.grid) {
+            this.objectManager.removeObject(this.grid);
+        }
+        
+        this.grid = this.objectManager.createGrid(color, color);
+        this.objectManager.addToScene(this.grid);
     }
 }
