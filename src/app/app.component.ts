@@ -57,8 +57,10 @@ export class AppComponent implements OnInit, OnDestroy{
 
     public ngOnInit(): void {
         this.subscribtions.push(
-            this.store.select('settingsForm').subscribe(({ position }) => this.panelOnRightSide = position === 'right'),
-            this.store.select('settingsForm').subscribe(({ formOpened }) => this.contentExpanded = formOpened),
+            this.store.select(state => state.settingsForm.formPosition)
+                .subscribe(position => this.panelOnRightSide = position === 'right'),
+            this.store.select(state => state.settingsForm.formOpened)
+                .subscribe(formOpened => this.contentExpanded = formOpened),
         );
     }
 
@@ -79,7 +81,7 @@ export class AppComponent implements OnInit, OnDestroy{
     }
 
     public changeContolPanelSide(): void {
-        this.store.dispatch(new SettingsFormActions.SetPosition(this.getTooltipPosition()));
+        this.store.dispatch(new SettingsFormActions.SetFormPosition(this.getTooltipPosition()));
     }
 
 }

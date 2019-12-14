@@ -1,6 +1,6 @@
 const SETTINGSFORM = {
     key: 'settingsForm',
-    position: 'left',
+    formPosition: 'left',
     formOpened: false
 }
 

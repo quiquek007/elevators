@@ -7,5 +7,6 @@ import { Component, Input, ViewEncapsulation  } from '@angular/core';
     encapsulation: ViewEncapsulation.None
 })
 export class SettingsPanelComponent {
-    @Input() selectedOption: string;
+    @Input()
+    public selectedOption: string;
 }

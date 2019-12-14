@@ -1,4 +1,4 @@
 export interface SettingsForm {
-    position: 'left' | 'right';
+    formPosition: 'left' | 'right';
     formOpened: boolean;
 }

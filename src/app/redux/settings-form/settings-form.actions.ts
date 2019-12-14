@@ -1,10 +1,10 @@
 import { Action } from '@ngrx/store';
 
-const SET_POSITION = 'SET_POSITION';
+const SET_FORM_POSITION = 'SET_FORM_POSITION';
 const SET_FORM_OPENED = 'SET_FORM_OPENED';
 
-class SetPosition implements Action {
-    type = SET_POSITION;
+class SetFormPosition implements Action {
+    type = SET_FORM_POSITION;
     constructor(public payload: string) {}
 }
 
@@ -14,9 +14,9 @@ class SetFormOpened implements Action {
 }
 
 export default {
-    SetPosition,
+    SetFormPosition,
     SetFormOpened,
-    SET_POSITION,
+    SET_FORM_POSITION,
     SET_FORM_OPENED
 };
 

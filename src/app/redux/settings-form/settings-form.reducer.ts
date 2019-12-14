@@ -15,8 +15,8 @@ export function settingsFormReducer(state: SettingsForm = defaultState, action: 
   		case SettingsFormReducer.SET_FORM_OPENED:
   			return { ...state, formOpened: action.payload };
 
-  		case SettingsFormReducer.SET_POSITION:
-            return { ...state, position: action.payload };
+  		case SettingsFormReducer.SET_FORM_POSITION:
+            return { ...state, formPosition: action.payload };
 
   		default:
   			return state;

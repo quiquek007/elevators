@@ -15,17 +15,18 @@ import BackgroundActions from '../../redux/background/background.actions';
 })
 export class BackgroundSettingsComponent implements OnInit, OnDestroy {
     public backgroundColor: string;
-    public gridColor: string;
-    public tooltipPosition: string = 'right'
+
+    public tooltipPosition: string = 'right';
     private subscriptions: Subscription[] = [];
 
     constructor(private store: Store<AppState>) {}
 
     public ngOnInit(): void {
         this.subscriptions.push(
-            this.store.select('settingsForm').subscribe(({ position }) => this.tooltipPosition = position),
-            this.store.select('background').subscribe(({ backgroundColor }) => this.backgroundColor = backgroundColor),
-            this.store.select('background').subscribe(({ gridColor }) => this.gridColor = gridColor),
+            this.store.select(state => state.settingsForm.formPosition)
+                .subscribe(position => this.tooltipPosition = position),
+            this.store.select(state => state.background.backgroundColor)
+                .subscribe(backgroundColor => this.backgroundColor = backgroundColor),
         );
     }
 
@@ -45,15 +46,5 @@ export class BackgroundSettingsComponent implements OnInit, OnDestroy {
     public onBackgroundColorReset(): void {
         this.store.dispatch(new BackgroundActions.ResetBackgroundColor());
         this.backgroundColor = (this.store.source as any).value.background.backgroundColor;
-    }
-
-    public onGridColorChange(color: string): void {
-		this.gridColor = color;
-        this.store.dispatch(new BackgroundActions.SetGridColor(color));
-	}
-	
-    public onGridColorReset(): void {
-        this.store.dispatch(new BackgroundActions.ResetGridColor());
-        this.gridColor = (this.store.source as any).value.background.gridColor;
     }
 }

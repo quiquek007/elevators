@@ -1,0 +1,33 @@
+<div class="panelbar-wrapper">
+    <kendo-panelbar>
+    <kendo-panelbar-item title="">
+        <ng-template kendoPanelBarItemTitle>
+            Available currencies
+            <kendo-switch
+                (click)="onChangeSwitch($event)">
+            </kendo-switch>
+        </ng-template>
+        <kendo-panelbar-item [iconClass]="'fa fa-btc'" title="Bitcoin"></kendo-panelbar-item>
+        <kendo-panelbar-item [iconClass]="'fa fa-eur'" title="EUR"></kendo-panelbar-item>
+        <kendo-panelbar-item [iconClass]="'fa fa-usd'" title="USD"></kendo-panelbar-item>
+        <kendo-panelbar-item [iconClass]="'fa fa-gbp'" title="GBP"></kendo-panelbar-item>
+    </kendo-panelbar-item>
+    </kendo-panelbar>
+</div>
+<section class="option-line">
+    <span>Grid color:</span>
+    <div>
+        <kendo-colorpicker [value]="gridColor"
+            [format]="'hex'"
+            [gradientSettings]="{opacity: false}"
+            (valueChange)="onGridColorChange($event)">
+        </kendo-colorpicker>
+        <button kendoButton
+            kendoTooltip
+            title="Default color"
+            [position]="getTooltipPosition()"
+            (click)="onGridColorReset()"
+            [iconClass]="'k-icon k-i-reset-color'">
+        </button>
+    </div>
+</section>

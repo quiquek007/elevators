@@ -14,6 +14,7 @@ import { EngineComponent } from './engine/engine.component';
 import { ObjectManagerService } from './services/object-manager.service';
 import { rootReducer } from './redux/root-reducer';
 import { BackgroundSettingsComponent } from './settings-panel/background-settings/background-settings.component';
+import { GridSettingsComponent } from './settings-panel/background-settings/grid-settings/grid-settings.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { BackgroundSettingsComponent } from './settings-panel/background-setting
     EngineComponent,
     SettingsPanelComponent,
     BackgroundSettingsComponent,
+    GridSettingsComponent,
   ],
   imports: [
     BrowserModule,
