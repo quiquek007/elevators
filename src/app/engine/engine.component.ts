@@ -2,16 +2,16 @@ import {
     Component,
     ElementRef,
     ViewChild,
-    AfterViewInit,
     OnInit,
     OnDestroy
 } from '@angular/core';
 import { EngineService } from '../services/engine.service';
-import { ObjectManagerService } from '../services/object-manager.service';
 import { Store } from '@ngrx/store';
-import { AppState } from '../redux/root-interface';
 import { Subscription, combineLatest } from 'rxjs';
 import * as THREE from 'three';
+import { AppState } from '../redux/root-interface';
+import { ObjectManagerService } from '../services/object-manager.service';
+import GridUpdateSettings from './engine.interfaces';
 
 @Component({
     selector: 'app-engine',
@@ -56,8 +56,10 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .subscribe(backgroundColor => this.engServ.setColorBackground(backgroundColor)),
             combineLatest(
                 this.store.select(state => state.background.gridColor),
-                this.store.select(state => state.background.gridEnable)
-            ).subscribe(([gridColor, enable]) => this.updateGrid(gridColor, enable)),
+                this.store.select(state => state.background.gridOpacity),
+                this.store.select(state => state.background.gridEnable),
+            ).subscribe(([gridColor, gridOpacity, enable]) =>
+                this.updateGrid({ gridColor, gridOpacity }, enable)),
         );
     }
 
@@ -66,16 +68,12 @@ export class EngineComponent implements OnInit, OnDestroy {
      * require to create new grid for change color
      * @param color - string || THREE.Color
      */
-    private updateGrid(color: string, enable: boolean = true): void{
-        if (this.grid) {
-            this.objectManager.removeObject(this.grid);
-        }
+    private updateGrid({ gridColor, gridOpacity }: GridUpdateSettings, enable: boolean = true): void{
+        if (this.grid) this.objectManager.removeObject(this.grid);
+        if (!enable) return;
 
-        if (!enable) {
-            return;
-        }
-
-        this.grid = this.objectManager.createGrid(color, color);
+        this.grid = this.objectManager.createGrid(gridColor, gridColor);
+        (this.grid.material as any).opacity = gridOpacity;
         this.objectManager.addToScene(this.grid);
     }
 }

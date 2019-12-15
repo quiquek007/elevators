@@ -4,6 +4,7 @@ const BACKGROUND = {
     gridColor: 'gray',
     gridEnable: true,
     gridSettingsExpanded: false,
+    gridOpacity: 0.2,
 }
 
 export default BACKGROUND;

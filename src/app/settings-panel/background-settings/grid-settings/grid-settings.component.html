@@ -1,8 +1,9 @@
 <kendo-panelbar (stateChange)="onGridSettingsExpanded($event)">
-    <kendo-panelbar-item title="" [expanded]="gridSettingsExpanded">
+    <kendo-panelbar-item title=""
+        [expanded]="gridSettingsExpanded">
         <ng-template kendoPanelBarItemTitle>
             <div class="grid-title-wrapper">
-                <span class="grid-title">Grid settings</span>
+                <span class="grid-title">Show Grid</span>
                 <kendo-switch class="grid-switch"
                     [(ngModel)]="gridEnable"
                     (click)="onChangeSwitch($event)">
@@ -15,6 +16,7 @@
                 <div>
                     <kendo-colorpicker [value]="gridColor"
                         [format]="'hex'"
+                        [disabled]="!gridEnable"
                         [gradientSettings]="{opacity: false}"
                         (valueChange)="onGridColorChange($event)">
                     </kendo-colorpicker>
@@ -22,10 +24,23 @@
                         kendoTooltip
                         title="Default color"
                         [position]="getTooltipPosition()"
+                        [disabled]="!gridEnable"
                         (click)="onGridColorReset()"
                         [iconClass]="'k-icon k-i-reset-color'">
                     </button>
                 </div>
+            </section>
+            <section class="option-line">
+                <span>Grid opacity:</span>
+                <kendo-numerictextbox class="grid-opacity-component"
+                    [value]="gridOpacity"
+                    [min]="0.00"
+                    [max]="1.00"
+                    [step]="0.01"
+                    [disabled]="!gridEnable"
+                    [autoCorrect]="true"
+                    (valueChange)="onOpacityChange($event)">
+                </kendo-numerictextbox>
             </section>
         </ng-template>
     </kendo-panelbar-item>

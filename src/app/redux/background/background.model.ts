@@ -3,4 +3,5 @@ export interface Background {
     gridColor: string;
     gridEnable: boolean;
     gridSettingsExpanded: boolean;
+    gridOpacity: number;
 }

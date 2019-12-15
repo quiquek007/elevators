@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/redux/root-interface';
 import BackgroundActions from '../../../redux/background/background.actions';
+import BACKGROUND from 'src/app/constants/background.constants';
 
 @Component({
     selector: 'grid-settings',
@@ -17,6 +18,7 @@ export class GridSettingsComponent implements OnInit {
     public tooltipPosition: string = 'right';
     public gridSettingsExpanded: boolean;
     public gridEnable: boolean;
+    public gridOpacity: number;
 
     private subscriptions: Subscription[] = [];
 
@@ -32,6 +34,11 @@ export class GridSettingsComponent implements OnInit {
                 .subscribe(expanded => this.gridSettingsExpanded = expanded),
             this.store.select(state => state.background.gridEnable)
                 .subscribe(enable => this.gridEnable = enable),
+            this.store.select(state => state.background.gridOpacity)
+                .subscribe(opacity => {
+                    this.gridOpacity = opacity;
+                    if (opacity === null) this.store.dispatch(new BackgroundActions.SetGridOpacity(BACKGROUND.gridOpacity));
+                }),
         );
     }
 
@@ -49,8 +56,6 @@ export class GridSettingsComponent implements OnInit {
 	
     public onGridColorReset(): void {
         this.store.dispatch(new BackgroundActions.ResetGridColor());
-        // TODO: remove if ok
-        // this.gridColor = (this.store.source as any).value.background.gridColor;
     }
 
     public onChangeSwitch(event: Event): void {
@@ -60,5 +65,9 @@ export class GridSettingsComponent implements OnInit {
 
     public onGridSettingsExpanded(event: Event): void {
         this.store.dispatch(new BackgroundActions.SetGridSettingsExpand(event[0].expanded));
+    }
+
+    public onOpacityChange(opacity: number): void {
+        this.store.dispatch(new BackgroundActions.SetGridOpacity(opacity));
     }
 }

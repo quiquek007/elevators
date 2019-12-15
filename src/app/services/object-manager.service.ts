@@ -24,7 +24,6 @@ export class ObjectManagerService {
         otherLineColor: any = new THREE.Color(0x000000)
         ): THREE.GridHelper {
         const grid = new THREE.GridHelper(200, 40, centerLineColor, otherLineColor) as any;
-        grid.material.opacity = 0.2;
         grid.material.transparent = false;
         return grid;
     }
