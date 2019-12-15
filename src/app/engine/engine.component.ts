@@ -10,7 +10,7 @@ import { EngineService } from '../services/engine.service';
 import { ObjectManagerService } from '../services/object-manager.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../redux/root-interface';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import * as THREE from 'three';
 
 @Component({
@@ -54,8 +54,10 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.subscribtions.push(
             this.store.select(state => state.background.backgroundColor)
                 .subscribe(backgroundColor => this.engServ.setColorBackground(backgroundColor)),
-            this.store.select(state => state.background.gridColor)
-                .subscribe(gridColor => this.updateGrid(gridColor)),
+            combineLatest(
+                this.store.select(state => state.background.gridColor),
+                this.store.select(state => state.background.gridEnable)
+            ).subscribe(([gridColor, enable]) => this.updateGrid(gridColor, enable)),
         );
     }
 
@@ -64,11 +66,15 @@ export class EngineComponent implements OnInit, OnDestroy {
      * require to create new grid for change color
      * @param color - string || THREE.Color
      */
-    private updateGrid(color: string): void{
+    private updateGrid(color: string, enable: boolean = true): void{
         if (this.grid) {
             this.objectManager.removeObject(this.grid);
         }
-        
+
+        if (!enable) {
+            return;
+        }
+
         this.grid = this.objectManager.createGrid(color, color);
         this.objectManager.addToScene(this.grid);
     }

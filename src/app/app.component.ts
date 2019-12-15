@@ -83,5 +83,4 @@ export class AppComponent implements OnInit, OnDestroy{
     public changeContolPanelSide(): void {
         this.store.dispatch(new SettingsFormActions.SetFormPosition(this.getTooltipPosition()));
     }
-
 }

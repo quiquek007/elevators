@@ -1,13 +1,11 @@
 import {
     Component,
-    OnInit,
-    ViewChild
+    OnInit
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/redux/root-interface';
 import BackgroundActions from '../../../redux/background/background.actions';
-import { SwitchComponent } from '@progress/kendo-angular-inputs';
 
 @Component({
     selector: 'grid-settings',
@@ -17,9 +15,8 @@ import { SwitchComponent } from '@progress/kendo-angular-inputs';
 export class GridSettingsComponent implements OnInit {
     public gridColor: string;
     public tooltipPosition: string = 'right';
-
-    @ViewChild(SwitchComponent, { static: false })
-    public switchEl: SwitchComponent;
+    public gridSettingsExpanded: boolean;
+    public gridEnable: boolean;
 
     private subscriptions: Subscription[] = [];
 
@@ -29,7 +26,12 @@ export class GridSettingsComponent implements OnInit {
         this.subscriptions.push(
             this.store.select(state => state.settingsForm.formPosition)
                 .subscribe(position => this.tooltipPosition = position),
-            this.store.select(state => state.background.gridColor).subscribe(gridColor => this.gridColor = gridColor),
+            this.store.select(state => state.background.gridColor)
+                .subscribe(gridColor => this.gridColor = gridColor),
+            this.store.select(state => state.background.gridSettingsExpanded)
+                .subscribe(expanded => this.gridSettingsExpanded = expanded),
+            this.store.select(state => state.background.gridEnable)
+                .subscribe(enable => this.gridEnable = enable),
         );
     }
 
@@ -41,19 +43,22 @@ export class GridSettingsComponent implements OnInit {
         return this.tooltipPosition === 'left' ? 'right' : 'top';
     }
 
-    
     public onGridColorChange(color: string): void {
-		this.gridColor = color;
         this.store.dispatch(new BackgroundActions.SetGridColor(color));
 	}
 	
     public onGridColorReset(): void {
         this.store.dispatch(new BackgroundActions.ResetGridColor());
-        this.gridColor = (this.store.source as any).value.background.gridColor;
+        // TODO: remove if ok
+        // this.gridColor = (this.store.source as any).value.background.gridColor;
     }
 
     public onChangeSwitch(event: Event): void {
         event.stopPropagation();
-        console.log(this.switchEl);
+        this.store.dispatch(new BackgroundActions.SetGridEnable(this.gridEnable));
+    }
+
+    public onGridSettingsExpanded(event: Event): void {
+        this.store.dispatch(new BackgroundActions.SetGridSettingsExpand(event[0].expanded));
     }
 }

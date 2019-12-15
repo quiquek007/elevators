@@ -24,6 +24,12 @@ export function backgroundReducer(state: Background = defaultState, action: any)
 		case BackgroundActions.RESET_GRID_COLOR:
 			return { ...state, gridColor: BACKGROUND.gridColor };
 
+		case BackgroundActions.SET_GRID_SETTINGS_EXPAND:
+			return { ...state, gridSettingsExpanded: action.payload };
+
+		case BackgroundActions.SET_GRID_ENABLE:
+			return { ...state, gridEnable: action.payload };
+
   		default:
   			return state;
 	}

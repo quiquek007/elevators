@@ -15,6 +15,7 @@ import { ObjectManagerService } from './services/object-manager.service';
 import { rootReducer } from './redux/root-reducer';
 import { BackgroundSettingsComponent } from './settings-panel/background-settings/background-settings.component';
 import { GridSettingsComponent } from './settings-panel/background-settings/grid-settings/grid-settings.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { GridSettingsComponent } from './settings-panel/background-settings/grid
     LayoutModule,
     TooltipModule,
     InputsModule,
+    FormsModule,
     StoreModule.forRoot(rootReducer),
   ],
   exports: [],
