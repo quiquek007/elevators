@@ -40,9 +40,10 @@
                     <button kendoButton
                         kendoTooltip
                         title="Default size"
+                        [disabled]="!gridEnable"
                         [position]="getTooltipPosition()"
-                        (click)="onGridSizeReset()"
-                        [iconClass]="'k-icon k-i-reset-color'">
+                        [iconClass]="'k-icon k-i-reset-color'"
+                        (click)="onGridSizeReset()">
                     </button>
                 </div>
             </section>
