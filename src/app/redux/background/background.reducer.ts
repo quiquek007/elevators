@@ -33,6 +33,12 @@ export function backgroundReducer(state: Background = defaultState, action: any)
 		case BackgroundActions.SET_GRID_OPACITY:
 			return { ...state, gridOpacity: action.payload };
 
+		case BackgroundActions.SET_GRID_SIZE:
+			return { ...state, gridSize: action.payload };
+			
+		case BackgroundActions.RESET_GRID_SIZE:
+			return { ...state, gridSize: BACKGROUND.gridSize };
+
   		default:
   			return state;
 	}

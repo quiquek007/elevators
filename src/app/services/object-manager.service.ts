@@ -20,10 +20,12 @@ export class ObjectManagerService {
     }
 
     public createGrid(
+        size: number,
+        division: number,
         centerLineColor: any = new THREE.Color(0x000000),
         otherLineColor: any = new THREE.Color(0x000000)
         ): THREE.GridHelper {
-        const grid = new THREE.GridHelper(200, 40, centerLineColor, otherLineColor) as any;
+        const grid = new THREE.GridHelper(size, division, centerLineColor, otherLineColor) as any;
         grid.material.transparent = false;
         return grid;
     }

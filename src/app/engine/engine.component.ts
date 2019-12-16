@@ -12,6 +12,7 @@ import * as THREE from 'three';
 import { AppState } from '../redux/root-interface';
 import { ObjectManagerService } from '../services/object-manager.service';
 import GridUpdateSettings from './engine.interfaces';
+import { GridSizeModel } from '../shared/grid-size.model';
 
 @Component({
     selector: 'app-engine',
@@ -58,8 +59,9 @@ export class EngineComponent implements OnInit, OnDestroy {
                 this.store.select(state => state.background.gridColor),
                 this.store.select(state => state.background.gridOpacity),
                 this.store.select(state => state.background.gridEnable),
-            ).subscribe(([gridColor, gridOpacity, enable]) =>
-                this.updateGrid({ gridColor, gridOpacity }, enable)),
+                this.store.select(state => state.background.gridSize),
+            ).subscribe(([gridColor, gridOpacity, enable, gridSize]) =>
+                this.updateGrid({ gridColor, gridOpacity, gridSize }, enable )),
         );
     }
 
@@ -68,11 +70,11 @@ export class EngineComponent implements OnInit, OnDestroy {
      * require to create new grid for change color
      * @param color - string || THREE.Color
      */
-    private updateGrid({ gridColor, gridOpacity }: GridUpdateSettings, enable: boolean = true): void{
+    private updateGrid({ gridColor, gridOpacity, gridSize }: GridUpdateSettings, enable: boolean = true): void{
         if (this.grid) this.objectManager.removeObject(this.grid);
         if (!enable) return;
 
-        this.grid = this.objectManager.createGrid(gridColor, gridColor);
+        this.grid = this.objectManager.createGrid(gridSize.size, gridSize.division, gridColor, gridColor);
         (this.grid.material as any).opacity = gridOpacity;
         this.objectManager.addToScene(this.grid);
     }

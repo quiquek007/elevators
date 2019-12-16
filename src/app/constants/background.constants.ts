@@ -5,6 +5,10 @@ const BACKGROUND = {
     gridEnable: true,
     gridSettingsExpanded: false,
     gridOpacity: 0.2,
+    gridSize: {
+        size: 200,
+        division: 40
+    },
 }
 
 export default BACKGROUND;

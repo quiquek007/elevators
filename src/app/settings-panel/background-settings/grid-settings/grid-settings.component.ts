@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/redux/root-interface';
 import BackgroundActions from '../../../redux/background/background.actions';
 import BACKGROUND from 'src/app/constants/background.constants';
+import { GridSizeModel } from 'src/app/shared/grid-size.model';
 
 @Component({
     selector: 'grid-settings',
@@ -19,6 +20,7 @@ export class GridSettingsComponent implements OnInit {
     public gridSettingsExpanded: boolean;
     public gridEnable: boolean;
     public gridOpacity: number;
+    public gridSize: GridSizeModel;
 
     private subscriptions: Subscription[] = [];
 
@@ -35,10 +37,12 @@ export class GridSettingsComponent implements OnInit {
             this.store.select(state => state.background.gridEnable)
                 .subscribe(enable => this.gridEnable = enable),
             this.store.select(state => state.background.gridOpacity)
-                .subscribe(opacity => {
-                    this.gridOpacity = opacity;
-                    if (opacity === null) this.store.dispatch(new BackgroundActions.SetGridOpacity(BACKGROUND.gridOpacity));
-                }),
+                .subscribe(opacity => this.gridOpacity = opacity),
+            this.store.select(state => state.background.gridSize)
+                .subscribe(size => {
+                    // avoid mutilate basic constant
+                    this.gridSize = Object.assign({}, size);
+                }), 
         );
     }
 
@@ -68,6 +72,19 @@ export class GridSettingsComponent implements OnInit {
     }
 
     public onOpacityChange(opacity: number): void {
-        this.store.dispatch(new BackgroundActions.SetGridOpacity(opacity));
+        if (opacity === null) this.store.dispatch(new BackgroundActions.SetGridOpacity(BACKGROUND.gridOpacity));
+        else this.store.dispatch(new BackgroundActions.SetGridOpacity(opacity));
+    }
+
+    public onGridSizeChange(): void {
+        const defaultValue = 5;
+        for (let key in this.gridSize) {
+            if (this.gridSize[key] === null) this.gridSize[key] = defaultValue;
+        }       
+        this.store.dispatch(new BackgroundActions.SetGridSize(this.gridSize));
+    }
+
+    public onGridSizeReset(): void {
+        this.store.dispatch(new BackgroundActions.ResetGridSize());
     }
 }

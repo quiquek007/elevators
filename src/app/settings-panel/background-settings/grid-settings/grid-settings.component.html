@@ -12,6 +12,41 @@
         </ng-template>
         <ng-template kendoPanelBarContent>
             <section class="option-line">
+                <span>Grid options(size/division):</span>
+                <div>
+                    <kendo-numerictextbox class="grid-numerictext-component"
+                        [value]="gridSize?.size"
+                        [min]="1"
+                        [step]="5"
+                        [disabled]="!gridEnable"
+                        [decimals]="0"
+                        [format]="'n0'"
+                        [autoCorrect]="true"
+                        [(ngModel)]="gridSize.size"
+                        (valueChange)="onGridSizeChange(gridSize)">
+                    </kendo-numerictextbox>
+                    <kendo-numerictextbox class="grid-numerictext-component"
+                        [value]="gridSize?.division"
+                        [min]="1"
+                        [max]="5000"
+                        [step]="1"
+                        [disabled]="!gridEnable"
+                        [decimals]="0"
+                        [format]="'n0'"
+                        [autoCorrect]="true"
+                        [(ngModel)]="gridSize.division"
+                        (valueChange)="onGridSizeChange(gridSize)">
+                    </kendo-numerictextbox>
+                    <button kendoButton
+                        kendoTooltip
+                        title="Default size"
+                        [position]="getTooltipPosition()"
+                        (click)="onGridSizeReset()"
+                        [iconClass]="'k-icon k-i-reset-color'">
+                    </button>
+                </div>
+            </section>
+            <section class="option-line">
                 <span>Grid color:</span>
                 <div>
                     <kendo-colorpicker [value]="gridColor"
@@ -32,11 +67,11 @@
             </section>
             <section class="option-line">
                 <span>Grid opacity:</span>
-                <kendo-numerictextbox class="grid-opacity-component"
+                <kendo-numerictextbox class="grid-numerictext-component"
                     [value]="gridOpacity"
                     [min]="0.00"
                     [max]="1.00"
-                    [step]="0.01"
+                    [step]="0.02"
                     [disabled]="!gridEnable"
                     [autoCorrect]="true"
                     (valueChange)="onOpacityChange($event)">
