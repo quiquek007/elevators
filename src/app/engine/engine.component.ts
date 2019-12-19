@@ -22,6 +22,8 @@ import { GridSizeModel } from '../shared/grid-size.model';
 export class EngineComponent implements OnInit, OnDestroy {
     private subscribtions: Subscription[] = [];
     private grid: THREE.GridHelper = null;
+    private rendererAlpha: boolean;
+    private rendererAntialias: boolean;
 
     @ViewChild('rendererCanvas', {static: true})
     public rendererCanvas: ElementRef <HTMLCanvasElement>;
@@ -36,17 +38,17 @@ export class EngineComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         if (!this.rendererCanvas) {
-            throw new Error("rendererCanvas not implemented.");
+            throw new Error('rendererCanvas not implemented.');
         }
+
+        this.initRendererSubscribtions();
 
         const rendererSettings = {
             canvas: this.rendererCanvas.nativeElement,
-            alpha: true, // transparent background
-            antialias: true, // smooth edges
-            // precision: "lowp",
+            alpha: this.rendererAlpha, // transparent background
+            antialias: this.rendererAntialias, // smooth edges
         };
-        this.engServ.createRenderer(this.rendererCanvas, rendererSettings)
-        this.engServ.createScene( this.canvasContainer);
+        this.engServ.createScene(rendererSettings, this.canvasContainer);
         this.engServ.animate();
 
         this.objectManager.createCube();
@@ -56,6 +58,15 @@ export class EngineComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.subscribtions.forEach(sub => sub.unsubscribe());
+    }
+
+    private initRendererSubscribtions(): void {
+        this.subscribtions.push(
+            this.store.select(state => state.background.rendererAlpha)
+                .subscribe(alpha => this.rendererAlpha = alpha),
+            this.store.select(state => state.background.rendererAntialias)
+                .subscribe(antialias => this.rendererAntialias = antialias),
+        );
     }
 
     private initSubscribtions(): void {

@@ -9,7 +9,6 @@ import * as OrbitControls from 'three-orbitcontrols';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {
-    private canvas: HTMLCanvasElement;
     private renderer: THREE.WebGLRenderer;
     private camera: THREE.PerspectiveCamera;
     private scene: THREE.Scene;
@@ -25,13 +24,9 @@ export class EngineService implements OnDestroy {
         if (this.frameId != null) cancelAnimationFrame(this.frameId);
     }
 
-    public createRenderer(canvas: ElementRef<HTMLCanvasElement>, settings: any): void {
-        this.canvas = canvas.nativeElement;
-        this.renderer = new THREE.WebGLRenderer(settings);
-    }
-
-    public createScene(container: ElementRef<HTMLDivElement>): void {
+    public createScene(settings: THREE.WebGLRendererParameters, container: ElementRef<HTMLDivElement>): void {
         // The first step is to get the reference of the canvas element from our HTML document
+        this.renderer = new THREE.WebGLRenderer(settings);
         this.renderer.setSize(container.nativeElement.clientWidth, container.nativeElement.clientHeight);
         this.container = container.nativeElement;
         this.scene = new THREE.Scene();
