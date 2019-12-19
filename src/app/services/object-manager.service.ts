@@ -32,7 +32,6 @@ export class ObjectManagerService {
     
     public addToScene(object: any): void {
         this.engine.addToScene(object);
-        return;
     }
 
     public addToStorerage(obj: any): void {

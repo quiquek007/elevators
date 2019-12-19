@@ -1,0 +1,35 @@
+<kendo-panelbar (stateChange)="onRendererSettingsExpanded($event)">
+    <kendo-panelbar-item title="Renderer settings"
+        [expanded]="rendererSettingsExpanded">
+        <ng-template kendoPanelBarContent>
+            <section class="option-line">
+                <span>Alpha channel:</span>
+                <div class="option-line__attention-block">
+                    <attention-sign kendoTooltip
+                        *ngIf="!alphaEl?.control?.control.pristine" 
+                        [title]="attentionText">
+                    </attention-sign>
+                    <kendo-switch #alphaEl 
+                        class="component-switch"
+                        [(ngModel)]="rendererAlpha"
+                        (click)="onAlphaSwitch()">
+                    </kendo-switch>
+                </div>
+            </section>
+            <section class="option-line">
+                <span>Antialias:</span>
+                <div class="option-line__attention-block">
+                    <attention-sign kendoTooltip
+                        *ngIf="!antialiasEl?.control?.control.pristine" 
+                        [title]="attentionText">
+                    </attention-sign>
+                    <kendo-switch #antialiasEl
+                        class="component-switch"
+                        [(ngModel)]="rendererAntialias"
+                        (click)="onAntialiasSwitch()">
+                    </kendo-switch>
+                </div>
+            </section>
+        </ng-template>
+    </kendo-panelbar-item>
+</kendo-panelbar>

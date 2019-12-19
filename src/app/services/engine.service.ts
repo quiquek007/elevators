@@ -25,14 +25,13 @@ export class EngineService implements OnDestroy {
         if (this.frameId != null) cancelAnimationFrame(this.frameId);
     }
 
-    public createScene(canvas: ElementRef<HTMLCanvasElement>, container: ElementRef<HTMLDivElement>): void {
-        // The first step is to get the reference of the canvas element from our HTML document
+    public createRenderer(canvas: ElementRef<HTMLCanvasElement>, settings: any): void {
         this.canvas = canvas.nativeElement;
-        this.renderer = new THREE.WebGLRenderer({
-            canvas: this.canvas,
-            alpha: true, // transparent background
-            antialias: true // smooth edges
-        });
+        this.renderer = new THREE.WebGLRenderer(settings);
+    }
+
+    public createScene(container: ElementRef<HTMLDivElement>): void {
+        // The first step is to get the reference of the canvas element from our HTML document
         this.renderer.setSize(container.nativeElement.clientWidth, container.nativeElement.clientHeight);
         this.container = container.nativeElement;
         this.scene = new THREE.Scene();

@@ -39,7 +39,14 @@ export class EngineComponent implements OnInit, OnDestroy {
             throw new Error("rendererCanvas not implemented.");
         }
 
-        this.engServ.createScene(this.rendererCanvas, this.canvasContainer);
+        const rendererSettings = {
+            canvas: this.rendererCanvas.nativeElement,
+            alpha: true, // transparent background
+            antialias: true, // smooth edges
+            // precision: "lowp",
+        };
+        this.engServ.createRenderer(this.rendererCanvas, rendererSettings)
+        this.engServ.createScene( this.canvasContainer);
         this.engServ.animate();
 
         this.objectManager.createCube();
@@ -66,9 +73,8 @@ export class EngineComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * grid lifecyrcle:
+     * grid lifecircle:
      * require to create new grid for change color
-     * @param color - string || THREE.Color
      */
     private updateGrid({ gridColor, gridOpacity, gridSize }: GridUpdateSettings, enable: boolean = true): void{
         if (this.grid) this.objectManager.removeObject(this.grid);

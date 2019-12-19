@@ -38,6 +38,15 @@ export function backgroundReducer(state: Background = defaultState, action: any)
 			
 		case BackgroundActions.RESET_GRID_SIZE:
 			return { ...state, gridSize: BACKGROUND.gridSize };
+			
+		case BackgroundActions.SET_RENDERER_EXPAND:
+			return { ...state, rendererSettingsExpanded: action.payload };
+			
+		case BackgroundActions.SET_RENDERER_ALPHA:
+			return { ...state, rendererAlpha: action.payload };
+			
+		case BackgroundActions.SET_RENDERER_ANTIALIAS:
+			return { ...state, rendererAntialias: action.payload };
 
   		default:
   			return state;

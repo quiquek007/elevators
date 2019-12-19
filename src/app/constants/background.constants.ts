@@ -1,6 +1,7 @@
 const BACKGROUND = {
     key: 'background',
     backgroundColor: 'rgb(64, 64, 64)',
+
     gridColor: 'gray',
     gridEnable: true,
     gridSettingsExpanded: false,
@@ -9,6 +10,10 @@ const BACKGROUND = {
         size: 200,
         division: 40
     },
+
+    rendererSettingsExpanded: false,
+    rendererAlpha: true,
+    rendererAntialias: true,
 }
 
 export default BACKGROUND;
