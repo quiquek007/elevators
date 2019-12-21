@@ -18,6 +18,7 @@ import { GridSettingsComponent } from './settings-panel/background-settings/grid
 import { FormsModule } from '@angular/forms';
 import { RendererSettingsComponent } from './settings-panel/background-settings/renderer-settings/renderer-settings.component';
 import { AttentionSignComponent } from './resouces/attention-sign/attention-sign.component';
+import { ControlsSettingsComponent } from './settings-panel/background-settings/controls-settings/controls-settings.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { AttentionSignComponent } from './resouces/attention-sign/attention-sign
     GridSettingsComponent,
     RendererSettingsComponent,
     AttentionSignComponent,
+    ControlsSettingsComponent,
   ],
   imports: [
     BrowserModule,

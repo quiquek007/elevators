@@ -14,6 +14,11 @@ const BACKGROUND = {
     rendererSettingsExpanded: false,
     rendererAlpha: true,
     rendererAntialias: true,
+
+    controlsSettingsExpanded: false,
+    controls: {
+        enableDamping: true,
+    }
 }
 
 export default BACKGROUND;

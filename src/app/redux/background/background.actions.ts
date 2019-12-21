@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { GridSizeModel } from 'src/app/shared/grid-size.model';
+import { Controls } from 'src/app/shared/controls.model';
 
 const SET_BACKGROUND_COLOR = 'SET_BACKGROUND_COLOR';
 const RESET_BACKGROUND_COLOR = 'RESET_BACKGROUND_COLOR';
@@ -15,6 +16,9 @@ const RESET_GRID_SIZE = 'RESET_GRID_SIZE';
 const SET_RENDERER_EXPAND = 'SET_RENDERER_EXPAND';
 const SET_RENDERER_ALPHA = 'SET_RENDERER_ALPHA';
 const SET_RENDERER_ANTIALIAS = 'SET_RENDERER_ANTIALIAS';
+
+const SET_CONTROLS_SETTINGS_EXPAND = 'SET_CONTROLS_SETTINGS_EXPAND';
+const SET_CONTROLS_DUMPING = 'SET_CONTROLS_DUMPING';
 
 // background settings
 class SetBackgroundColor implements Action {
@@ -76,6 +80,17 @@ class SetRendererAntialias implements Action {
     constructor(public payload: boolean) {}
 }
 
+// controls
+class SetControlsSettingsExpand implements Action {
+    type = SET_CONTROLS_SETTINGS_EXPAND;
+    constructor(public payload: boolean) {}
+}
+
+class SetControlsDumping implements Action {
+    type = SET_CONTROLS_DUMPING;
+    constructor(public payload: Controls) {}
+}
+
 export default {
     SetBackgroundColor,
     ResetBackgroundColor,
@@ -89,6 +104,8 @@ export default {
     SetRendererExpand,
     SetRendererAlpha,
     SetRendererAntialias,
+    SetControlsSettingsExpand,
+    SetControlsDumping,
 
     SET_BACKGROUND_COLOR,
     RESET_BACKGROUND_COLOR,
@@ -102,4 +119,6 @@ export default {
     SET_RENDERER_EXPAND,
     SET_RENDERER_ALPHA,
     SET_RENDERER_ANTIALIAS,
+    SET_CONTROLS_SETTINGS_EXPAND,
+    SET_CONTROLS_DUMPING,
 };

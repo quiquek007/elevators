@@ -47,6 +47,12 @@ export function backgroundReducer(state: Background = defaultState, action: any)
 			
 		case BackgroundActions.SET_RENDERER_ANTIALIAS:
 			return { ...state, rendererAntialias: action.payload };
+			
+		case BackgroundActions.SET_CONTROLS_SETTINGS_EXPAND:
+			return { ...state, controlsSettingsExpanded: action.payload };
+			
+		case BackgroundActions.SET_CONTROLS_DUMPING:
+			return { ...state, controls: action.payload };
 
   		default:
   			return state;

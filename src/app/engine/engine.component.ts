@@ -41,7 +41,7 @@ export class EngineComponent implements OnInit, OnDestroy {
             throw new Error('rendererCanvas not implemented.');
         }
 
-        this.initRendererSubscribtions();
+        this.initPrerenderSettings();
 
         const rendererSettings = {
             canvas: this.rendererCanvas.nativeElement,
@@ -60,7 +60,7 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.subscribtions.forEach(sub => sub.unsubscribe());
     }
 
-    private initRendererSubscribtions(): void {
+    private initPrerenderSettings(): void {
         this.subscribtions.push(
             this.store.select(state => state.background.rendererAlpha)
                 .subscribe(alpha => this.rendererAlpha = alpha),
@@ -80,6 +80,8 @@ export class EngineComponent implements OnInit, OnDestroy {
                 this.store.select(state => state.background.gridSize),
             ).subscribe(([gridColor, gridOpacity, enable, gridSize]) =>
                 this.updateGrid({ gridColor, gridOpacity, gridSize }, enable )),
+            this.store.select(state => state.background.controls.enableDamping)
+                .subscribe(dump => this.engServ.controls.enableDamping = dump),
         );
     }
 

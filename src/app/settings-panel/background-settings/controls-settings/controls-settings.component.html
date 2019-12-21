@@ -1,0 +1,15 @@
+<kendo-panelbar (stateChange)="onControlsSettingsExpanded($event)">
+    <kendo-panelbar-item title="Controls settings"
+        [expanded]="controlsSettingsExpanded">
+        <ng-template kendoPanelBarContent>
+            <section class="option-line">
+                <span>Enable Dumping:</span>
+                <kendo-switch
+                    class="component-switch"
+                    [(ngModel)]="controls.enableDamping"
+                    (click)="onDumpingChange()">
+                </kendo-switch>
+            </section>
+        </ng-template>
+    </kendo-panelbar-item>
+</kendo-panelbar>

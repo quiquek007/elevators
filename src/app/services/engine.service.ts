@@ -13,10 +13,10 @@ export class EngineService implements OnDestroy {
     private camera: THREE.PerspectiveCamera;
     private scene: THREE.Scene;
     private light: THREE.AmbientLight;
-    private controls: any;
     private container: HTMLElement;
-
     private frameId: number = null;
+    
+    public controls: OrbitControls;
 
     constructor(private ngZone: NgZone) {}
 
