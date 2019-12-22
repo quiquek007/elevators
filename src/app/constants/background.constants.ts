@@ -18,6 +18,7 @@ const BACKGROUND = {
     controlsSettingsExpanded: false,
     controls: {
         enableDamping: true,
+        dampingFactor: 0.15
     }
 }
 

@@ -10,6 +10,30 @@
                     (click)="onDumpingChange()">
                 </kendo-switch>
             </section>
+            <section class="option-line">
+                <span>Dumping factor:</span>
+                <div>
+                    <kendo-numerictextbox class="numerictext-component"
+                        [value]="controls?.dampingFactor"
+                        [min]="0"
+                        [step]="0.01"
+                        [disabled]="!controls?.enableDamping"
+                        [decimals]="2"
+                        [format]="'n2'"
+                        [autoCorrect]="true"
+                        [(ngModel)]="controls.dampingFactor"
+                        (valueChange)="onGridSizeChange(gridSize)">
+                    </kendo-numerictextbox>
+                    <!-- <button kendoButton
+                        kendoTooltip
+                        title="Default factor"
+                        [position]="getTooltipPosition()"
+                        [disabled]="!controls?.enableDamping"
+                        (click)="onDampingFactorReset()"
+                        [iconClass]="'k-icon k-i-reset-color'">
+                    </button> -->
+                </div>
+            </section>
         </ng-template>
     </kendo-panelbar-item>
 </kendo-panelbar>

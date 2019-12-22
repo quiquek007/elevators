@@ -17,6 +17,7 @@ export class ControlsSettingsComponent implements OnInit {
     public controlsSettingsExpanded: boolean;
     public controls: Controls;
 
+    private tooltipPosition: string = 'right';
     private subscriptions: Subscription[] = [];
 
     constructor(private store: Store<AppState>) {}
@@ -34,6 +35,10 @@ export class ControlsSettingsComponent implements OnInit {
         this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
+    public getTooltipPosition(): string {
+        return this.tooltipPosition === 'left' ? 'right' : 'top';
+    }
+
     public onDumpingChange(): void {
         this.store.dispatch(new BackgroundActions.SetControlsDumping(this.controls));
     }
@@ -42,8 +47,15 @@ export class ControlsSettingsComponent implements OnInit {
         this.store.dispatch(new BackgroundActions.SetControlsSettingsExpand(event[0].expanded));
     }
 
-    // public onOpacityChange(opacity: number): void {
-    //     if (opacity === null) this.store.dispatch(new BackgroundActions.SetGridOpacity(BACKGROUND.gridOpacity));
-    //     else this.store.dispatch(new BackgroundActions.SetGridOpacity(opacity));
+    // public ononDampingFactorReset(event: Event): void {
+    //     this.store.dispatch(new BackgroundActions.SetControlsSettingsExpand(event[0].expanded));
     // }
+    
+    public onGridSizeChange(): void {
+        // const defaultValue = 5;
+        // for (let key in this.controls) {
+        //     if (this.controls[key] === null) this.controls[key] = defaultValue;
+        // }       
+        this.store.dispatch(new BackgroundActions.SetControlsDumpingFactor(this.controls));
+    }
 }
