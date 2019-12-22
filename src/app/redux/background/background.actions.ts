@@ -18,8 +18,9 @@ const SET_RENDERER_ALPHA = 'SET_RENDERER_ALPHA';
 const SET_RENDERER_ANTIALIAS = 'SET_RENDERER_ANTIALIAS';
 
 const SET_CONTROLS_SETTINGS_EXPAND = 'SET_CONTROLS_SETTINGS_EXPAND';
-const SET_CONTROLS_DUMPING = 'SET_CONTROLS_DUMPING';
+const SET_CONTROLS_ENABLE_DUMPING = 'SET_CONTROLS_ENABLE_DUMPING';
 const SET_CONTROLS_DUMPING_FACTOR = 'SET_CONTROLS_DUMPING_FACTOR';
+const RESET_CONTROLS_DUMPING_FACTOR = 'RESET_CONTROLS_DUMPING_FACTOR';
 
 // background settings
 class SetBackgroundColor implements Action {
@@ -88,13 +89,17 @@ class SetControlsSettingsExpand implements Action {
 }
 
 class SetControlsDumping implements Action {
-    type = SET_CONTROLS_DUMPING;
-    constructor(public payload: Controls) {}
+    type = SET_CONTROLS_ENABLE_DUMPING;
+    constructor(public payload: boolean) {}
 }
 
 class SetControlsDumpingFactor implements Action {
     type = SET_CONTROLS_DUMPING_FACTOR;
     constructor(public payload: number) {}
+}
+
+class ResetControlsDumpingFactor implements Action {
+    type = RESET_CONTROLS_DUMPING_FACTOR;
 }
 
 export default {
@@ -113,6 +118,7 @@ export default {
     SetControlsSettingsExpand,
     SetControlsDumping,
     SetControlsDumpingFactor,
+    ResetControlsDumpingFactor,
 
     SET_BACKGROUND_COLOR,
     RESET_BACKGROUND_COLOR,
@@ -127,6 +133,7 @@ export default {
     SET_RENDERER_ALPHA,
     SET_RENDERER_ANTIALIAS,
     SET_CONTROLS_SETTINGS_EXPAND,
-    SET_CONTROLS_DUMPING,
+    SET_CONTROLS_ENABLE_DUMPING,
     SET_CONTROLS_DUMPING_FACTOR,
+    RESET_CONTROLS_DUMPING_FACTOR,
 };

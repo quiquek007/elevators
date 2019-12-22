@@ -21,11 +21,11 @@ export class RendererSettingsComponent implements OnInit {
 
     public ngOnInit() {
         this.subscriptions.push(
-            this.store.select(state => state.background.rendererSettingsExpanded)
+            this.store.select(state => state.background.renderer.rendererSettingsExpanded)
                 .subscribe(expanded => this.rendererSettingsExpanded = expanded),
-            this.store.select(state => state.background.rendererAlpha)
+            this.store.select(state => state.background.renderer.rendererAlpha)
                 .subscribe(alpha => this.rendererAlpha = alpha),
-            this.store.select(state => state.background.rendererAntialias)
+            this.store.select(state => state.background.renderer.rendererAntialias)
                 .subscribe(antialias => this.rendererAntialias = antialias),
         );
     }

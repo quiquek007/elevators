@@ -62,9 +62,9 @@ export class EngineComponent implements OnInit, OnDestroy {
 
     private initPrerenderSettings(): void {
         this.subscribtions.push(
-            this.store.select(state => state.background.rendererAlpha)
+            this.store.select(state => state.background.renderer.rendererAlpha)
                 .subscribe(alpha => this.rendererAlpha = alpha),
-            this.store.select(state => state.background.rendererAntialias)
+            this.store.select(state => state.background.renderer.rendererAntialias)
                 .subscribe(antialias => this.rendererAntialias = antialias),
         );
     }
@@ -74,14 +74,16 @@ export class EngineComponent implements OnInit, OnDestroy {
             this.store.select(state => state.background.backgroundColor)
                 .subscribe(backgroundColor => this.engServ.setColorBackground(backgroundColor)),
             combineLatest(
-                this.store.select(state => state.background.gridColor),
-                this.store.select(state => state.background.gridOpacity),
-                this.store.select(state => state.background.gridEnable),
-                this.store.select(state => state.background.gridSize),
+                this.store.select(state => state.background.grid.gridColor),
+                this.store.select(state => state.background.grid.gridOpacity),
+                this.store.select(state => state.background.grid.gridEnable),
+                this.store.select(state => state.background.grid.gridSize),
             ).subscribe(([gridColor, gridOpacity, enable, gridSize]) =>
                 this.updateGrid({ gridColor, gridOpacity, gridSize }, enable )),
             this.store.select(state => state.background.controls.enableDamping)
-                .subscribe(dump => this.engServ.controls.enableDamping = dump),
+                .subscribe(flag => this.engServ.controls.enableDamping = flag),
+            this.store.select(state => state.background.controls.dampingFactor)
+                .subscribe(dump => this.engServ.controls.dampingFactor = dump),
         );
     }
 

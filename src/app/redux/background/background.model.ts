@@ -1,19 +1,11 @@
 import { GridSizeModel } from 'src/app/shared/grid-size.model';
 import { Controls } from 'src/app/shared/controls.model';
+import { Grid } from 'src/app/shared/grid.model';
+import { Renderer } from 'src/app/shared/renderer.model';
 
 export interface Background {
     backgroundColor: string;
-
-    gridColor: string;
-    gridEnable: boolean;
-    gridSettingsExpanded: boolean;
-    gridOpacity: number;
-    gridSize: GridSizeModel;
-
-    rendererSettingsExpanded: boolean;
-    rendererAlpha: boolean;
-    rendererAntialias: boolean;
-
-    controlsSettingsExpanded: boolean;
+    grid: Grid;
+    renderer: Renderer;
     controls: Controls;
 }

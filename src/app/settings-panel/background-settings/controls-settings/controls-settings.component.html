@@ -2,35 +2,37 @@
     <kendo-panelbar-item title="Controls settings"
         [expanded]="controlsSettingsExpanded">
         <ng-template kendoPanelBarContent>
-            <!-- <section class="option-line">
+            <section class="option-line">
                 <span>Enable Damping:</span>
                 <kendo-switch
                     class="component-switch"
-                    [(ngModel)]="controls.enableDamping"
-                    (click)="onDumpingChange()">
+                    [(ngModel)]="enableDamping"
+                    (click)="onDumpingEnableChange()">
                 </kendo-switch>
-            </section> -->
+            </section>
             <section class="option-line">
                 <span>Dumping factor:</span>
                 <div>
                     <kendo-numerictextbox class="numerictext-component"
                         [value]="dampingFactor"
-                        [min]="0"
+                        [min]="0.001"
+                        [max]="1"
                         [step]="0.01"
-                        [decimals]="2"
+                        [decimals]="3"
                         [format]="'n2'"
                         [autoCorrect]="true"
+                        [disabled]="!enableDamping"
                         [(ngModel)]="dampingFactor"
-                        (valueChange)="onGridSizeChange()">
+                        (valueChange)="onDampingFactorChange()">
                     </kendo-numerictextbox>
-                    <!-- <button kendoButton
+                    <button kendoButton
                         kendoTooltip
                         title="Default factor"
                         [position]="getTooltipPosition()"
-                        [disabled]="!controls?.enableDamping"
-                        (click)="onDampingFactorReset()"
-                        [iconClass]="'k-icon k-i-reset-color'">
-                    </button> -->
+                        [disabled]="!enableDamping"
+                        [iconClass]="'k-icon k-i-reset-color'"
+                        (click)="onDampingFactorReset()">
+                    </button>
                 </div>
             </section>
         </ng-template>

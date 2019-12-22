@@ -19,47 +19,88 @@ export function backgroundReducer(state: Background = defaultState, action: any)
 			  return { ...state, backgroundColor: BACKGROUND.backgroundColor };
 			  
 		case BackgroundActions.SET_GRID_COLOR:
-  			return { ...state, gridColor: action.payload };
+			return { 
+				...state,
+				grid: { ...state.grid, gridColor: action.payload }
+			}; 
 
 		case BackgroundActions.RESET_GRID_COLOR:
-			return { ...state, gridColor: BACKGROUND.gridColor };
+			return { 
+				...state,
+				grid: { ...state.grid, gridColor: BACKGROUND.grid.gridColor }
+			}; 
 
 		case BackgroundActions.SET_GRID_SETTINGS_EXPAND:
-			return { ...state, gridSettingsExpanded: action.payload };
+			return { 
+				...state,
+				grid: { ...state.grid, gridSettingsExpanded: action.payload }
+			}; 
 
 		case BackgroundActions.SET_GRID_ENABLE:
-			return { ...state, gridEnable: action.payload };
+			return { 
+				...state,
+				grid: { ...state.grid, gridEnable: action.payload }
+			}; 
 
 		case BackgroundActions.SET_GRID_OPACITY:
-			return { ...state, gridOpacity: action.payload };
+			return { 
+				...state,
+				grid: { ...state.grid, gridOpacity: action.payload }
+			}; 
 
 		case BackgroundActions.SET_GRID_SIZE:
-			return { ...state, gridSize: action.payload };
+			return { 
+				...state,
+				grid: { ...state.grid, gridSize: action.payload }
+			}; 
 			
 		case BackgroundActions.RESET_GRID_SIZE:
-			return { ...state, gridSize: BACKGROUND.gridSize };
+			return { 
+				...state,
+				grid: { ...state.grid, gridSize: BACKGROUND.grid.gridSize }
+			}; 
 			
 		case BackgroundActions.SET_RENDERER_EXPAND:
-			return { ...state, rendererSettingsExpanded: action.payload };
+			return { 
+				...state,
+				renderer: { ...state.renderer, rendererSettingsExpanded: action.payload }
+			}; 
 			
 		case BackgroundActions.SET_RENDERER_ALPHA:
-			return { ...state, rendererAlpha: action.payload };
+			return { 
+				...state,
+				renderer: { ...state.renderer, rendererAlpha: action.payload }
+			}; 
 			
 		case BackgroundActions.SET_RENDERER_ANTIALIAS:
-			return { ...state, rendererAntialias: action.payload };
+			return { 
+				...state,
+				renderer: { ...state.renderer, rendererAntialias: action.payload }
+			}; 
 			
 		case BackgroundActions.SET_CONTROLS_SETTINGS_EXPAND:
-			return { ...state, controlsSettingsExpanded: action.payload };
+			return { 
+				...state,
+				controls: { ...state.controls, controlsSettingsExpanded: action.payload }
+			}; 
 			
-		case BackgroundActions.SET_CONTROLS_DUMPING:
-			return { ...state, controls: action.payload };
+		case BackgroundActions.SET_CONTROLS_ENABLE_DUMPING:
+			return { 
+				...state,
+				controls: { ...state.controls, enableDamping: action.payload }
+			}; 
 			
 		case BackgroundActions.SET_CONTROLS_DUMPING_FACTOR:
-			const obj = { 
+			return { 
 				...state,
 				controls: { ...state.controls, dampingFactor: action.payload }
-			};
-			return obj; 
+			}; 
+			
+		case BackgroundActions.RESET_CONTROLS_DUMPING_FACTOR:
+			return { 
+				...state,
+				controls: { ...state.controls, dampingFactor: BACKGROUND.controls.dampingFactor }
+			}; 
 
   		default:
   			return state;

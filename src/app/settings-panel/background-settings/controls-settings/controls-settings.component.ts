@@ -15,7 +15,7 @@ import { Controls } from 'src/app/shared/controls.model';
 })
 export class ControlsSettingsComponent implements OnInit {
     public controlsSettingsExpanded: boolean;
-    public controls: Controls;
+    public enableDamping: boolean;
     public dampingFactor: number;
 
     private tooltipPosition: string = 'right';
@@ -25,10 +25,10 @@ export class ControlsSettingsComponent implements OnInit {
 
     public ngOnInit(): void {
         this.subscriptions.push(
-            this.store.select(state => state.background.controlsSettingsExpanded)
+            this.store.select(state => state.background.controls.controlsSettingsExpanded)
                 .subscribe(enable => this.controlsSettingsExpanded = enable),
-            this.store.select(state => state.background.controls)
-                .subscribe(controls => this.controls = Object.assign({}, controls)),
+            this.store.select(state => state.background.controls.enableDamping)
+                .subscribe(enable => this.enableDamping = enable),
             this.store.select(state => state.background.controls.dampingFactor)
                 .subscribe(factor => this.dampingFactor = factor),
         );
@@ -42,23 +42,20 @@ export class ControlsSettingsComponent implements OnInit {
         return this.tooltipPosition === 'left' ? 'right' : 'top';
     }
 
-    public onDumpingChange(): void {
-        this.store.dispatch(new BackgroundActions.SetControlsDumping(this.controls));
-    }
-
     public onControlsSettingsExpanded(event: Event): void {
         this.store.dispatch(new BackgroundActions.SetControlsSettingsExpand(event[0].expanded));
     }
 
-    // public ononDampingFactorReset(event: Event): void {
-    //     this.store.dispatch(new BackgroundActions.SetControlsSettingsExpand(event[0].expanded));
-    // }
+    public onDumpingEnableChange(): void {
+        this.store.dispatch(new BackgroundActions.SetControlsDumping(this.enableDamping));
+    }
+
+    public onDampingFactorReset(): void {
+        this.store.dispatch(new BackgroundActions.ResetControlsDumpingFactor());
+    }
     
-    public onGridSizeChange(): void {
-        // const defaultValue = 5;
-        // for (let key in this.controls) {
-        //     if (this.controls[key] === null) this.controls[key] = defaultValue;
-        // }       
+    public onDampingFactorChange(): void {
+        if (this.dampingFactor === null) this.dampingFactor = 0.01;
         this.store.dispatch(new BackgroundActions.SetControlsDumpingFactor(this.dampingFactor));
     }
 }

@@ -30,15 +30,15 @@ export class GridSettingsComponent implements OnInit {
         this.subscriptions.push(
             this.store.select(state => state.settingsForm.formPosition)
                 .subscribe(position => this.tooltipPosition = position),
-            this.store.select(state => state.background.gridColor)
+            this.store.select(state => state.background.grid.gridColor)
                 .subscribe(gridColor => this.gridColor = gridColor),
-            this.store.select(state => state.background.gridSettingsExpanded)
+            this.store.select(state => state.background.grid.gridSettingsExpanded)
                 .subscribe(expanded => this.gridSettingsExpanded = expanded),
-            this.store.select(state => state.background.gridEnable)
+            this.store.select(state => state.background.grid.gridEnable)
                 .subscribe(enable => this.gridEnable = enable),
-            this.store.select(state => state.background.gridOpacity)
+            this.store.select(state => state.background.grid.gridOpacity)
                 .subscribe(opacity => this.gridOpacity = opacity),
-            this.store.select(state => state.background.gridSize)
+            this.store.select(state => state.background.grid.gridSize)
                 .subscribe(size => {
                     // avoid mutilate basic constant
                     this.gridSize = Object.assign({}, size);
@@ -72,7 +72,7 @@ export class GridSettingsComponent implements OnInit {
     }
 
     public onOpacityChange(opacity: number): void {
-        if (opacity === null) this.store.dispatch(new BackgroundActions.SetGridOpacity(BACKGROUND.gridOpacity));
+        if (opacity === null) this.store.dispatch(new BackgroundActions.SetGridOpacity(BACKGROUND.grid.gridOpacity));
         else this.store.dispatch(new BackgroundActions.SetGridOpacity(opacity));
     }
 
