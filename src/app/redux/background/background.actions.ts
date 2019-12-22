@@ -94,7 +94,7 @@ class SetControlsDumping implements Action {
 
 class SetControlsDumpingFactor implements Action {
     type = SET_CONTROLS_DUMPING_FACTOR;
-    constructor(public payload: Controls) {}
+    constructor(public payload: number) {}
 }
 
 export default {

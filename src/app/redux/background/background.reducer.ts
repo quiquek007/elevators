@@ -55,7 +55,11 @@ export function backgroundReducer(state: Background = defaultState, action: any)
 			return { ...state, controls: action.payload };
 			
 		case BackgroundActions.SET_CONTROLS_DUMPING_FACTOR:
-			return { ...state, controls: action.payload };
+			const obj = { 
+				...state,
+				controls: { ...state.controls, dampingFactor: action.payload }
+			};
+			return obj; 
 
   		default:
   			return state;

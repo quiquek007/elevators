@@ -2,27 +2,26 @@
     <kendo-panelbar-item title="Controls settings"
         [expanded]="controlsSettingsExpanded">
         <ng-template kendoPanelBarContent>
-            <section class="option-line">
-                <span>Enable Dumping:</span>
+            <!-- <section class="option-line">
+                <span>Enable Damping:</span>
                 <kendo-switch
                     class="component-switch"
                     [(ngModel)]="controls.enableDamping"
                     (click)="onDumpingChange()">
                 </kendo-switch>
-            </section>
+            </section> -->
             <section class="option-line">
                 <span>Dumping factor:</span>
                 <div>
                     <kendo-numerictextbox class="numerictext-component"
-                        [value]="controls?.dampingFactor"
+                        [value]="dampingFactor"
                         [min]="0"
                         [step]="0.01"
-                        [disabled]="!controls?.enableDamping"
                         [decimals]="2"
                         [format]="'n2'"
                         [autoCorrect]="true"
-                        [(ngModel)]="controls.dampingFactor"
-                        (valueChange)="onGridSizeChange(gridSize)">
+                        [(ngModel)]="dampingFactor"
+                        (valueChange)="onGridSizeChange()">
                     </kendo-numerictextbox>
                     <!-- <button kendoButton
                         kendoTooltip
