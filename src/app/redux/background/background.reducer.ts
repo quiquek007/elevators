@@ -101,6 +101,18 @@ export function backgroundReducer(state: Background = defaultState, action: any)
 				...state,
 				controls: { ...state.controls, dampingFactor: BACKGROUND.controls.dampingFactor }
 			}; 
+			
+		case BackgroundActions.SET_CONTROLS_CAMERA_MIN_DISTANCE:
+			return { 
+				...state,
+				controls: { ...state.controls, cameraMinDistance: action.payload }
+			}; 
+			
+		case BackgroundActions.SET_CONTROLS_CAMERA_MAX_DISTANCE:
+			return { 
+				...state,
+				controls: { ...state.controls, cameraMaxDistance: action.payload }
+			}; 
 
   		default:
   			return state;

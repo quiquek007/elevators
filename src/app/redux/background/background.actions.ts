@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
 import { GridSizeModel } from 'src/app/shared/grid-size.model';
-import { Controls } from 'src/app/shared/controls.model';
 
 const SET_BACKGROUND_COLOR = 'SET_BACKGROUND_COLOR';
 const RESET_BACKGROUND_COLOR = 'RESET_BACKGROUND_COLOR';
@@ -21,6 +20,8 @@ const SET_CONTROLS_SETTINGS_EXPAND = 'SET_CONTROLS_SETTINGS_EXPAND';
 const SET_CONTROLS_ENABLE_DUMPING = 'SET_CONTROLS_ENABLE_DUMPING';
 const SET_CONTROLS_DUMPING_FACTOR = 'SET_CONTROLS_DUMPING_FACTOR';
 const RESET_CONTROLS_DUMPING_FACTOR = 'RESET_CONTROLS_DUMPING_FACTOR';
+const SET_CONTROLS_CAMERA_MIN_DISTANCE = 'SET_CONTROLS_CAMERA_MIN_DISTANCE';
+const SET_CONTROLS_CAMERA_MAX_DISTANCE = 'SET_CONTROLS_CAMERA_MAX_DISTANCE';
 
 // background settings
 class SetBackgroundColor implements Action {
@@ -102,6 +103,16 @@ class ResetControlsDumpingFactor implements Action {
     type = RESET_CONTROLS_DUMPING_FACTOR;
 }
 
+class SetControlsCameraMinDistance implements Action {
+    type = SET_CONTROLS_CAMERA_MIN_DISTANCE;
+    constructor(public payload: number) {}
+}
+
+class SetControlsCameraMaxDistance implements Action {
+    type = SET_CONTROLS_CAMERA_MAX_DISTANCE;
+    constructor(public payload: number) {}
+}
+
 export default {
     SetBackgroundColor,
     ResetBackgroundColor,
@@ -119,6 +130,8 @@ export default {
     SetControlsDumping,
     SetControlsDumpingFactor,
     ResetControlsDumpingFactor,
+    SetControlsCameraMinDistance,
+    SetControlsCameraMaxDistance,
 
     SET_BACKGROUND_COLOR,
     RESET_BACKGROUND_COLOR,
@@ -136,4 +149,6 @@ export default {
     SET_CONTROLS_ENABLE_DUMPING,
     SET_CONTROLS_DUMPING_FACTOR,
     RESET_CONTROLS_DUMPING_FACTOR,
+    SET_CONTROLS_CAMERA_MIN_DISTANCE,
+    SET_CONTROLS_CAMERA_MAX_DISTANCE,
 };

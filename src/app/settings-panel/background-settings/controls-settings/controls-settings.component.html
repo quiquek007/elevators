@@ -35,6 +35,33 @@
                     </button>
                 </div>
             </section>
+            <section class="option-line">
+                <span>Camera distance(min/max):</span>
+                <div>
+                    <kendo-numerictextbox class="numerictext-component"
+                        [value]="cameraMinDistance"
+                        [min]="0"
+                        [max]="50000"
+                        [step]="25"
+                        [decimals]="0"
+                        [format]="'n0'"
+                        [autoCorrect]="true"
+                        [(ngModel)]="cameraMinDistance"
+                        (valueChange)="onCameraMinDistanceChange()">
+                    </kendo-numerictextbox>
+                    <kendo-numerictextbox class="numerictext-component"
+                        [value]="cameraMaxDistance"
+                        [min]="1"
+                        [max]="50000"
+                        [step]="25"
+                        [decimals]="0"
+                        [format]="'n0'"
+                        [autoCorrect]="true"
+                        [(ngModel)]="cameraMaxDistance"
+                        (valueChange)="onCameraMaxDistanceChange()">
+                    </kendo-numerictextbox>
+                </div>
+            </section>
         </ng-template>
     </kendo-panelbar-item>
 </kendo-panelbar>

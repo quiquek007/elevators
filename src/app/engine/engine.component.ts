@@ -84,6 +84,10 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .subscribe(flag => this.engServ.controls.enableDamping = flag),
             this.store.select(state => state.background.controls.dampingFactor)
                 .subscribe(dump => this.engServ.controls.dampingFactor = dump),
+            this.store.select(state => state.background.controls.cameraMinDistance)
+                .subscribe(distance => this.engServ.controls.minDistance = distance),
+            this.store.select(state => state.background.controls.cameraMaxDistance)
+                .subscribe(distance => this.engServ.controls.maxDistance = distance),
         );
     }
 

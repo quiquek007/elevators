@@ -40,13 +40,8 @@ export class EngineService implements OnDestroy {
 
         // mouse control
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-        this.controls.dampingFactor = 0.15;
         this.controls.screenSpacePanning = false;
-        this.controls.minDistance = 100;
-        this.controls.maxDistance = 500;
-        this.controls.maxPolarAngle = Math.PI / 2;
-        this.controls.enableZoom = true;
+        // this.controls.maxPolarAngle = Math.PI / 2;
 
         this.scene.add(this.light);
         this.scene.add(this.camera);

@@ -22,7 +22,9 @@ const BACKGROUND = {
     controls: {
         controlsSettingsExpanded: false,
         enableDamping: true,
-        dampingFactor: 0.15
+        dampingFactor: 0.15,
+        cameraMinDistance: 100,
+        cameraMaxDistance: 1000,
     }
 }
 
