@@ -13,19 +13,19 @@ import { AppComponent } from './app.component';
 import { EngineComponent } from './engine/engine.component';
 import { ObjectManagerService } from './services/object-manager.service';
 import { rootReducer } from './redux/root-reducer';
-import { BackgroundSettingsComponent } from './settings-panel/background-settings/background-settings.component';
-import { GridSettingsComponent } from './settings-panel/background-settings/grid-settings/grid-settings.component';
+import { GeneralSettingsComponent } from './settings-panel/general-settings/general-settings.component';
+import { GridSettingsComponent } from './settings-panel/general-settings/grid-settings/grid-settings.component';
 import { FormsModule } from '@angular/forms';
-import { RendererSettingsComponent } from './settings-panel/background-settings/renderer-settings/renderer-settings.component';
+import { RendererSettingsComponent } from './settings-panel/general-settings/renderer-settings/renderer-settings.component';
 import { AttentionSignComponent } from './resouces/attention-sign/attention-sign.component';
-import { ControlsSettingsComponent } from './settings-panel/background-settings/controls-settings/controls-settings.component';
+import { ControlsSettingsComponent } from './settings-panel/general-settings/controls-settings/controls-settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EngineComponent,
     SettingsPanelComponent,
-    BackgroundSettingsComponent,
+    GeneralSettingsComponent,
     GridSettingsComponent,
     RendererSettingsComponent,
     AttentionSignComponent,

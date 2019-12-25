@@ -5,8 +5,8 @@ import {
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/redux/root-interface';
-import BackgroundActions from '../../../redux/background/background.actions';
-import BACKGROUND from 'src/app/constants/background.constants';
+import GeneralSettingsActions from '../../../redux/general-settings/general-settings.actions';
+import generalSettings from 'src/app/constants/general-settings.constants';
 import { GridSizeModel } from 'src/app/shared/grid-size.model';
 
 @Component({
@@ -30,15 +30,15 @@ export class GridSettingsComponent implements OnInit {
         this.subscriptions.push(
             this.store.select(state => state.settingsForm.formPosition)
                 .subscribe(position => this.tooltipPosition = position),
-            this.store.select(state => state.background.grid.gridColor)
+            this.store.select(state => state.generalSettings.grid.gridColor)
                 .subscribe(gridColor => this.gridColor = gridColor),
-            this.store.select(state => state.background.grid.gridSettingsExpanded)
+            this.store.select(state => state.generalSettings.grid.gridSettingsExpanded)
                 .subscribe(expanded => this.gridSettingsExpanded = expanded),
-            this.store.select(state => state.background.grid.gridEnable)
+            this.store.select(state => state.generalSettings.grid.gridEnable)
                 .subscribe(enable => this.gridEnable = enable),
-            this.store.select(state => state.background.grid.gridOpacity)
+            this.store.select(state => state.generalSettings.grid.gridOpacity)
                 .subscribe(opacity => this.gridOpacity = opacity),
-            this.store.select(state => state.background.grid.gridSize)
+            this.store.select(state => state.generalSettings.grid.gridSize)
                 .subscribe(size => {
                     // avoid mutilate basic constant
                     this.gridSize = Object.assign({}, size);
@@ -55,25 +55,25 @@ export class GridSettingsComponent implements OnInit {
     }
 
     public onGridColorChange(color: string): void {
-        this.store.dispatch(new BackgroundActions.SetGridColor(color));
+        this.store.dispatch(new GeneralSettingsActions.SetGridColor(color));
 	}
 	
     public onGridColorReset(): void {
-        this.store.dispatch(new BackgroundActions.ResetGridColor());
+        this.store.dispatch(new GeneralSettingsActions.ResetGridColor());
     }
 
     public onChangeSwitch(event: Event): void {
         event.stopPropagation();
-        this.store.dispatch(new BackgroundActions.SetGridEnable(this.gridEnable));
+        this.store.dispatch(new GeneralSettingsActions.SetGridEnable(this.gridEnable));
     }
 
     public onGridSettingsExpanded(event: Event): void {
-        this.store.dispatch(new BackgroundActions.SetGridSettingsExpand(event[0].expanded));
+        this.store.dispatch(new GeneralSettingsActions.SetGridSettingsExpand(event[0].expanded));
     }
 
     public onOpacityChange(opacity: number): void {
-        if (opacity === null) this.store.dispatch(new BackgroundActions.SetGridOpacity(BACKGROUND.grid.gridOpacity));
-        else this.store.dispatch(new BackgroundActions.SetGridOpacity(opacity));
+        if (opacity === null) this.store.dispatch(new GeneralSettingsActions.SetGridOpacity(generalSettings.grid.gridOpacity));
+        else this.store.dispatch(new GeneralSettingsActions.SetGridOpacity(opacity));
     }
 
     public onGridSizeChange(): void {
@@ -81,10 +81,10 @@ export class GridSettingsComponent implements OnInit {
         for (let key in this.gridSize) {
             if (this.gridSize[key] === null) this.gridSize[key] = defaultValue;
         }       
-        this.store.dispatch(new BackgroundActions.SetGridSize(this.gridSize));
+        this.store.dispatch(new GeneralSettingsActions.SetGridSize(this.gridSize));
     }
 
     public onGridSizeReset(): void {
-        this.store.dispatch(new BackgroundActions.ResetGridSize());
+        this.store.dispatch(new GeneralSettingsActions.ResetGridSize());
     }
 }

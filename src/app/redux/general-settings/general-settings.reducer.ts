@@ -1,114 +1,114 @@
-import BackgroundActions from './background.actions';
-import { Background } from './background.model'
+import GeneralActions from './general-settings.actions';
+import { GeneralSettings } from './general-settings.model'
 import DefaultState from '../default-state.provider';
-import BACKGROUND from 'src/app/constants/background.constants';
+import generalSettings from 'src/app/constants/general-settings.constants';
 
 let defaultState = new DefaultState().getState();
 if (!defaultState) {
-	defaultState = BACKGROUND
+	defaultState = generalSettings
 } else {
-	defaultState = defaultState[BACKGROUND.key];
+	defaultState = defaultState[generalSettings.key];
 }
 
-export function backgroundReducer(state: Background = defaultState, action: any) {
+export function generalSettingsReducer(state: GeneralSettings = defaultState, action: any) {
 	switch (action.type) {
-  		case BackgroundActions.SET_BACKGROUND_COLOR:
+  		case GeneralActions.SET_GENERAL_SETTINGS_COLOR:
   			return { ...state, backgroundColor: action.payload };
 
-  		case BackgroundActions.RESET_BACKGROUND_COLOR:
-			  return { ...state, backgroundColor: BACKGROUND.backgroundColor };
+  		case GeneralActions.RESET_GENERAL_SETTINGS_COLOR:
+			  return { ...state, backgroundColor: generalSettings.backgroundColor };
 			  
-		case BackgroundActions.SET_GRID_COLOR:
+		case GeneralActions.SET_GRID_COLOR:
 			return { 
 				...state,
 				grid: { ...state.grid, gridColor: action.payload }
 			}; 
 
-		case BackgroundActions.RESET_GRID_COLOR:
+		case GeneralActions.RESET_GRID_COLOR:
 			return { 
 				...state,
-				grid: { ...state.grid, gridColor: BACKGROUND.grid.gridColor }
+				grid: { ...state.grid, gridColor: generalSettings.grid.gridColor }
 			}; 
 
-		case BackgroundActions.SET_GRID_SETTINGS_EXPAND:
+		case GeneralActions.SET_GRID_SETTINGS_EXPAND:
 			return { 
 				...state,
 				grid: { ...state.grid, gridSettingsExpanded: action.payload }
 			}; 
 
-		case BackgroundActions.SET_GRID_ENABLE:
+		case GeneralActions.SET_GRID_ENABLE:
 			return { 
 				...state,
 				grid: { ...state.grid, gridEnable: action.payload }
 			}; 
 
-		case BackgroundActions.SET_GRID_OPACITY:
+		case GeneralActions.SET_GRID_OPACITY:
 			return { 
 				...state,
 				grid: { ...state.grid, gridOpacity: action.payload }
 			}; 
 
-		case BackgroundActions.SET_GRID_SIZE:
+		case GeneralActions.SET_GRID_SIZE:
 			return { 
 				...state,
 				grid: { ...state.grid, gridSize: action.payload }
 			}; 
 			
-		case BackgroundActions.RESET_GRID_SIZE:
+		case GeneralActions.RESET_GRID_SIZE:
 			return { 
 				...state,
-				grid: { ...state.grid, gridSize: BACKGROUND.grid.gridSize }
+				grid: { ...state.grid, gridSize: generalSettings.grid.gridSize }
 			}; 
 			
-		case BackgroundActions.SET_RENDERER_EXPAND:
+		case GeneralActions.SET_RENDERER_EXPAND:
 			return { 
 				...state,
 				renderer: { ...state.renderer, rendererSettingsExpanded: action.payload }
 			}; 
 			
-		case BackgroundActions.SET_RENDERER_ALPHA:
+		case GeneralActions.SET_RENDERER_ALPHA:
 			return { 
 				...state,
 				renderer: { ...state.renderer, rendererAlpha: action.payload }
 			}; 
 			
-		case BackgroundActions.SET_RENDERER_ANTIALIAS:
+		case GeneralActions.SET_RENDERER_ANTIALIAS:
 			return { 
 				...state,
 				renderer: { ...state.renderer, rendererAntialias: action.payload }
 			}; 
 			
-		case BackgroundActions.SET_CONTROLS_SETTINGS_EXPAND:
+		case GeneralActions.SET_CONTROLS_SETTINGS_EXPAND:
 			return { 
 				...state,
 				controls: { ...state.controls, controlsSettingsExpanded: action.payload }
 			}; 
 			
-		case BackgroundActions.SET_CONTROLS_ENABLE_DUMPING:
+		case GeneralActions.SET_CONTROLS_ENABLE_DUMPING:
 			return { 
 				...state,
 				controls: { ...state.controls, enableDamping: action.payload }
 			}; 
 			
-		case BackgroundActions.SET_CONTROLS_DUMPING_FACTOR:
+		case GeneralActions.SET_CONTROLS_DUMPING_FACTOR:
 			return { 
 				...state,
 				controls: { ...state.controls, dampingFactor: action.payload }
 			}; 
 			
-		case BackgroundActions.RESET_CONTROLS_DUMPING_FACTOR:
+		case GeneralActions.RESET_CONTROLS_DUMPING_FACTOR:
 			return { 
 				...state,
-				controls: { ...state.controls, dampingFactor: BACKGROUND.controls.dampingFactor }
+				controls: { ...state.controls, dampingFactor: generalSettings.controls.dampingFactor }
 			}; 
 			
-		case BackgroundActions.SET_CONTROLS_CAMERA_MIN_DISTANCE:
+		case GeneralActions.SET_CONTROLS_CAMERA_MIN_DISTANCE:
 			return { 
 				...state,
 				controls: { ...state.controls, cameraMinDistance: action.payload }
 			}; 
 			
-		case BackgroundActions.SET_CONTROLS_CAMERA_MAX_DISTANCE:
+		case GeneralActions.SET_CONTROLS_CAMERA_MAX_DISTANCE:
 			return { 
 				...state,
 				controls: { ...state.controls, cameraMaxDistance: action.payload }

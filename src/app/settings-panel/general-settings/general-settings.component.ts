@@ -6,14 +6,14 @@ import {
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from 'src/app/redux/root-interface';
-import BackgroundActions from '../../redux/background/background.actions';
+import GeneralSettingsActions from '../../redux/general-settings/general-settings.actions';
 
 @Component({
-    selector: 'background-settings',
-    templateUrl: './background-settings.component.html',
-	styleUrls: ['./background-settings.component.less']
+    selector: 'general-settings',
+    templateUrl: './general-settings.component.html',
+	styleUrls: ['./general-settings.component.less']
 })
-export class BackgroundSettingsComponent implements OnInit, OnDestroy {
+export class GeneralSettingsComponent implements OnInit, OnDestroy {
     public backgroundColor: string;
 
     public tooltipPosition: string = 'right';
@@ -25,7 +25,7 @@ export class BackgroundSettingsComponent implements OnInit, OnDestroy {
         this.subscriptions.push(
             this.store.select(state => state.settingsForm.formPosition)
                 .subscribe(position => this.tooltipPosition = position),
-            this.store.select(state => state.background.backgroundColor)
+            this.store.select(state => state.generalSettings.backgroundColor)
                 .subscribe(backgroundColor => this.backgroundColor = backgroundColor),
         );
     }
@@ -39,12 +39,10 @@ export class BackgroundSettingsComponent implements OnInit, OnDestroy {
     }
 
     public onBackgroundColorChange(color: string): void {
-		this.backgroundColor = color;
-        this.store.dispatch(new BackgroundActions.SetBackgroundColor(color));
+        this.store.dispatch(new GeneralSettingsActions.SetBackgroundColor(color));
 	}
 	
     public onBackgroundColorReset(): void {
-        this.store.dispatch(new BackgroundActions.ResetBackgroundColor());
-        this.backgroundColor = (this.store.source as any).value.background.backgroundColor;
+        this.store.dispatch(new GeneralSettingsActions.ResetBackgroundColor());
     }
 }

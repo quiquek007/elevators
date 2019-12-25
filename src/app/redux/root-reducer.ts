@@ -1,7 +1,7 @@
-import { backgroundReducer } from './background/background.reducer';
+import { generalSettingsReducer } from './general-settings/general-settings.reducer';
 import { settingsFormReducer } from './settings-form/settings-form.reducer';
 
 export const rootReducer = {
-    background: backgroundReducer,
+    generalSettings: generalSettingsReducer,
     settingsForm: settingsFormReducer
 };

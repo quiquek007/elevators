@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
 import { GridSizeModel } from 'src/app/shared/grid-size.model';
 
-const SET_BACKGROUND_COLOR = 'SET_BACKGROUND_COLOR';
-const RESET_BACKGROUND_COLOR = 'RESET_BACKGROUND_COLOR';
+const SET_GENERAL_SETTINGS_COLOR = 'SET_GENERAL_SETTINGS_COLOR';
+const RESET_GENERAL_SETTINGS_COLOR = 'RESET_GENERAL_SETTINGS_COLOR';
 
 const SET_GRID_COLOR = 'SET_GRID_COLOR';
 const RESET_GRID_COLOR = 'RESET_GRID_COLOR';
@@ -23,14 +23,14 @@ const RESET_CONTROLS_DUMPING_FACTOR = 'RESET_CONTROLS_DUMPING_FACTOR';
 const SET_CONTROLS_CAMERA_MIN_DISTANCE = 'SET_CONTROLS_CAMERA_MIN_DISTANCE';
 const SET_CONTROLS_CAMERA_MAX_DISTANCE = 'SET_CONTROLS_CAMERA_MAX_DISTANCE';
 
-// background settings
+// general settings
 class SetBackgroundColor implements Action {
-    type = SET_BACKGROUND_COLOR;
+    type = SET_GENERAL_SETTINGS_COLOR;
     constructor(public payload: string) {}
 }
 
 class ResetBackgroundColor implements Action {
-    type = RESET_BACKGROUND_COLOR;
+    type = RESET_GENERAL_SETTINGS_COLOR;
 }
 
 // grid settings
@@ -133,8 +133,8 @@ export default {
     SetControlsCameraMinDistance,
     SetControlsCameraMaxDistance,
 
-    SET_BACKGROUND_COLOR,
-    RESET_BACKGROUND_COLOR,
+    SET_GENERAL_SETTINGS_COLOR,
+    RESET_GENERAL_SETTINGS_COLOR,
     SET_GRID_COLOR,
     RESET_GRID_COLOR,
     SET_GRID_SETTINGS_EXPAND,

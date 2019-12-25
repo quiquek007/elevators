@@ -1,5 +1,5 @@
-const BACKGROUND = {
-    key: 'background',
+const generalSettings = {
+    key: 'generalSettings',
     backgroundColor: 'rgb(64, 64, 64)',
 
     grid: {
@@ -28,4 +28,4 @@ const BACKGROUND = {
     }
 }
 
-export default BACKGROUND;
+export default generalSettings;

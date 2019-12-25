@@ -5,14 +5,13 @@ import {
     OnInit,
     OnDestroy
 } from '@angular/core';
-import { EngineService } from '../services/engine.service';
 import { Store } from '@ngrx/store';
 import { Subscription, combineLatest } from 'rxjs';
 import * as THREE from 'three';
+import { EngineService } from '../services/engine.service';
 import { AppState } from '../redux/root-interface';
 import { ObjectManagerService } from '../services/object-manager.service';
 import GridUpdateSettings from './engine.interfaces';
-import { GridSizeModel } from '../shared/grid-size.model';
 
 @Component({
     selector: 'app-engine',
@@ -62,31 +61,31 @@ export class EngineComponent implements OnInit, OnDestroy {
 
     private initPrerenderSettings(): void {
         this.subscribtions.push(
-            this.store.select(state => state.background.renderer.rendererAlpha)
+            this.store.select(state => state.generalSettings.renderer.rendererAlpha)
                 .subscribe(alpha => this.rendererAlpha = alpha),
-            this.store.select(state => state.background.renderer.rendererAntialias)
+            this.store.select(state => state.generalSettings.renderer.rendererAntialias)
                 .subscribe(antialias => this.rendererAntialias = antialias),
         );
     }
 
     private initSubscribtions(): void {
         this.subscribtions.push(
-            this.store.select(state => state.background.backgroundColor)
+            this.store.select(state => state.generalSettings.backgroundColor)
                 .subscribe(backgroundColor => this.engServ.setColorBackground(backgroundColor)),
             combineLatest(
-                this.store.select(state => state.background.grid.gridColor),
-                this.store.select(state => state.background.grid.gridOpacity),
-                this.store.select(state => state.background.grid.gridEnable),
-                this.store.select(state => state.background.grid.gridSize),
+                this.store.select(state => state.generalSettings.grid.gridColor),
+                this.store.select(state => state.generalSettings.grid.gridOpacity),
+                this.store.select(state => state.generalSettings.grid.gridEnable),
+                this.store.select(state => state.generalSettings.grid.gridSize),
             ).subscribe(([gridColor, gridOpacity, enable, gridSize]) =>
                 this.updateGrid({ gridColor, gridOpacity, gridSize }, enable )),
-            this.store.select(state => state.background.controls.enableDamping)
+            this.store.select(state => state.generalSettings.controls.enableDamping)
                 .subscribe(flag => this.engServ.controls.enableDamping = flag),
-            this.store.select(state => state.background.controls.dampingFactor)
+            this.store.select(state => state.generalSettings.controls.dampingFactor)
                 .subscribe(dump => this.engServ.controls.dampingFactor = dump),
-            this.store.select(state => state.background.controls.cameraMinDistance)
+            this.store.select(state => state.generalSettings.controls.cameraMinDistance)
                 .subscribe(distance => this.engServ.controls.minDistance = distance),
-            this.store.select(state => state.background.controls.cameraMaxDistance)
+            this.store.select(state => state.generalSettings.controls.cameraMaxDistance)
                 .subscribe(distance => this.engServ.controls.maxDistance = distance),
         );
     }

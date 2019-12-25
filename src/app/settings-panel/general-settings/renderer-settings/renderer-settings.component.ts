@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from 'src/app/redux/root-interface';
-import BackgroundActions from '../../../redux/background/background.actions';
+import GeneralSettingsActions from '../../../redux/general-settings/general-settings.actions';
 
 @Component({
     selector: 'renderer-settings',
@@ -21,11 +21,11 @@ export class RendererSettingsComponent implements OnInit {
 
     public ngOnInit() {
         this.subscriptions.push(
-            this.store.select(state => state.background.renderer.rendererSettingsExpanded)
+            this.store.select(state => state.generalSettings.renderer.rendererSettingsExpanded)
                 .subscribe(expanded => this.rendererSettingsExpanded = expanded),
-            this.store.select(state => state.background.renderer.rendererAlpha)
+            this.store.select(state => state.generalSettings.renderer.rendererAlpha)
                 .subscribe(alpha => this.rendererAlpha = alpha),
-            this.store.select(state => state.background.renderer.rendererAntialias)
+            this.store.select(state => state.generalSettings.renderer.rendererAntialias)
                 .subscribe(antialias => this.rendererAntialias = antialias),
         );
     }
@@ -35,14 +35,14 @@ export class RendererSettingsComponent implements OnInit {
     }
 
     public onRendererSettingsExpanded(event: Event): void {
-        this.store.dispatch(new BackgroundActions.SetRendererExpand(event[0].expanded));
+        this.store.dispatch(new GeneralSettingsActions.SetRendererExpand(event[0].expanded));
     }
 
     public onAlphaSwitch(): void {
-        this.store.dispatch(new BackgroundActions.SetRendererAlpha(this.rendererAlpha));
+        this.store.dispatch(new GeneralSettingsActions.SetRendererAlpha(this.rendererAlpha));
     }
 
     public onAntialiasSwitch(): void {
-        this.store.dispatch(new BackgroundActions.SetRendererAntialias(this.rendererAntialias));
+        this.store.dispatch(new GeneralSettingsActions.SetRendererAntialias(this.rendererAntialias));
     }
 }
