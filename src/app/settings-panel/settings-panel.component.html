@@ -1,14 +1,8 @@
-<div *ngIf="selectedOption === 'background'">
+<div *ngIf="selectedOption === 'GlobalSettings'">
     <general-settings></general-settings>
 </div>
-<div id="Notifications" *ngIf="selectedOption === 'Notifications'">
-    <ul>
-        <li>Monday meeting</li>
-        <li>Regarding org chart changes</li>
-        <li>Meeting with Cliff</li>
-        <li>Global Marketing Meeting</li>
-        <li>Out tonight with collegues?</li>
-    </ul>
+<div id="ElevatorsManager" *ngIf="selectedOption === 'ElevatorsManager'">
+    <elevators-manager></elevators-manager>
 </div>
 <div id="Calendar" *ngIf="selectedOption === 'Calendar'">
     <ul>

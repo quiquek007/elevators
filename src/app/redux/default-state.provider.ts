@@ -11,7 +11,7 @@ export default class DefaultState {
         return this.state;
     }
 
-    public setState(state): void {
+    public setState(state: any): void {
         localStorage.setItem(localStorageProject, JSON.stringify(state));
     }
 

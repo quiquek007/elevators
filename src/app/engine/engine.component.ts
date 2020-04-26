@@ -12,6 +12,10 @@ import { EngineService } from '../services/engine.service';
 import { AppState } from '../redux/root-interface';
 import { ObjectManagerService } from '../services/object-manager.service';
 import GridUpdateSettings from './engine.interfaces';
+import { filter } from 'rxjs/operators';
+import { DefaultElevator } from '../shared/default-elevator.model';
+import Elevator from '../shared/classes/elevator.class';
+import BuildingSettingsActions from '../redux/building-settings/building-settings.actions';
 
 @Component({
     selector: 'app-engine',
@@ -23,12 +27,14 @@ export class EngineComponent implements OnInit, OnDestroy {
     private grid: THREE.GridHelper = null;
     private rendererAlpha: boolean;
     private rendererAntialias: boolean;
+    private allElevators: Elevator[] = [];
+    private distanceBetweenElevators: number;
 
     @ViewChild('rendererCanvas', {static: true})
-    public rendererCanvas: ElementRef <HTMLCanvasElement>;
+    public rendererCanvas: ElementRef<HTMLCanvasElement>;
 
     @ViewChild('canvasContainer', {static: true})
-    public canvasContainer: ElementRef <HTMLDivElement>;
+    public canvasContainer: ElementRef<HTMLDivElement>;
 
     constructor(
         private engServ: EngineService,
@@ -51,6 +57,8 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.engServ.animate();
 
         this.objectManager.createCube();
+        var axesHelper = new THREE.AxesHelper( 50 );
+        this.objectManager.addToScene(axesHelper);
 
         this.initSubscribtions();
     }
@@ -65,6 +73,10 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .subscribe(alpha => this.rendererAlpha = alpha),
             this.store.select(state => state.generalSettings.renderer.rendererAntialias)
                 .subscribe(antialias => this.rendererAntialias = antialias),
+            this.store.select(state => state.buildingSettings.elevators)
+                .subscribe(elevators => this.allElevators = [...elevators]),
+            this.store.select(state => state.buildingSettings.distanceBetweenElevators)
+                .subscribe(distance => this.distanceBetweenElevators = distance),
         );
     }
 
@@ -87,6 +99,8 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .subscribe(distance => this.engServ.controls.minDistance = distance),
             this.store.select(state => state.generalSettings.controls.cameraMaxDistance)
                 .subscribe(distance => this.engServ.controls.maxDistance = distance),
+            this.store.select(state => state.buildingSettings.createNewElevator).pipe(filter(ev => ev !== null))
+                .subscribe(config => this.createNewElevator(config)),
         );
     }
 
@@ -101,5 +115,14 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.grid = this.objectManager.createGrid(gridSize.size, gridSize.division, gridColor, gridColor);
         (this.grid.material as any).opacity = gridOpacity;
         this.objectManager.addToScene(this.grid);
+    }
+
+    private createNewElevator(config: DefaultElevator): void {
+        const elevator = this.objectManager.createElevator(config);
+        this.allElevators.push(elevator);
+        this.store.dispatch(new BuildingSettingsActions.SetElevators(this.allElevators));
+        elevator.createGeometry();
+        elevator.geometry.forEach(element => this.objectManager.addToScene(element));
+        console.log('elevator', elevator);
     }
 }

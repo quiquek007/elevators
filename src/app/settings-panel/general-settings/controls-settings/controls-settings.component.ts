@@ -26,6 +26,8 @@ export class ControlsSettingsComponent implements OnInit {
 
     public ngOnInit(): void {
         this.subscriptions.push(
+            this.store.select(state => state.settingsForm.formPosition)
+                .subscribe(position => this.tooltipPosition = position),
             this.store.select(state => state.generalSettings.controls.controlsSettingsExpanded)
                 .subscribe(enable => this.controlsSettingsExpanded = enable),
             this.store.select(state => state.generalSettings.controls.enableDamping)

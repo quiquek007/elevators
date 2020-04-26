@@ -19,6 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { RendererSettingsComponent } from './settings-panel/general-settings/renderer-settings/renderer-settings.component';
 import { AttentionSignComponent } from './resouces/attention-sign/attention-sign.component';
 import { ControlsSettingsComponent } from './settings-panel/general-settings/controls-settings/controls-settings.component';
+import { ElevatorsManagerComponent } from './settings-panel/elevators-manager/elevators-manager.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { ControlsSettingsComponent } from './settings-panel/general-settings/con
     RendererSettingsComponent,
     AttentionSignComponent,
     ControlsSettingsComponent,
+    ElevatorsManagerComponent,
   ],
   imports: [
     BrowserModule,

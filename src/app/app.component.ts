@@ -18,18 +18,19 @@ import { localStorageProject } from './constants/project.constants';
 export class AppComponent implements OnInit, OnDestroy{
     public contentExpanded: boolean = false;
     public panelOnRightSide: boolean = false;
-    public selected: string = 'background';
+    public selected: string = 'GlobalSettings';
 
     private subscribtions: Subscription[] = [];
 
-    public items: Array <DrawerItem> = [{
-            text: 'background',
-            icon: 'k-i-gear',
-            selected: true
+    public items: Array <DrawerItem> = [
+        {
+            text: 'ElevatorsManager',
+            icon: 'k-i-plus-outline'
         },
         {
-            text: 'Notifications',
-            icon: 'k-i-bell'
+            text: 'GlobalSettings',
+            icon: 'k-i-gear',
+            selected: true
         },
         {
             text: 'Calendar',

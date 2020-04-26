@@ -1,7 +1,7 @@
-const SETTINGSFORM = {
+const settingsForm = {
     key: 'settingsForm',
     formPosition: 'left',
     formOpened: false
 }
 
-export default SETTINGSFORM;
+export default settingsForm;
