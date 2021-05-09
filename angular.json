@@ -33,6 +33,9 @@
               },
               "src/styles.less"
             ],
+            "allowedCommonJsDependencies": [
+              "lodash"
+            ],
             "scripts": []
           },
           "configurations": {

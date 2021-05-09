@@ -23,7 +23,7 @@
                         [format]="'n0'"
                         [autoCorrect]="true"
                         [(ngModel)]="gridSize.size"
-                        (valueChange)="onGridSizeChange(gridSize)">
+                        (valueChange)="onGridSizeChange()">
                     </kendo-numerictextbox>
                     <kendo-numerictextbox class="numerictext-component"
                         [value]="gridSize?.division"
@@ -35,7 +35,7 @@
                         [format]="'n0'"
                         [autoCorrect]="true"
                         [(ngModel)]="gridSize.division"
-                        (valueChange)="onGridSizeChange(gridSize)">
+                        (valueChange)="onGridSizeChange()">
                     </kendo-numerictextbox>
                     <button kendoButton
                         kendoTooltip
