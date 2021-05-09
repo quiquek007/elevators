@@ -50,7 +50,7 @@ export class AppComponent implements OnInit, OnDestroy{
     ];
 
     @HostListener('window:beforeunload', ['$event'])
-    publiccanDeactivate(event: any) {
+    public canDeactivate(event: any) {
         localStorage.setItem(localStorageProject, JSON.stringify((this.store.source as any).value));
     }
 

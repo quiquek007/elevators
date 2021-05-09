@@ -5,7 +5,6 @@ import Building from '../shared/classes/building.class';
 import { DefaultElevator } from '../shared/default-elevator.model';
 import { Store } from '@ngrx/store';
 import { AppState } from '../redux/root-interface';
-import buildingSettingsActions from '../redux/building-settings/building-settings.actions';
 import Elevator from '../shared/classes/elevator.class';
 
 @Injectable({ providedIn: 'root' })
@@ -33,7 +32,7 @@ export class ObjectManagerService {
         centerLineColor: any = new THREE.Color(0x000000),
         otherLineColor: any = new THREE.Color(0x000000)
         ): THREE.GridHelper {
-            const grid = new THREE.GridHelper(size, division, centerLineColor, otherLineColor) as any;
+            const grid: any = new THREE.GridHelper(size, division, centerLineColor, otherLineColor);
             grid.material.transparent = false;
             return grid;
     }
