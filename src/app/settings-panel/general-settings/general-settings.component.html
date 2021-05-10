@@ -11,11 +11,21 @@
             kendoTooltip
             title="Default color"
             [position]="getTooltipPosition()"
-            (click)="onBackgroundColorReset()"
-            [iconClass]="'k-icon k-i-reset-color'">
+            [iconClass]="'k-icon k-i-reset-color'"
+            (click)="onBackgroundColorReset()">
         </button>
     </div>
 </section>
 <grid-settings></grid-settings>
 <controls-settings></controls-settings>
 <renderer-settings></renderer-settings>
+<section class="option-line">
+    <span>Reset all settings:</span>
+    <button kendoButton
+        kendoTooltip
+        title="Reset all settings"
+        [position]="getTooltipPosition()"
+        [iconClass]="'k-icon k-i-reload'"
+        (click)="onResetAllSettings()">
+    </button>
+</section>

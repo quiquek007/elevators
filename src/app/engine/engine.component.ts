@@ -119,10 +119,11 @@ export class EngineComponent implements OnInit, OnDestroy {
 
     private createNewElevator(config: DefaultElevator): void {
         const elevator = this.objectManager.createElevator(config);
+        console.log('elevator', elevator);
         this.allElevators.push(elevator);
+        return;
         this.store.dispatch(new BuildingSettingsActions.SetElevators(this.allElevators));
         elevator.createGeometry();
         elevator.geometry.forEach(element => this.objectManager.addToScene(element));
-        console.log('elevator', elevator);
     }
 }

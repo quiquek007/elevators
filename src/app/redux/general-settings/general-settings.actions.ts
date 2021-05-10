@@ -3,6 +3,7 @@ import { GridSizeModel } from 'src/app/shared/grid-size.model';
 
 const SET_GENERAL_SETTINGS_COLOR = 'SET_GENERAL_SETTINGS_COLOR';
 const RESET_GENERAL_SETTINGS_COLOR = 'RESET_GENERAL_SETTINGS_COLOR';
+const RESET_GENERAL_SETTINGS_ALL_SETTINGS = 'RESET_GENERAL_SETTINGS_ALL_SETTINGS';
 
 const SET_GRID_COLOR = 'SET_GRID_COLOR';
 const RESET_GRID_COLOR = 'RESET_GRID_COLOR';
@@ -31,6 +32,10 @@ class SetBackgroundColor implements Action {
 
 class ResetBackgroundColor implements Action {
     type = RESET_GENERAL_SETTINGS_COLOR;
+}
+
+class ResetAllSettings implements Action {
+    type = RESET_GENERAL_SETTINGS_ALL_SETTINGS;
 }
 
 // grid settings
@@ -116,6 +121,7 @@ class SetControlsCameraMaxDistance implements Action {
 export default {
     SetBackgroundColor,
     ResetBackgroundColor,
+    ResetAllSettings,
     SetGridColor,
     ResetGridColor,
     SetGridSettingsExpand,
@@ -135,6 +141,7 @@ export default {
 
     SET_GENERAL_SETTINGS_COLOR,
     RESET_GENERAL_SETTINGS_COLOR,
+    RESET_GENERAL_SETTINGS_ALL_SETTINGS,
     SET_GRID_COLOR,
     RESET_GRID_COLOR,
     SET_GRID_SETTINGS_EXPAND,

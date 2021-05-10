@@ -17,6 +17,8 @@ export function generalSettingsReducer(state: GeneralSettings = defaultState, ac
 
   		case GeneralActions.RESET_GENERAL_SETTINGS_COLOR:
 			  return { ...state, backgroundColor: generalSettings.backgroundColor };
+
+  		case GeneralActions.RESET_GENERAL_SETTINGS_ALL_SETTINGS: return generalSettings;
 			  
 		case GeneralActions.SET_GRID_COLOR:
 			return { 
