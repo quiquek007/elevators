@@ -33,7 +33,8 @@
               "src/styles.less"
             ],
             "allowedCommonJsDependencies": [
-              "lodash"
+              "lodash",
+              "three-orbitcontrols"
             ],
             "scripts": [],
             "vendorChunk": true,

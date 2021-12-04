@@ -1,3 +1,6 @@
+import { Subscription, combineLatest } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import * as THREE from 'three';
 import {
     Component,
     ElementRef,
@@ -6,13 +9,10 @@ import {
     OnDestroy
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription, combineLatest } from 'rxjs';
-import * as THREE from 'three';
 import { EngineService } from '../services/engine.service';
 import { AppState } from '../redux/root-interface';
 import { ObjectManagerService } from '../services/object-manager.service';
 import GridUpdateSettings from './engine.interfaces';
-import { filter } from 'rxjs/operators';
 import { DefaultElevator } from '../shared/default-elevator.model';
 import Elevator from '../shared/classes/elevator.class';
 import BuildingSettingsActions from '../redux/building-settings/building-settings.actions';

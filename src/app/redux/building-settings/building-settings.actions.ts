@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import Elevator from 'src/app/shared/classes/elevator.class';
+import Elevator from 'app/shared/classes/elevator.class';
 
 const SET_ELEVATORS = 'SET_ELEVATORS';
 const CREATE_NEW_ELEVATOR = 'CREATE_NEW_ELEVATOR';

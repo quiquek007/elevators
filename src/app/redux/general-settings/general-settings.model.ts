@@ -1,6 +1,6 @@
-import { Controls } from 'src/app/shared/controls.model';
-import { Grid } from 'src/app/shared/grid.model';
-import { Renderer } from 'src/app/shared/renderer.model';
+import { Controls } from 'app/shared/controls.model';
+import { Grid } from 'app/shared/grid.model';
+import { Renderer } from 'app/shared/renderer.model';
 
 export interface GeneralSettings {
     backgroundColor: string;

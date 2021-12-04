@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { GridSizeModel } from 'src/app/shared/grid-size.model';
+import { GridSizeModel } from 'app/shared/grid-size.model';
 
 const SET_GENERAL_SETTINGS_COLOR = 'SET_GENERAL_SETTINGS_COLOR';
 const RESET_GENERAL_SETTINGS_COLOR = 'RESET_GENERAL_SETTINGS_COLOR';

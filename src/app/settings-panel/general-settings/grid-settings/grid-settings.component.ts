@@ -4,10 +4,10 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/redux/root-interface';
+import { AppState } from 'app/redux/root-interface';
 import GeneralSettingsActions from '../../../redux/general-settings/general-settings.actions';
-import generalSettings from 'src/app/constants/general-settings.constants';
-import { GridSizeModel } from 'src/app/shared/grid-size.model';
+import generalSettings from 'app/constants/general-settings.constants';
+import { GridSizeModel } from 'app/shared/grid-size.model';
 
 @Component({
     selector: 'grid-settings',

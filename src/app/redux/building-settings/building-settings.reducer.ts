@@ -1,6 +1,6 @@
 import { BuildingSettings } from './building-settings.model';
 import DefaultState from '../default-state.provider';
-import buildingSettings from 'src/app/constants/building-settings.constants';
+import buildingSettings from 'app/constants/building-settings.constants';
 import buildingSettingsActions from './building-settings.actions';
 
 let defaultState = new DefaultState().getState();

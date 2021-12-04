@@ -1,7 +1,7 @@
 import GeneralActions from './general-settings.actions';
 import { GeneralSettings } from './general-settings.model'
 import DefaultState from '../default-state.provider';
-import generalSettings from 'src/app/constants/general-settings.constants';
+import generalSettings from 'app/constants/general-settings.constants';
 
 let defaultState = new DefaultState().getState();
 if (!defaultState) {

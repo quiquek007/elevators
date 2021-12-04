@@ -1,6 +1,6 @@
 import { SettingsForm } from './settings-form.model';
 import SettingsFormActions from './settings-form.actions';
-import settingsForm from 'src/app/constants/settings-form.constants';
+import settingsForm from 'app/constants/settings-form.constants';
 import DefaultState from '../default-state.provider';
 
 let defaultState = new DefaultState().getState();

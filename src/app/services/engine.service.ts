@@ -1,11 +1,11 @@
 import * as THREE from 'three';
+import * as OrbitControls from 'three-orbitcontrols';
 import {
     Injectable,
     ElementRef,
     OnDestroy,
     NgZone
 } from '@angular/core';
-import * as OrbitControls from 'three-orbitcontrols';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {

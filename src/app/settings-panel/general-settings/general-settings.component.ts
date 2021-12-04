@@ -5,8 +5,8 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { localStorageProject } from 'src/app/constants/project.constants';
-import { AppState } from 'src/app/redux/root-interface';
+import { localStorageProject } from 'app/constants/project.constants';
+import { AppState } from 'app/redux/root-interface';
 import GeneralSettingsActions from '../../redux/general-settings/general-settings.actions';
 
 @Component({

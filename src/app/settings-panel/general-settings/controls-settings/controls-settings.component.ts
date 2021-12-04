@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/redux/root-interface';
+import { AppState } from 'app/redux/root-interface';
 import GeneralSettingsActions from '../../../redux/general-settings/general-settings.actions';
 
 @Component({

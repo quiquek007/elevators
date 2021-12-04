@@ -1,4 +1,4 @@
-import buildingSettings from 'src/app/constants/building-settings.constants';
+import buildingSettings from 'app/constants/building-settings.constants';
 import { DefaultElevator } from '../default-elevator.model';
 import * as THREE from 'three';
 

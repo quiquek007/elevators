@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/redux/root-interface';
-import BuildingSettingsActions from 'src/app/redux/building-settings/building-settings.actions';
-import Elevator from 'src/app/shared/classes/elevator.class';
-import { DefaultElevator } from 'src/app/shared/default-elevator.model';
+import { AppState } from 'app/redux/root-interface';
+import BuildingSettingsActions from 'app/redux/building-settings/building-settings.actions';
+import Elevator from 'app/shared/classes/elevator.class';
+import { DefaultElevator } from 'app/shared/default-elevator.model';
 
 @Component({
     selector: 'elevators-manager',

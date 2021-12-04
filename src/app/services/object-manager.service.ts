@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import * as THREE from 'three';
 import { EngineService } from './engine.service';
 import Building from '../shared/classes/building.class';
 import { DefaultElevator } from '../shared/default-elevator.model';
-import { Store } from '@ngrx/store';
 import { AppState } from '../redux/root-interface';
 import Elevator from '../shared/classes/elevator.class';
 
