@@ -18,7 +18,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
     public backgroundColor: string;
     public tooltipPosition: string = 'right';
     private subscriptions: Subscription[] = [];
-    private state: any;
+    private state: AppState;
 
     constructor(private store: Store<AppState>) {}
 
@@ -28,8 +28,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
                 .subscribe(position => this.tooltipPosition = position),
             this.store.select(state => state.generalSettings.backgroundColor)
                 .subscribe(backgroundColor => this.backgroundColor = backgroundColor),
-            this.store.select(state => state)
-                .subscribe(state => this.state = state),
+            this.store.select(state => state).subscribe(state => this.state = state),
         );
     }
 
@@ -52,6 +51,5 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
     public onResetAllSettings(): void {
         this.store.dispatch(new GeneralSettingsActions.ResetAllSettings());
         localStorage.setItem(localStorageProject, JSON.stringify(this.state));
-        console.log(this.state);
     }
 }

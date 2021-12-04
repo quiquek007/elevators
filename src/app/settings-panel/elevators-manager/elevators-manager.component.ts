@@ -60,6 +60,7 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public onAddElevator(): void {
         this.store.dispatch(new BuildingSettingsActions.CreateNewElevator(this.defaultElevator));
+        // to nullify store
         this.store.dispatch(new BuildingSettingsActions.CreateNewElevator(null));
     }
 

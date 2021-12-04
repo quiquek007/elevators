@@ -14,6 +14,10 @@
     justify-content: space-between;
     padding: 5px 5px 5px 15px;
 
+    > span {
+        cursor: default;
+    }
+
     &__attention-block {
         display: flex;
         align-items: center;
@@ -40,4 +44,20 @@
 
 .numerictext-component {
     width: 88px;
+}
+
+.k-panelbar>.k-item>.k-link, 
+.k-panelbar>.k-item>.k-link:not(:focus) {
+    background-color: #f2f2f2;
+    color: #ff6358;
+}
+
+.k-panelbar>.k-item>.k-link:hover {
+    background-color: #e95348;
+    color: #ffffff;
+}
+
+.k-panelbar>.k-item>.k-link.k-state-focused {
+    background-color: #e67d76;
+    color: #ffffff;
 }

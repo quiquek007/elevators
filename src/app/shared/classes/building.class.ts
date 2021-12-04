@@ -11,7 +11,7 @@ export default class Building {
 
     constructor() {}
 
-    public createElevator(elevatorConfiguration?: DefaultElevator): Elevator {
+    public createElevator(elevatorConfiguration: DefaultElevator): Elevator {
         const elevator = new Elevator(elevatorConfiguration);
         elevator.startPosition = this.getFreePositionForElevator();
         this.elevators.push(elevator);
@@ -36,7 +36,7 @@ export default class Building {
         const newVector = new THREE.Vector3(0, 0, 0); 
         if (this.countOfElevators === 0) return newVector;
 
-        const lastElevator = this.elevators[this.elevators.length - 1];
+        const lastElevator = this.elevators[this.countOfElevators];
         newVector.x = lastElevator.startPosition.x + lastElevator.freeSpace.left;
         return newVector;
     }

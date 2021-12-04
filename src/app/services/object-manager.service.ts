@@ -37,7 +37,7 @@ export class ObjectManagerService {
             return grid;
     }
 
-    public createElevator(elevatorConfiguration?: DefaultElevator): Elevator {
+    public createElevator(elevatorConfiguration: DefaultElevator): Elevator {
         return this.building.createElevator(elevatorConfiguration);
     }
     

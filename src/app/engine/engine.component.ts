@@ -99,7 +99,8 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .subscribe(distance => this.engServ.controls.minDistance = distance),
             this.store.select(state => state.generalSettings.controls.cameraMaxDistance)
                 .subscribe(distance => this.engServ.controls.maxDistance = distance),
-            this.store.select(state => state.buildingSettings.createNewElevator).pipe(filter(ev => ev !== null))
+            this.store.select(state => state.buildingSettings.createNewElevator)
+                .pipe(filter(newElevator => newElevator !== null))
                 .subscribe(config => this.createNewElevator(config)),
         );
     }

@@ -1,0 +1,6 @@
+создать формы для elevatorConfiguration: sizes ect.
+create selected elevator table
+запоминать расположение камеры
+
+*validation for localStorage data
+*make limit for generation of store
