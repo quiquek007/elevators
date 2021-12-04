@@ -4,11 +4,7 @@ import settingsForm from 'app/constants/settings-form.constants';
 import DefaultState from '../default-state.provider';
 
 let defaultState = new DefaultState().getState();
-if (!defaultState) {
-	defaultState = settingsForm
-} else {
-	defaultState = defaultState[settingsForm.key];
-}
+defaultState = !defaultState ? settingsForm : defaultState[settingsForm.key];
 
 export function settingsFormReducer(state: SettingsForm = defaultState, action: any) {
 	switch (action.type) {
@@ -17,6 +13,9 @@ export function settingsFormReducer(state: SettingsForm = defaultState, action: 
 
   		case SettingsFormActions.SET_FORM_POSITION:
             return { ...state, formPosition: action.payload };
+
+  		case SettingsFormActions.SET_SELECTED_TAB:
+            return { ...state, selectedTab: action.payload };
 
   		default:
   			return state;

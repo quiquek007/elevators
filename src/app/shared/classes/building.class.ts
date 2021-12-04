@@ -15,7 +15,7 @@ export default class Building {
         const elevator = new Elevator(elevatorConfiguration);
         elevator.startPosition = this.getFreePositionForElevator();
         this.elevators.push(elevator);
-        this.countOfElevators += 1;
+        this.countOfElevators++;
         return elevator;
     }
 
@@ -24,7 +24,7 @@ export default class Building {
         //     const element = new Elevator(elevatorConfiguration);
         //     this.elevators.push(element);
         // }
-        this.countOfElevators -= 1;
+        this.countOfElevators--;
     }
 
     public clearElevators(): void {
@@ -33,7 +33,7 @@ export default class Building {
     }
 
     public getFreePositionForElevator(): THREE.Vector3 {
-        const newVector = new THREE.Vector3(0, 0, 0); 
+        const newVector = new THREE.Vector3(0, 0, 0);
         if (this.countOfElevators === 0) return newVector;
 
         const lastElevator = this.elevators[this.countOfElevators];

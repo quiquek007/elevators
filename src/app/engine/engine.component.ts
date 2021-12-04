@@ -42,9 +42,7 @@ export class EngineComponent implements OnInit, OnDestroy {
         private store: Store<AppState>) {}
 
     public ngOnInit(): void {
-        if (!this.rendererCanvas) {
-            throw new Error('rendererCanvas not implemented.');
-        }
+        if (!this.rendererCanvas) throw new Error('rendererCanvas is not implemented!');
 
         this.initPrerenderSettings();
 

@@ -1,5 +1,3 @@
 const localStorageProject: string = 'elevatorsProject';
 
-export {
-    localStorageProject,
-}
+export { localStorageProject }
