@@ -4,11 +4,7 @@ import buildingSettings from 'app/constants/building-settings.constants';
 import buildingSettingsActions from './building-settings.actions';
 
 let defaultState = new DefaultState().getState();
-if (!defaultState) {
-	defaultState = buildingSettings
-} else {
-	defaultState = defaultState[buildingSettings.key];
-}
+defaultState = !defaultState ? buildingSettings : defaultState[buildingSettings.key];
 
 export function buildingSettingsReducer(state: BuildingSettings = defaultState, action: any) {
 	switch (action.type) {

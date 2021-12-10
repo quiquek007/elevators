@@ -16,6 +16,8 @@ import GridUpdateSettings from './engine.interfaces';
 import { DefaultElevator } from '../shared/default-elevator.model';
 import Elevator from '../shared/classes/elevator.class';
 import BuildingSettingsActions from '../redux/building-settings/building-settings.actions';
+import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
+import cameraSettings from 'app/constants/camera-settings.constants';
 
 @Component({
     selector: 'app-engine',
@@ -28,6 +30,7 @@ export class EngineComponent implements OnInit, OnDestroy {
     private rendererAlpha: boolean;
     private rendererAntialias: boolean;
     private allElevators: Elevator[] = [];
+    private cameraSettings: CameraSettings = { ...cameraSettings };
     private distanceBetweenElevators: number;
 
     @ViewChild('rendererCanvas', {static: true})
@@ -51,7 +54,8 @@ export class EngineComponent implements OnInit, OnDestroy {
             alpha: this.rendererAlpha, // transparent background
             antialias: this.rendererAntialias, // smooth edges
         };
-        this.engServ.createScene(rendererSettings, this.canvasContainer);
+        
+        this.engServ.createScene(rendererSettings, this.canvasContainer, this.cameraSettings);
         this.engServ.animate();
 
         this.objectManager.createCube();
@@ -75,6 +79,10 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .subscribe(elevators => this.allElevators = [...elevators]),
             this.store.select(state => state.buildingSettings.distanceBetweenElevators)
                 .subscribe(distance => this.distanceBetweenElevators = distance),
+            this.store.select(state => state.cameraSettings.cameraPosition)
+                .subscribe(cameraPosition => this.cameraSettings.cameraPosition = cameraPosition),
+            this.store.select(state => state.cameraSettings.controlsTarget)
+                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget),
         );
     }
 
@@ -82,11 +90,11 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.subscribtions.push(
             this.store.select(state => state.generalSettings.backgroundColor)
                 .subscribe(backgroundColor => this.engServ.setColorBackground(backgroundColor)),
-            combineLatest(
+            combineLatest([
                 this.store.select(state => state.generalSettings.grid.gridColor),
                 this.store.select(state => state.generalSettings.grid.gridOpacity),
                 this.store.select(state => state.generalSettings.grid.gridEnable),
-                this.store.select(state => state.generalSettings.grid.gridSize),
+                this.store.select(state => state.generalSettings.grid.gridSize)]
             ).subscribe(([gridColor, gridOpacity, enable, gridSize]) =>
                 this.updateGrid({ gridColor, gridOpacity, gridSize }, enable )),
             this.store.select(state => state.generalSettings.controls.enableDamping)
@@ -105,7 +113,7 @@ export class EngineComponent implements OnInit, OnDestroy {
 
     /**
      * grid lifecircle:
-     * require to create new grid for change color
+     * require to create new grid for changing color
      */
     private updateGrid({ gridColor, gridOpacity, gridSize }: GridUpdateSettings, enable: boolean = true): void{
         if (this.grid) this.objectManager.removeObject(this.grid);

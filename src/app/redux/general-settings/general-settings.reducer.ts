@@ -4,11 +4,7 @@ import DefaultState from '../default-state.provider';
 import generalSettings from 'app/constants/general-settings.constants';
 
 let defaultState = new DefaultState().getState();
-if (!defaultState) {
-	defaultState = generalSettings
-} else {
-	defaultState = defaultState[generalSettings.key];
-}
+defaultState = !defaultState ? generalSettings : defaultState[generalSettings.key];
 
 export function generalSettingsReducer(state: GeneralSettings = defaultState, action: any) {
 	switch (action.type) {

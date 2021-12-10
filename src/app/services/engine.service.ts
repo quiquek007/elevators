@@ -1,11 +1,17 @@
 import * as THREE from 'three';
 import * as OrbitControls from 'three-orbitcontrols';
+import { fromEvent } from 'rxjs';
+import { debounceTime, skip } from 'rxjs/operators';
 import {
     Injectable,
     ElementRef,
     OnDestroy,
     NgZone
 } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from 'app/redux/root-interface';
+import CameraSettingsActions from '../redux/camera-settings/camera-settings.actions';
+import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {
@@ -18,13 +24,16 @@ export class EngineService implements OnDestroy {
     
     public controls: OrbitControls;
 
-    constructor(private ngZone: NgZone) {}
+    constructor(private ngZone: NgZone, private store: Store<AppState>) {}
 
     public ngOnDestroy(): void {
         if (this.frameId != null) cancelAnimationFrame(this.frameId);
     }
 
-    public createScene(settings: THREE.WebGLRendererParameters, container: ElementRef<HTMLDivElement>): void {
+    public createScene(
+            settings: THREE.WebGLRendererParameters,
+            container: ElementRef<HTMLDivElement>,
+            cameraSettings: CameraSettings): void {
         // The first step is to get the reference of the canvas element from our HTML document
         this.renderer = new THREE.WebGLRenderer(settings);
         this.renderer.setSize(container.nativeElement.clientWidth, container.nativeElement.clientHeight);
@@ -32,7 +41,6 @@ export class EngineService implements OnDestroy {
         this.scene = new THREE.Scene();
 
         this.camera = new THREE.PerspectiveCamera(50, this.container.clientWidth / this.container.clientHeight, 0.1, 1000);
-        this.camera.position.x = 2;
 
         // soft white light
         this.light = new THREE.AmbientLight(0x404040);
@@ -45,6 +53,9 @@ export class EngineService implements OnDestroy {
 
         this.scene.add(this.light);
         this.scene.add(this.camera);
+
+        this.setInitialCameraPosition(cameraSettings);
+        this.subscribeOnCameraMovement();
     }
 
     public animate(): void {
@@ -65,7 +76,7 @@ export class EngineService implements OnDestroy {
         this.frameId = requestAnimationFrame(() => this.render());
         // animation
         // this.cube.rotation.x += 0.01;
-        // this.cube.rotation.y += 0.01;
+        // this.cube.rotation.y += 0.01;        
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
@@ -91,4 +102,23 @@ export class EngineService implements OnDestroy {
 	public removeFromScene(obj: any): void {
 		this.scene.remove(obj);
 	}
+
+    public setInitialCameraPosition(cameraSettings: CameraSettings): void {        
+        if (!cameraSettings) return;
+
+        ['x', 'y', 'z'].forEach(axis => {
+            this.camera.position[axis] = cameraSettings.cameraPosition[axis];
+            this.controls.target[axis] = cameraSettings.controlsTarget[axis];
+        })
+    }
+
+    private subscribeOnCameraMovement(): void {
+        fromEvent(this.controls, 'change').pipe(skip(1), debounceTime(250)).subscribe(() => {
+            const { position } = this.camera;
+            const { target } = this.controls;
+            
+            this.store.dispatch(new CameraSettingsActions.SetCameraPostion({x: position.x, y: position.y, z: position.z}));
+            this.store.dispatch(new CameraSettingsActions.SetControlsTarget({x: target.x, y: target.y, z: target.z}));
+        });
+    }
 }

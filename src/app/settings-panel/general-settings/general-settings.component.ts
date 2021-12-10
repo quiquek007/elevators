@@ -8,6 +8,10 @@ import { Subscription } from 'rxjs';
 import { localStorageProject } from 'app/constants/project.constants';
 import { AppState } from 'app/redux/root-interface';
 import GeneralSettingsActions from '../../redux/general-settings/general-settings.actions';
+import CameraSettingsActions from 'app/redux/camera-settings/camera-settings.actions';
+import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
+import cameraSettings from 'app/constants/camera-settings.constants';
+import { EngineService } from 'app/services/engine.service';
 
 @Component({
     selector: 'general-settings',
@@ -15,12 +19,14 @@ import GeneralSettingsActions from '../../redux/general-settings/general-setting
 	styleUrls: ['./general-settings.component.less']
 })
 export class GeneralSettingsComponent implements OnInit, OnDestroy {
-    public backgroundColor: string;
-    public tooltipPosition: string = 'right';
     private subscriptions: Subscription[] = [];
+    private cameraSettings: CameraSettings = { ...cameraSettings };
     private state: AppState;
 
-    constructor(private store: Store<AppState>) {}
+    public backgroundColor: string;
+    public tooltipPosition: string = 'right';
+
+    constructor(private store: Store<AppState>, private engServ: EngineService) {}
 
     public ngOnInit(): void {
         this.subscriptions.push(
@@ -29,6 +35,10 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
             this.store.select(state => state.generalSettings.backgroundColor)
                 .subscribe(backgroundColor => this.backgroundColor = backgroundColor),
             this.store.select(state => state).subscribe(state => this.state = state),
+            this.store.select(state => state.cameraSettings.cameraPosition)
+                .subscribe(cameraPosition => this.cameraSettings.cameraPosition = cameraPosition),
+            this.store.select(state => state.cameraSettings.controlsTarget)
+                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget),
         );
     }
 
@@ -50,6 +60,9 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
 	
     public onResetAllSettings(): void {
         this.store.dispatch(new GeneralSettingsActions.ResetAllSettings());
+        this.store.dispatch(new CameraSettingsActions.ResetCameraPosition());
+        this.store.dispatch(new CameraSettingsActions.ResetControlsTarget());
+        this.engServ.setInitialCameraPosition(this.cameraSettings);
         localStorage.setItem(localStorageProject, JSON.stringify(this.state));
     }
 }

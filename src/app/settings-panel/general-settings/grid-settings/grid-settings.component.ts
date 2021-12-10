@@ -40,7 +40,7 @@ export class GridSettingsComponent implements OnInit {
                 .subscribe(opacity => this.gridOpacity = opacity),
             this.store.select(state => state.generalSettings.grid.gridSize)
                 .subscribe(size => {
-                    // avoid mutilate basic constant
+                    // avoid mutaion the original constant
                     this.gridSize = Object.assign({}, size);
                 }), 
         );
