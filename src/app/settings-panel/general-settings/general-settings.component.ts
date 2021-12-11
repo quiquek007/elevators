@@ -5,7 +5,6 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { localStorageProject } from 'app/constants/project.constants';
 import { AppState } from 'app/redux/root-interface';
 import GeneralSettingsActions from '../../redux/general-settings/general-settings.actions';
 import CameraSettingsActions from 'app/redux/camera-settings/camera-settings.actions';
@@ -21,7 +20,6 @@ import { EngineService } from 'app/services/engine.service';
 export class GeneralSettingsComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
     private cameraSettings: CameraSettings = { ...cameraSettings };
-    private state: AppState;
 
     public backgroundColor: string;
     public tooltipPosition: string = 'right';
@@ -34,7 +32,6 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
                 .subscribe(position => this.tooltipPosition = position),
             this.store.select(state => state.generalSettings.backgroundColor)
                 .subscribe(backgroundColor => this.backgroundColor = backgroundColor),
-            this.store.select(state => state).subscribe(state => this.state = state),
             this.store.select(state => state.cameraSettings.cameraPosition)
                 .subscribe(cameraPosition => this.cameraSettings.cameraPosition = cameraPosition),
             this.store.select(state => state.cameraSettings.controlsTarget)
@@ -63,6 +60,5 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
         this.store.dispatch(new CameraSettingsActions.ResetCameraPosition());
         this.store.dispatch(new CameraSettingsActions.ResetControlsTarget());
         this.engServ.setInitialCameraPosition(this.cameraSettings);
-        localStorage.setItem(localStorageProject, JSON.stringify(this.state));
     }
 }
