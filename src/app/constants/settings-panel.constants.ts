@@ -1,8 +1,8 @@
-const settingsForm = {
-    key: 'settingsForm',
+const settingsPanel = {
+    key: 'settingsPanel',
     formPosition: 'left',
     formOpened: false,
     selectedTab: 'GlobalSettings'
 }
 
-export default settingsForm;
+export default settingsPanel;

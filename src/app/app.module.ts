@@ -20,18 +20,24 @@ import { RendererSettingsComponent } from './settings-panel/general-settings/ren
 import { AttentionSignComponent } from './resouces/attention-sign/attention-sign.component';
 import { ControlsSettingsComponent } from './settings-panel/general-settings/controls-settings/controls-settings.component';
 import { ElevatorsManagerComponent } from './settings-panel/elevators-manager/elevators-manager.component';
+import { WireframesSettingsComponent } from './settings-panel/elevators-manager/wireframes-settings/wireframes-settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+
     EngineComponent,
+
     SettingsPanelComponent,
     GeneralSettingsComponent,
     GridSettingsComponent,
     RendererSettingsComponent,
-    AttentionSignComponent,
     ControlsSettingsComponent,
+
     ElevatorsManagerComponent,
+    WireframesSettingsComponent,
+
+    AttentionSignComponent,
   ],
   imports: [
     BrowserModule,

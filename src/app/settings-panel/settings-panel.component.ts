@@ -19,7 +19,7 @@ export class SettingsPanelComponent {
 
     public ngOnInit(): void {
         this.subscribtions.push(
-            this.store.select(state => state.settingsForm.selectedTab)
+            this.store.select(state => state.settingsPanel.selectedTab)
                 .subscribe(selectedTab => this.selectedOption = selectedTab)
         );
     }

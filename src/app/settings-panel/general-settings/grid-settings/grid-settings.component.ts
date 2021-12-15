@@ -28,7 +28,7 @@ export class GridSettingsComponent implements OnInit {
 
     public ngOnInit(): void {
         this.subscriptions.push(
-            this.store.select(state => state.settingsForm.formPosition)
+            this.store.select(state => state.settingsPanel.formPosition)
                 .subscribe(position => this.tooltipPosition = position),
             this.store.select(state => state.generalSettings.grid.gridColor)
                 .subscribe(gridColor => this.gridColor = gridColor),
@@ -42,7 +42,7 @@ export class GridSettingsComponent implements OnInit {
                 .subscribe(size => {
                     // avoid mutaion the original constant
                     this.gridSize = Object.assign({}, size);
-                }), 
+                }),
         );
     }
 
@@ -57,7 +57,7 @@ export class GridSettingsComponent implements OnInit {
     public onGridColorChange(color: string): void {
         this.store.dispatch(new GeneralSettingsActions.SetGridColor(color));
 	}
-	
+
     public onGridColorReset(): void {
         this.store.dispatch(new GeneralSettingsActions.ResetGridColor());
     }
@@ -80,7 +80,7 @@ export class GridSettingsComponent implements OnInit {
         const defaultValue = 5;
         for (let key in this.gridSize) {
             if (this.gridSize[key] === null) this.gridSize[key] = defaultValue;
-        }       
+        }
         this.store.dispatch(new GeneralSettingsActions.SetGridSize(this.gridSize));
     }
 

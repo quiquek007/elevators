@@ -1,16 +1,16 @@
 import { Action } from '@ngrx/store';
 
-const SET_FORM_POSITION = 'SET_FORM_POSITION';
-const SET_FORM_OPENED = 'SET_FORM_OPENED';
+const SET_PANEL_POSITION = 'SET_PANEL_POSITION';
+const SET_PANEL_OPENED = 'SET_PANEL_OPENED';
 const SET_SELECTED_TAB = 'SET_SELECTED_TAB';
 
-class SetFormPosition implements Action {
-    type = SET_FORM_POSITION;
+class SetPanelPosition implements Action {
+    type = SET_PANEL_POSITION;
     constructor(public payload: string) {}
 }
 
-class SetFormOpened implements Action {
-    type = SET_FORM_OPENED;
+class SetPanelOpened implements Action {
+    type = SET_PANEL_OPENED;
     constructor(public payload: boolean) {}
 }
 
@@ -20,11 +20,12 @@ class SetSelectedTab implements Action {
 }
 
 export default {
-    SetFormPosition,
-    SetFormOpened,
+    SetPanelPosition,
+    SetPanelOpened,
     SetSelectedTab,
-    SET_FORM_POSITION,
-    SET_FORM_OPENED,
+
+    SET_PANEL_POSITION,
+    SET_PANEL_OPENED,
     SET_SELECTED_TAB
 };
 

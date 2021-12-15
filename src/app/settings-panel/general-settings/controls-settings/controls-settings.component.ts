@@ -26,7 +26,7 @@ export class ControlsSettingsComponent implements OnInit {
 
     public ngOnInit(): void {
         this.subscriptions.push(
-            this.store.select(state => state.settingsForm.formPosition)
+            this.store.select(state => state.settingsPanel.formPosition)
                 .subscribe(position => this.tooltipPosition = position),
             this.store.select(state => state.generalSettings.controls.controlsSettingsExpanded)
                 .subscribe(enable => this.controlsSettingsExpanded = enable),
@@ -60,12 +60,12 @@ export class ControlsSettingsComponent implements OnInit {
     public onDampingFactorReset(): void {
         this.store.dispatch(new GeneralSettingsActions.ResetControlsDumpingFactor());
     }
-    
+
     public onDampingFactorChange(): void {
         if (this.dampingFactor === null) this.dampingFactor = 0.01;
         this.store.dispatch(new GeneralSettingsActions.SetControlsDumpingFactor(this.dampingFactor));
     }
-    
+
     public onCameraMinDistanceChange(): void {
         if (this.cameraMinDistance === null) this.cameraMinDistance = 0;
         if (this.cameraMinDistance >= this.cameraMaxDistance) {
@@ -74,7 +74,7 @@ export class ControlsSettingsComponent implements OnInit {
         }
         this.store.dispatch(new GeneralSettingsActions.SetControlsCameraMinDistance(this.cameraMinDistance));
     }
-    
+
     public onCameraMaxDistanceChange(): void {
         if (this.cameraMaxDistance === null) this.cameraMaxDistance = 500;
         if (this.cameraMaxDistance < this.cameraMinDistance) {

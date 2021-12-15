@@ -1,0 +1,26 @@
+<kendo-panelbar (stateChange)="onWireframesSettingsExpanded($event)">
+    <kendo-panelbar-item title="Wireframes settings"
+        [expanded]="wireframesSettingsExpanded">
+        <ng-template kendoPanelBarContent>
+            <section class="option-line">
+                <span>Show wireframe:</span>
+                <div>
+                    <kendo-switch class="component-switch"
+                        [(ngModel)]="isWireframesShowed"
+                        (click)="onShowWireframeChange()">
+                    </kendo-switch>
+                </div>
+            </section>
+            <section class="option-line">
+                <span>Wireframes color:</span>
+                <div>
+                    <kendo-colorpicker [value]="wireframesColor"
+                        [format]="'hex'"
+                        [gradientSettings]="{opacity: false}"
+                        (valueChange)="onWireframesColorChange($event)">
+                    </kendo-colorpicker>
+                </div>
+            </section>
+        </ng-template>
+    </kendo-panelbar-item>
+</kendo-panelbar>

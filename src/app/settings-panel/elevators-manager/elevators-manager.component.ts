@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/root-interface';
-import BuildingSettingsActions from 'app/redux/building-settings/building-settings.actions';
+import ElevatorManagerSettingsActions from 'app/redux/elevator-manager-settings/elevator-manager-settings.actions';
 import Elevator from 'app/shared/classes/elevator.class';
-import { DefaultElevator } from 'app/shared/default-elevator.model';
+import { IElevator } from 'app/shared/elevator.model';
+import { ObjectManagerService } from 'app/services/object-manager.service';
+import { Wireframes } from 'app/shared/wireframes.model';
 
 @Component({
     selector: 'elevators-manager',
@@ -12,7 +14,7 @@ import { DefaultElevator } from 'app/shared/default-elevator.model';
     styleUrls: ['./elevators-manager.component.less']
 })
 export class ElevatorsManagerComponent implements OnInit {
-    public selectedElevator: Elevator = null;
+    public selectedElevator: Elevator;
     public wallColor: THREE.Color | string;
     public wallOpacity: number;
     public wallTransparent: boolean;
@@ -20,33 +22,36 @@ export class ElevatorsManagerComponent implements OnInit {
     public elevatorSpeed: number;
     public elevatorCoveredFloors: number;
     public elevatorCurrentFloor: number;
-    
-    private defaultElevator: DefaultElevator;
+    public isWireframesShowed: boolean;
+    public wireframesColor: THREE.Color | number | string;
+
     private tooltipPosition: string = 'right';
     private subscriptions: Subscription[] = [];
 
-    constructor(private store: Store<AppState>) {}
+    constructor(private store: Store<AppState>, private objectManager: ObjectManagerService) {}
 
     public ngOnInit() {
         this.subscriptions.push(
-            this.store.select(state => state.settingsForm.formPosition)
+            this.store.select(state => state.settingsPanel.formPosition)
                 .subscribe(position => this.tooltipPosition = position),
-            this.store.select(state => state.buildingSettings.defaultElevator.wallColor)
+            this.store.select(state => state.elevatorManagerSettings.defaultElevator.wallColor)
                 .subscribe(color => this.wallColor = color),
-            this.store.select(state => state.buildingSettings.defaultElevator.wallOpacity)
+            this.store.select(state => state.elevatorManagerSettings.defaultElevator.wallOpacity)
                 .subscribe(opacity => this.wallOpacity = opacity),
-            this.store.select(state => state.buildingSettings.defaultElevator.wallTransparent)
+            this.store.select(state => state.elevatorManagerSettings.defaultElevator.wallTransparent)
                 .subscribe(value => this.wallTransparent = value),
-            this.store.select(state => state.buildingSettings.defaultElevator.capacity)
+            this.store.select(state => state.elevatorManagerSettings.defaultElevator.capacity)
                 .subscribe(capacity => this.elevatorCapacity = capacity),
-            this.store.select(state => state.buildingSettings.defaultElevator.speed)
+            this.store.select(state => state.elevatorManagerSettings.defaultElevator.speed)
                 .subscribe(speed => this.elevatorSpeed = speed),
-            this.store.select(state => state.buildingSettings.defaultElevator.coveredFloors)
+            this.store.select(state => state.elevatorManagerSettings.defaultElevator.coveredFloors)
                 .subscribe(coveredFloors => this.elevatorCoveredFloors = coveredFloors),
-            this.store.select(state => state.buildingSettings.defaultElevator.currentFloor)
+            this.store.select(state => state.elevatorManagerSettings.defaultElevator.currentFloor)
                 .subscribe(floor => this.elevatorCurrentFloor = floor),
-            this.store.select(state => state.buildingSettings.defaultElevator)
-                .subscribe(defaultElevator => this.defaultElevator = defaultElevator),
+            this.store.select(state => state.elevatorManagerSettings.wireframes.isWireframesShowed)
+                .subscribe(isWireframesShowed => this.isWireframesShowed = isWireframesShowed),
+            this.store.select(state => state.elevatorManagerSettings.wireframes.color)
+                .subscribe(color => this.wireframesColor = color),
         );
     }
 
@@ -54,21 +59,29 @@ export class ElevatorsManagerComponent implements OnInit {
         return this.tooltipPosition === 'left' ? 'right' : 'top';
     }
 
-    public onDeleteElevator(): void {
-       
+    public onAddElevator(): void {
+        const elevatorConfig = this.getElevatorConfiguration();
+        const wireframesConfig = this.getWireframesConfiguration();
+        const elevator = this.objectManager.createElevatorConfiguration(elevatorConfig, wireframesConfig);
+        const elevatorObj = this.objectManager.buildElevator(elevator);
+
+        console.log('elevator', elevatorObj);
+
+        this.objectManager.addToScene(elevatorObj);
+        // this.store.dispatch(new elevatorManagerSettingsActions.CreateNewElevator(newElevator));
+        // // to nullify store
+        // this.store.dispatch(new elevatorManagerSettingsActions.CreateNewElevator(null));
     }
 
-    public onAddElevator(): void {
-        this.store.dispatch(new BuildingSettingsActions.CreateNewElevator(this.defaultElevator));
-        // to nullify store
-        this.store.dispatch(new BuildingSettingsActions.CreateNewElevator(null));
+    public onDeleteElevator(): void {
+
     }
 
     public onWallColorChange(color: string): void {
         if (this.selectedElevator) {
 
         } else {
-            this.store.dispatch(new BuildingSettingsActions.SetDefaultElevatorWallColor(color));
+            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallColor(color));
         }
     }
 
@@ -76,7 +89,7 @@ export class ElevatorsManagerComponent implements OnInit {
         if (this.selectedElevator) {
 
         } else {
-            this.store.dispatch(new BuildingSettingsActions.SetDefaultElevatorWallOpacity(opacity));
+            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallOpacity(opacity));
         }
     }
 
@@ -84,7 +97,7 @@ export class ElevatorsManagerComponent implements OnInit {
         if (this.selectedElevator) {
 
         } else {
-            this.store.dispatch(new BuildingSettingsActions.SetDefaultElevatorWallTransparent(this.wallTransparent));
+            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallTransparent(this.wallTransparent));
         }
     }
 
@@ -92,7 +105,7 @@ export class ElevatorsManagerComponent implements OnInit {
         if (this.selectedElevator) {
 
         } else {
-            this.store.dispatch(new BuildingSettingsActions.SetDefaultElevatorCapacity(capacity));
+            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCapacity(capacity));
         }
     }
 
@@ -100,7 +113,7 @@ export class ElevatorsManagerComponent implements OnInit {
         if (this.selectedElevator) {
 
         } else {
-            this.store.dispatch(new BuildingSettingsActions.SetDefaultElevatorSpeed(speed));
+            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorSpeed(speed));
         }
     }
 
@@ -108,7 +121,7 @@ export class ElevatorsManagerComponent implements OnInit {
         if (this.selectedElevator) {
 
         } else {
-            this.store.dispatch(new BuildingSettingsActions.SetDefaultElevatorCoveredFloors(coveredFloors));
+            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCoveredFloors(coveredFloors));
         }
     }
 
@@ -116,7 +129,26 @@ export class ElevatorsManagerComponent implements OnInit {
         if (this.selectedElevator) {
 
         } else {
-            this.store.dispatch(new BuildingSettingsActions.SetDefaultElevatorCurrentFloor(floor));
+            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCurrentFloor(floor));
+        }
+    }
+
+    private getElevatorConfiguration(): IElevator {
+        return {
+            capacity: this.elevatorCapacity,
+            coveredFloors: this.elevatorCapacity,
+            currentFloor: this.elevatorCurrentFloor,
+            speed: this.elevatorSpeed,
+            wallColor: this.wallColor,
+            wallOpacity: this.wallOpacity,
+            wallTransparent: this.wallTransparent
+        }
+    }
+
+    private getWireframesConfiguration(): Wireframes {
+        return {
+            isWireframesShowed: this.isWireframesShowed,
+            color: this.wireframesColor
         }
     }
 }

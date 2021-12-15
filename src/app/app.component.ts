@@ -3,7 +3,7 @@ import { DrawerItem, DrawerSelectEvent } from '@progress/kendo-angular-layout';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from './redux/root-interface';
-import SettingsFormActions from './redux/settings-form/settings-form.actions';
+import SettingsPanelActions from './redux/settings-panel/settings-panel.actions';
 import { localStorageProject } from './constants/project.constants';
 
 @Component({
@@ -57,11 +57,11 @@ export class AppComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.subscribtions.push(
             this.store.select(state => state).subscribe(x => this.plainStore = x),
-            this.store.select(state => state.settingsForm.formPosition)
+            this.store.select(state => state.settingsPanel.formPosition)
                 .subscribe(position => this.panelOnRightSide = position === 'right'),
-            this.store.select(state => state.settingsForm.formOpened)
+            this.store.select(state => state.settingsPanel.formOpened)
                 .subscribe(formOpened => this.contentExpanded = formOpened),
-            this.store.select(state => state.settingsForm.selectedTab)
+            this.store.select(state => state.settingsPanel.selectedTab)
                 .subscribe(selectedTab => {
                     this.selectedTab = selectedTab;
                     this.items.forEach(item => item.selected = false);
@@ -81,14 +81,14 @@ export class AppComponent implements OnInit, OnDestroy {
     public onSelect(ev: DrawerSelectEvent): void {
         this.items.forEach(item => item.selected = false);
         this.items.find(({ text }) => text === ev.item.text).selected = true;
-        this.store.dispatch(new SettingsFormActions.SetSelectedTab(ev.item.text));
+        this.store.dispatch(new SettingsPanelActions.SetSelectedTab(ev.item.text));
     }
 
     public onHideContent(): void {
-        this.store.dispatch(new SettingsFormActions.SetFormOpened(!this.contentExpanded));
+        this.store.dispatch(new SettingsPanelActions.SetPanelOpened(!this.contentExpanded));
     }
 
     public changeContolPanelSide(): void {
-        this.store.dispatch(new SettingsFormActions.SetFormPosition(this.getTooltipPosition()));
+        this.store.dispatch(new SettingsPanelActions.SetPanelPosition(this.getTooltipPosition()));
     }
 }

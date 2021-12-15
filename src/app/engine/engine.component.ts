@@ -13,9 +13,9 @@ import { EngineService } from '../services/engine.service';
 import { AppState } from '../redux/root-interface';
 import { ObjectManagerService } from '../services/object-manager.service';
 import GridUpdateSettings from './engine.interfaces';
-import { DefaultElevator } from '../shared/default-elevator.model';
+import { IElevator } from '../shared/elevator.model';
 import Elevator from '../shared/classes/elevator.class';
-import BuildingSettingsActions from '../redux/building-settings/building-settings.actions';
+import elevatorManagerSettingsActions from '../redux/elevator-manager-settings/elevator-manager-settings.actions';
 import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
 import cameraSettings from 'app/constants/camera-settings.constants';
 
@@ -54,11 +54,11 @@ export class EngineComponent implements OnInit, OnDestroy {
             alpha: this.rendererAlpha, // transparent background
             antialias: this.rendererAntialias, // smooth edges
         };
-        
+
         this.engServ.createScene(rendererSettings, this.canvasContainer, this.cameraSettings);
         this.engServ.animate();
 
-        this.objectManager.createCube();
+        this.objectManager.addToScene(this.objectManager.createCube());
         var axesHelper = new THREE.AxesHelper( 50 );
         this.objectManager.addToScene(axesHelper);
 
@@ -75,9 +75,9 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .subscribe(alpha => this.rendererAlpha = alpha),
             this.store.select(state => state.generalSettings.renderer.rendererAntialias)
                 .subscribe(antialias => this.rendererAntialias = antialias),
-            this.store.select(state => state.buildingSettings.elevators)
+            this.store.select(state => state.elevatorManagerSettings.elevators)
                 .subscribe(elevators => this.allElevators = [...elevators]),
-            this.store.select(state => state.buildingSettings.distanceBetweenElevators)
+            this.store.select(state => state.elevatorManagerSettings.distanceBetweenElevators)
                 .subscribe(distance => this.distanceBetweenElevators = distance),
             this.store.select(state => state.cameraSettings.cameraPosition)
                 .subscribe(cameraPosition => this.cameraSettings.cameraPosition = cameraPosition),
@@ -105,9 +105,9 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .subscribe(distance => this.engServ.controls.minDistance = distance),
             this.store.select(state => state.generalSettings.controls.cameraMaxDistance)
                 .subscribe(distance => this.engServ.controls.maxDistance = distance),
-            this.store.select(state => state.buildingSettings.createNewElevator)
-                .pipe(filter(newElevator => newElevator !== null))
-                .subscribe(config => this.createNewElevator(config)),
+            // this.store.select(state => state.elevatorManagerSettings.createNewElevator)
+            //     .pipe(filter(newElevator => newElevator !== null))
+            //     .subscribe(config => this.createNewElevator(config)),
         );
     }
 
@@ -124,13 +124,13 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.objectManager.addToScene(this.grid);
     }
 
-    private createNewElevator(config: DefaultElevator): void {
-        const elevator = this.objectManager.createElevator(config);
-        console.log('elevator', elevator);
-        this.allElevators.push(elevator);
-        return;
-        this.store.dispatch(new BuildingSettingsActions.SetElevators(this.allElevators));
-        elevator.createGeometry();
-        elevator.geometry.forEach(element => this.objectManager.addToScene(element));
+    private createNewElevator(config: IElevator): void {
+        // const elevator = this.objectManager.createElevatorConfiguration(config);
+        // console.log('elevator', elevator);
+        // this.allElevators.push(elevator);
+        // return;
+        // this.store.dispatch(new elevatorManagerSettingsActions.SetElevators(this.allElevators));
+        // elevator.createGeometry();
+        // elevator.geometry.forEach(element => this.objectManager.addToScene(element));
     }
 }

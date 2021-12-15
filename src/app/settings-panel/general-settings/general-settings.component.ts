@@ -28,7 +28,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.subscriptions.push(
-            this.store.select(state => state.settingsForm.formPosition)
+            this.store.select(state => state.settingsPanel.formPosition)
                 .subscribe(position => this.tooltipPosition = position),
             this.store.select(state => state.generalSettings.backgroundColor)
                 .subscribe(backgroundColor => this.backgroundColor = backgroundColor),
@@ -50,11 +50,11 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
     public onBackgroundColorChange(color: string): void {
         this.store.dispatch(new GeneralSettingsActions.SetBackgroundColor(color));
 	}
-	
+
     public onBackgroundColorReset(): void {
         this.store.dispatch(new GeneralSettingsActions.ResetBackgroundColor());
     }
-	
+
     public onResetAllSettings(): void {
         this.store.dispatch(new GeneralSettingsActions.ResetAllSettings());
         this.store.dispatch(new CameraSettingsActions.ResetCameraPosition());
