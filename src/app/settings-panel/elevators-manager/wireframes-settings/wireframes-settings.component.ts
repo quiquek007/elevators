@@ -47,7 +47,8 @@ export class WireframesSettingsComponent implements OnInit {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetWireframesExpand(event[0].expanded));
     }
 
-    public onShowWireframeChange(): void {
+    public onShowWireframeChange(event: Event): void {
+        event.stopPropagation();
         this.store.dispatch(new ElevatorManagerSettingsActions.SetWireframesShowed(this.isWireframesShowed));
     }
 

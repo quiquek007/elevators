@@ -85,8 +85,6 @@ export default class Elevator implements IElevator{
         const edges = new THREE.EdgesGeometry(object.geometry);
         const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: this.wireframes.color}));
 
-        console.log('line', line);
-
         ['x', 'y', 'z'].forEach(axis => {
             line.position[axis] = object.position[axis];
             line.rotation[axis] = object.rotation[axis];

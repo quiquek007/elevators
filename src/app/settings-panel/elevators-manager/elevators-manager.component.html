@@ -112,3 +112,13 @@
     </div>
 </section>
 <wireframes-settings></wireframes-settings>
+<section class="option-line">
+    <span>Reset tab settings:</span>
+    <button kendoButton
+        kendoTooltip
+        title="Reset tab settings"
+        [position]="getTooltipPosition()"
+        [iconClass]="'k-icon k-i-reload'"
+        (click)="onResetAllSettings()">
+    </button>
+</section>

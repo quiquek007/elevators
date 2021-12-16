@@ -12,6 +12,8 @@ const SET_WIREFRAMES_EXPAND = 'SET_WIREFRAMES_EXPAND';
 const SET_WIREFRAMES_SHOWED = 'SET_WIREFRAMES_SHOWED';
 const SET_WIREFRAMES_COLOR = 'SET_WIREFRAMES_COLOR';
 
+const RESET_ELEVATOR_MANAGER_SETTINGS_ALL_SETTINGS = 'RESET_ELEVATOR_MANAGER_SETTINGS_ALL_SETTINGS';
+
 class SetElevatorWallColor implements Action {
     type = SET_ELEVATOR_WALL_COLOR;
     constructor(public payload: string) {}
@@ -63,6 +65,10 @@ class SetWireframesColor implements Action {
     constructor(public payload: THREE.Color | number | string) {}
 }
 
+class ResetAllSettings implements Action {
+    type = RESET_ELEVATOR_MANAGER_SETTINGS_ALL_SETTINGS;
+}
+
 export default {
     SET_ELEVATOR_WALL_COLOR,
     SET_ELEVATOR_WALL_OPACITY,
@@ -74,6 +80,7 @@ export default {
     SET_WIREFRAMES_EXPAND,
     SET_WIREFRAMES_SHOWED,
     SET_WIREFRAMES_COLOR,
+    RESET_ELEVATOR_MANAGER_SETTINGS_ALL_SETTINGS,
 
     SetElevatorWallColor,
     SetElevatorWallOpacity,
@@ -84,6 +91,7 @@ export default {
     SetElevatorCurrentFloor,
     SetWireframesExpand,
     SetWireframesShowed,
-    SetWireframesColor
+    SetWireframesColor,
+    ResetAllSettings
 };
 

@@ -10,6 +10,16 @@
         [mini]="true"
         [autoCollapse]="true"
         (select)="onSelect($event)">
+        <ng-template kendoDrawerFooterTemplate>
+            <button kendoButton
+                kendoTooltip
+                title="Reset all settings"
+                class="reset-button"
+                [position]="getTooltipPosition()"
+                [iconClass]="'k-icon k-i-reload'"
+                (click)="onResetAllSettings()">
+            </button>
+          </ng-template>
     </kendo-drawer>
 
     <!-- content of control panel -->

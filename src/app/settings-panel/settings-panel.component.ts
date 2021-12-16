@@ -10,10 +10,10 @@ import { AppState } from 'app/redux/root-interface';
     encapsulation: ViewEncapsulation.None
 })
 export class SettingsPanelComponent {
+    private subscribtions: Subscription[] = [];
+
     @Input()
     public selectedOption: string;
-
-    private subscribtions: Subscription[] = [];
 
     constructor(private store: Store<AppState>) {}
 

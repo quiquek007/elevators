@@ -5,6 +5,12 @@ import { Subscription } from 'rxjs';
 import { AppState } from './redux/root-interface';
 import SettingsPanelActions from './redux/settings-panel/settings-panel.actions';
 import { localStorageProject } from './constants/project.constants';
+import GeneralSettingsActions from 'app/redux/general-settings/general-settings.actions';
+import CameraSettingsActions from 'app/redux/camera-settings/camera-settings.actions';
+import { EngineService } from 'app/services/engine.service';
+import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
+import cameraSettings from 'app/constants/camera-settings.constants';
+import ElevatorManagerSettingsActions from './redux/elevator-manager-settings/elevator-manager-settings.actions';
 
 @Component({
     selector: 'app-root',
@@ -13,13 +19,13 @@ import { localStorageProject } from './constants/project.constants';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, OnDestroy {
+    private subscribtions: Subscription[] = [];
+    private plainStore: AppState;
+    private cameraSettings: CameraSettings = { ...cameraSettings };
+
     public contentExpanded: boolean = false;
     public panelOnRightSide: boolean = false;
     public selectedTab: string;
-
-    private subscribtions: Subscription[] = [];
-    private plainStore: AppState;
-
     public items: Array<DrawerItem> = [
         {
             text: 'ElevatorsManager',
@@ -34,9 +40,6 @@ export class AppComponent implements OnInit, OnDestroy {
             text: 'Calendar',
             icon: 'k-i-calendar'
         },
-        // {
-        //     separator: true
-        // },
         {
             text: 'Attachments',
             icon: 'k-i-hyperlink-email'
@@ -44,7 +47,14 @@ export class AppComponent implements OnInit, OnDestroy {
         {
             text: 'Favourites',
             icon: 'k-i-star-outline'
-        }
+        },
+        // {
+        //     separator: true
+        // },
+        // {
+        //     text: 'Reset All',
+        //     icon: 'k-i-reload'
+        // }
     ];
 
     @HostListener('window:beforeunload', ['$event'])
@@ -52,7 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
         localStorage.setItem(localStorageProject, JSON.stringify(this.plainStore));
     }
 
-    constructor(private store: Store<AppState>) {}
+    constructor(private store: Store<AppState>, private engServ: EngineService) {}
 
     public ngOnInit(): void {
         this.subscribtions.push(
@@ -66,7 +76,11 @@ export class AppComponent implements OnInit, OnDestroy {
                     this.selectedTab = selectedTab;
                     this.items.forEach(item => item.selected = false);
                     this.items.find(({ text }) => text === selectedTab).selected = true;
-                })
+                }),
+            this.store.select(state => state.cameraSettings.cameraPosition)
+                .subscribe(cameraPosition => this.cameraSettings.cameraPosition = cameraPosition),
+            this.store.select(state => state.cameraSettings.controlsTarget)
+                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget),
         );
     }
 
@@ -90,5 +104,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public changeContolPanelSide(): void {
         this.store.dispatch(new SettingsPanelActions.SetPanelPosition(this.getTooltipPosition()));
+    }
+
+    public onResetAllSettings(): void {
+        this.store.dispatch(new ElevatorManagerSettingsActions.ResetAllSettings());
+        this.store.dispatch(new GeneralSettingsActions.ResetAllSettings());
+        this.store.dispatch(new CameraSettingsActions.ResetCameraPosition());
+        this.store.dispatch(new CameraSettingsActions.ResetControlsTarget());
+        this.engServ.setInitialCameraPosition(this.cameraSettings);
     }
 }

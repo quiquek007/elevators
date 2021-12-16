@@ -151,4 +151,8 @@ export class ElevatorsManagerComponent implements OnInit {
             color: this.wireframesColor
         }
     }
+
+    public onResetAllSettings(): void {
+        this.store.dispatch(new ElevatorManagerSettingsActions.ResetAllSettings());
+    }
 }

@@ -1,16 +1,16 @@
 <kendo-panelbar (stateChange)="onWireframesSettingsExpanded($event)">
-    <kendo-panelbar-item title="Wireframes settings"
+    <kendo-panelbar-item title=""
         [expanded]="wireframesSettingsExpanded">
+        <ng-template kendoPanelBarItemTitle>
+            <div class="component-title-wrapper">
+                <span class="component-title">Show wireframes</span>
+                <kendo-switch class="component-switch"
+                    [(ngModel)]="isWireframesShowed"
+                    (click)="onShowWireframeChange($event)">
+                </kendo-switch>
+            </div>
+        </ng-template>
         <ng-template kendoPanelBarContent>
-            <section class="option-line">
-                <span>Show wireframe:</span>
-                <div>
-                    <kendo-switch class="component-switch"
-                        [(ngModel)]="isWireframesShowed"
-                        (click)="onShowWireframeChange()">
-                    </kendo-switch>
-                </div>
-            </section>
             <section class="option-line">
                 <span>Wireframes color:</span>
                 <div>

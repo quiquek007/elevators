@@ -68,6 +68,8 @@ export function elevatorManagerReducer(state: ElevatorManagerSettings = defaultS
                 wireframes: { ...state.wireframes, color: action.payload }
 			};
 
+        case ElevatorManagerActions.RESET_ELEVATOR_MANAGER_SETTINGS_ALL_SETTINGS: return elevatorManagerSettings;
+
   		default:
   			return state;
 	}
