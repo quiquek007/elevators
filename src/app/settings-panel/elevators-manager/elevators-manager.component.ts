@@ -32,24 +32,16 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public ngOnInit() {
         this.subscriptions.push(
-            this.store
-                .select(state => state.settingsPanel.formPosition)
-                .subscribe(position => this.tooltipPosition = position),
-            this.store
-                .select(state => state.elevatorManagerSettings.defaultElevator.wallColor)
-                .subscribe(color => this.wallColor = color),
-            this.store
-                .select(state => state.elevatorManagerSettings.defaultElevator.wallOpacity)
-                .subscribe(opacity => this.wallOpacity = opacity),
+            this.store.select(state => state.settingsPanel.formPosition).subscribe(position => this.tooltipPosition = position),
+            this.store.select(state => state.elevatorManagerSettings.defaultElevator.wallColor).subscribe(color => this.wallColor = color),
+            this.store.select(state => state.elevatorManagerSettings.defaultElevator.wallOpacity).subscribe(opacity => this.wallOpacity = opacity),
             this.store
                 .select(state => state.elevatorManagerSettings.defaultElevator.wallTransparent)
                 .subscribe(value => this.wallTransparent = value),
             this.store
                 .select(state => state.elevatorManagerSettings.defaultElevator.capacity)
                 .subscribe(capacity => this.elevatorCapacity = capacity),
-            this.store
-                .select(state => state.elevatorManagerSettings.defaultElevator.speed)
-                .subscribe(speed => this.elevatorSpeed = speed),
+            this.store.select(state => state.elevatorManagerSettings.defaultElevator.speed).subscribe(speed => this.elevatorSpeed = speed),
             this.store
                 .select(state => state.elevatorManagerSettings.defaultElevator.coveredFloors)
                 .subscribe(coveredFloors => this.elevatorCoveredFloors = coveredFloors),
@@ -59,9 +51,7 @@ export class ElevatorsManagerComponent implements OnInit {
             this.store
                 .select(state => state.elevatorManagerSettings.wireframes.isWireframesShowed)
                 .subscribe(isWireframesShowed => this.isWireframesShowed = isWireframesShowed),
-            this.store
-                .select(state => state.elevatorManagerSettings.wireframes.color)
-                .subscribe(color => this.wireframesColor = color)
+            this.store.select(state => state.elevatorManagerSettings.wireframes.color).subscribe(color => this.wireframesColor = color)
         );
     }
 
@@ -71,8 +61,7 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public onAddElevator(): void {
         const elevatorConfig = this.getElevatorConfiguration();
-        const wireframesConfig = this.getWireframesConfiguration();
-        const elevator = this.objectManager.createElevatorConfiguration(elevatorConfig, wireframesConfig);
+        const elevator = this.objectManager.createElevatorConfiguration(elevatorConfig);
         const elevatorObj = this.objectManager.buildElevator(elevator);
 
         console.log('elevator', elevatorObj);
@@ -142,14 +131,11 @@ export class ElevatorsManagerComponent implements OnInit {
             speed: this.elevatorSpeed,
             wallColor: this.wallColor,
             wallOpacity: this.wallOpacity,
-            wallTransparent: this.wallTransparent
-        };
-    }
-
-    private getWireframesConfiguration(): IWireframes {
-        return {
-            isWireframesShowed: this.isWireframesShowed,
-            color: this.wireframesColor
+            wallTransparent: this.wallTransparent,
+            wireframes: {
+                isWireframesShowed: this.isWireframesShowed,
+                color: this.wireframesColor
+            }
         };
     }
 

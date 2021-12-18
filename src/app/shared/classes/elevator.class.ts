@@ -1,6 +1,6 @@
+import * as THREE from 'three';
 import elevatorManagerSettings from 'app/constants/elevator-manager-settings.constants';
 import { IElevator } from '../Elevator/elevator.model';
-import * as THREE from 'three';
 import { IWireframes } from '../Elevator/childs/wireframes.model';
 import { ISize } from '../Elevator/childs/size.model';
 import { IEsteticWall } from '../Elevator/childs/estetic-wall.model';
@@ -28,7 +28,7 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
     public wireframes?: IWireframes;
     public geometry: any = [];
 
-    constructor(config: IElevator, wireframes: IWireframes) {
+    constructor(config: IElevator) {
         this.wallColor = config.wallColor;
         this.wallOpacity = config.wallOpacity;
         this.wallTransparent = config.wallTransparent;
@@ -39,7 +39,7 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         this.speed = config.speed;
         this.coveredFloors = config.coveredFloors;
         this.currentFloor = config.currentFloor;
-        this.wireframes = wireframes;
+        this.wireframes = config.wireframes;
         this.createGeometry();
         if (this.wireframes.isWireframesShowed) this.addWireframes();
     }
@@ -59,7 +59,7 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         wallBack.rotateY(-angle90);
         wallBack.translateZ(-this.length / 2);
 
-        // draw the doors
+        // TODO: draw the doors
         this.geometry.push(floor, ceiling, wallLeft, wallRight, wallBack);
     }
 
@@ -69,9 +69,7 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
     }
 
     private createPane(name: string, isWall: boolean = true): THREE.Mesh {
-        const geometry = isWall
-            ? new THREE.PlaneGeometry(this.length, this.height)
-            : new THREE.PlaneGeometry(this.length, this.width);
+        const geometry = isWall ? new THREE.PlaneGeometry(this.length, this.height) : new THREE.PlaneGeometry(this.length, this.width);
         const material = new THREE.MeshBasicMaterial({ color: this.wallColor, side: THREE.DoubleSide });
         const plane = new THREE.Mesh(geometry, material);
 

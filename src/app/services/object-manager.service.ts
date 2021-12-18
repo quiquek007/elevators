@@ -33,8 +33,8 @@ export class ObjectManagerService {
         return grid;
     }
 
-    public createElevatorConfiguration(elevatorConfig: IElevator, wireframesConfig: IWireframes): Elevator {
-        return this.building.createElevator(elevatorConfig, wireframesConfig);
+    public createElevatorConfiguration(elevatorConfig: IElevator): Elevator {
+        return this.building.createElevator(elevatorConfig);
     }
 
     public buildElevator(elevator: Elevator): THREE.Object3D {

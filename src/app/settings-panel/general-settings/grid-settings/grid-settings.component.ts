@@ -1,7 +1,4 @@
-import {
-    Component,
-    OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/root-interface';
@@ -28,21 +25,17 @@ export class GridSettingsComponent implements OnInit {
 
     public ngOnInit(): void {
         this.subscriptions.push(
-            this.store.select(state => state.settingsPanel.formPosition)
-                .subscribe(position => this.tooltipPosition = position),
-            this.store.select(state => state.generalSettings.grid.gridColor)
-                .subscribe(gridColor => this.gridColor = gridColor),
-            this.store.select(state => state.generalSettings.grid.gridSettingsExpanded)
-                .subscribe(expanded => this.gridSettingsExpanded = expanded),
-            this.store.select(state => state.generalSettings.grid.gridEnable)
-                .subscribe(enable => this.gridEnable = enable),
-            this.store.select(state => state.generalSettings.grid.gridOpacity)
-                .subscribe(opacity => this.gridOpacity = opacity),
-            this.store.select(state => state.generalSettings.grid.gridSize)
+            this.store.select(state => state.settingsPanel.formPosition).subscribe(position => this.tooltipPosition = position),
+            this.store.select(state => state.generalSettings.grid.gridColor).subscribe(gridColor => this.gridColor = gridColor),
+            this.store.select(state => state.generalSettings.grid.gridSettingsExpanded).subscribe(expanded => this.gridSettingsExpanded = expanded),
+            this.store.select(state => state.generalSettings.grid.gridEnable).subscribe(enable => this.gridEnable = enable),
+            this.store.select(state => state.generalSettings.grid.gridOpacity).subscribe(opacity => this.gridOpacity = opacity),
+            this.store
+                .select(state => state.generalSettings.grid.gridSize)
                 .subscribe(size => {
                     // avoid mutaion the original constant
                     this.gridSize = Object.assign({}, size);
-                }),
+                })
         );
     }
 
@@ -56,7 +49,7 @@ export class GridSettingsComponent implements OnInit {
 
     public onGridColorChange(color: string): void {
         this.store.dispatch(new GeneralSettingsActions.SetGridColor(color));
-	}
+    }
 
     public onGridColorReset(): void {
         this.store.dispatch(new GeneralSettingsActions.ResetGridColor());

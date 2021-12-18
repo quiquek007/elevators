@@ -10,8 +10,8 @@ export default class Building {
 
     constructor() {}
 
-    public createElevator(elevatorConf: IElevator, wireframesConfig: IWireframes): Elevator {
-        const elevator = new Elevator(elevatorConf, wireframesConfig);
+    public createElevator(elevatorConf: IElevator): Elevator {
+        const elevator = new Elevator(elevatorConf);
 
         // elevator.startPosition = this.getFreePositionForElevator();
         this.elevators.push(elevator);
