@@ -1,8 +1,4 @@
-import {
-    Component,
-    OnInit,
-    OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from 'app/redux/root-interface';
@@ -15,7 +11,7 @@ import { EngineService } from 'app/services/engine.service';
 @Component({
     selector: 'general-settings',
     templateUrl: './general-settings.component.html',
-	styleUrls: ['./general-settings.component.less']
+    styleUrls: ['./general-settings.component.less']
 })
 export class GeneralSettingsComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
@@ -28,14 +24,18 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.subscriptions.push(
-            this.store.select(state => state.settingsPanel.formPosition)
+            this.store
+                .select(state => state.settingsPanel.formPosition)
                 .subscribe(position => this.tooltipPosition = position),
-            this.store.select(state => state.generalSettings.backgroundColor)
+            this.store
+                .select(state => state.generalSettings.backgroundColor)
                 .subscribe(backgroundColor => this.backgroundColor = backgroundColor),
-            this.store.select(state => state.cameraSettings.cameraPosition)
+            this.store
+                .select(state => state.cameraSettings.cameraPosition)
                 .subscribe(cameraPosition => this.cameraSettings.cameraPosition = cameraPosition),
-            this.store.select(state => state.cameraSettings.controlsTarget)
-                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget),
+            this.store
+                .select(state => state.cameraSettings.controlsTarget)
+                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget)
         );
     }
 
@@ -49,7 +49,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy {
 
     public onBackgroundColorChange(color: string): void {
         this.store.dispatch(new GeneralSettingsActions.SetBackgroundColor(color));
-	}
+    }
 
     public onBackgroundColorReset(): void {
         this.store.dispatch(new GeneralSettingsActions.ResetBackgroundColor());

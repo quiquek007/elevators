@@ -1,8 +1,8 @@
 import Elevator from './elevator.class';
 import Floor from './floor.class';
-import { IElevator } from '../elevator.model';
+import { IElevator } from '../Elevator/elevator.model';
 import * as THREE from 'three';
-import { Wireframes } from '../wireframes.model';
+import { IWireframes } from '../Elevator/childs/wireframes.model';
 
 export default class Building {
     private elevators: Elevator[] = [];
@@ -10,7 +10,7 @@ export default class Building {
 
     constructor() {}
 
-    public createElevator(elevatorConf: IElevator, wireframesConfig: Wireframes): Elevator {
+    public createElevator(elevatorConf: IElevator, wireframesConfig: IWireframes): Elevator {
         const elevator = new Elevator(elevatorConf, wireframesConfig);
 
         // elevator.startPosition = this.getFreePositionForElevator();

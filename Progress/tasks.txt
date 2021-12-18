@@ -1,5 +1,8 @@
 создать формы для elevatorConfiguration: sizes ect.
 create selected elevator table
+реинициализация элеваторов
+селект элеватора
+добавление др элеваторов
 
 *validation for localStorage data
 *make limit for generation of store

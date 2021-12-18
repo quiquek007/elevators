@@ -1,19 +1,13 @@
 import { Subscription, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import * as THREE from 'three';
-import {
-    Component,
-    ElementRef,
-    ViewChild,
-    OnInit,
-    OnDestroy
-} from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { EngineService } from '../services/engine.service';
 import { AppState } from '../redux/root-interface';
 import { ObjectManagerService } from '../services/object-manager.service';
 import GridUpdateSettings from './engine.interfaces';
-import { IElevator } from '../shared/elevator.model';
+import { IElevator } from '../shared/Elevator/elevator.model';
 import Elevator from '../shared/classes/elevator.class';
 import elevatorManagerSettingsActions from '../redux/elevator-manager-settings/elevator-manager-settings.actions';
 import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
@@ -33,16 +27,17 @@ export class EngineComponent implements OnInit, OnDestroy {
     private cameraSettings: CameraSettings = { ...cameraSettings };
     private distanceBetweenElevators: number;
 
-    @ViewChild('rendererCanvas', {static: true})
+    @ViewChild('rendererCanvas', { static: true })
     public rendererCanvas: ElementRef<HTMLCanvasElement>;
 
-    @ViewChild('canvasContainer', {static: true})
+    @ViewChild('canvasContainer', { static: true })
     public canvasContainer: ElementRef<HTMLDivElement>;
 
     constructor(
         private engServ: EngineService,
         private objectManager: ObjectManagerService,
-        private store: Store<AppState>) {}
+        private store: Store<AppState>
+    ) {}
 
     public ngOnInit(): void {
         if (!this.rendererCanvas) throw new Error('rendererCanvas is not implemented!');
@@ -52,14 +47,14 @@ export class EngineComponent implements OnInit, OnDestroy {
         const rendererSettings = {
             canvas: this.rendererCanvas.nativeElement,
             alpha: this.rendererAlpha, // transparent background
-            antialias: this.rendererAntialias, // smooth edges
+            antialias: this.rendererAntialias // smooth edges
         };
 
         this.engServ.createScene(rendererSettings, this.canvasContainer, this.cameraSettings);
         this.engServ.animate();
 
         this.objectManager.addToScene(this.objectManager.createCube());
-        var axesHelper = new THREE.AxesHelper( 50 );
+        var axesHelper = new THREE.AxesHelper(50);
         this.objectManager.addToScene(axesHelper);
 
         this.initSubscribtions();
@@ -71,40 +66,52 @@ export class EngineComponent implements OnInit, OnDestroy {
 
     private initPrerenderSettings(): void {
         this.subscribtions.push(
-            this.store.select(state => state.generalSettings.renderer.rendererAlpha)
+            this.store
+                .select(state => state.generalSettings.renderer.rendererAlpha)
                 .subscribe(alpha => this.rendererAlpha = alpha),
-            this.store.select(state => state.generalSettings.renderer.rendererAntialias)
+            this.store
+                .select(state => state.generalSettings.renderer.rendererAntialias)
                 .subscribe(antialias => this.rendererAntialias = antialias),
-            this.store.select(state => state.elevatorManagerSettings.elevators)
+            this.store
+                .select(state => state.elevatorManagerSettings.elevators)
                 .subscribe(elevators => this.allElevators = [...elevators]),
-            this.store.select(state => state.elevatorManagerSettings.distanceBetweenElevators)
+            this.store
+                .select(state => state.elevatorManagerSettings.distanceBetweenElevators)
                 .subscribe(distance => this.distanceBetweenElevators = distance),
-            this.store.select(state => state.cameraSettings.cameraPosition)
+            this.store
+                .select(state => state.cameraSettings.cameraPosition)
                 .subscribe(cameraPosition => this.cameraSettings.cameraPosition = cameraPosition),
-            this.store.select(state => state.cameraSettings.controlsTarget)
-                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget),
+            this.store
+                .select(state => state.cameraSettings.controlsTarget)
+                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget)
         );
     }
 
     private initSubscribtions(): void {
         this.subscribtions.push(
-            this.store.select(state => state.generalSettings.backgroundColor)
+            this.store
+                .select(state => state.generalSettings.backgroundColor)
                 .subscribe(backgroundColor => this.engServ.setColorBackground(backgroundColor)),
             combineLatest([
                 this.store.select(state => state.generalSettings.grid.gridColor),
                 this.store.select(state => state.generalSettings.grid.gridOpacity),
                 this.store.select(state => state.generalSettings.grid.gridEnable),
-                this.store.select(state => state.generalSettings.grid.gridSize)]
-            ).subscribe(([gridColor, gridOpacity, enable, gridSize]) =>
-                this.updateGrid({ gridColor, gridOpacity, gridSize }, enable )),
-            this.store.select(state => state.generalSettings.controls.enableDamping)
+                this.store.select(state => state.generalSettings.grid.gridSize)
+            ]).subscribe(([gridColor, gridOpacity, enable, gridSize]) =>
+                this.updateGrid({ gridColor, gridOpacity, gridSize }, enable)
+            ),
+            this.store
+                .select(state => state.generalSettings.controls.enableDamping)
                 .subscribe(flag => this.engServ.controls.enableDamping = flag),
-            this.store.select(state => state.generalSettings.controls.dampingFactor)
+            this.store
+                .select(state => state.generalSettings.controls.dampingFactor)
                 .subscribe(dump => this.engServ.controls.dampingFactor = dump),
-            this.store.select(state => state.generalSettings.controls.cameraMinDistance)
+            this.store
+                .select(state => state.generalSettings.controls.cameraMinDistance)
                 .subscribe(distance => this.engServ.controls.minDistance = distance),
-            this.store.select(state => state.generalSettings.controls.cameraMaxDistance)
-                .subscribe(distance => this.engServ.controls.maxDistance = distance),
+            this.store
+                .select(state => state.generalSettings.controls.cameraMaxDistance)
+                .subscribe(distance => this.engServ.controls.maxDistance = distance)
             // this.store.select(state => state.elevatorManagerSettings.createNewElevator)
             //     .pipe(filter(newElevator => newElevator !== null))
             //     .subscribe(config => this.createNewElevator(config)),
@@ -115,7 +122,7 @@ export class EngineComponent implements OnInit, OnDestroy {
      * grid lifecircle:
      * require to create new grid for changing color
      */
-    private updateGrid({ gridColor, gridOpacity, gridSize }: GridUpdateSettings, enable: boolean = true): void{
+    private updateGrid({ gridColor, gridOpacity, gridSize }: GridUpdateSettings, enable: boolean = true): void {
         if (this.grid) this.objectManager.removeObject(this.grid);
         if (!enable) return;
 

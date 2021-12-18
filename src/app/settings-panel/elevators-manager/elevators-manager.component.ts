@@ -4,9 +4,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/root-interface';
 import ElevatorManagerSettingsActions from 'app/redux/elevator-manager-settings/elevator-manager-settings.actions';
 import Elevator from 'app/shared/classes/elevator.class';
-import { IElevator } from 'app/shared/elevator.model';
+import { IElevator } from 'app/shared/Elevator/elevator.model';
 import { ObjectManagerService } from 'app/services/object-manager.service';
-import { Wireframes } from 'app/shared/wireframes.model';
+import { IWireframes } from 'app/shared/Elevator/childs/wireframes.model';
 
 @Component({
     selector: 'elevators-manager',
@@ -32,26 +32,36 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public ngOnInit() {
         this.subscriptions.push(
-            this.store.select(state => state.settingsPanel.formPosition)
+            this.store
+                .select(state => state.settingsPanel.formPosition)
                 .subscribe(position => this.tooltipPosition = position),
-            this.store.select(state => state.elevatorManagerSettings.defaultElevator.wallColor)
+            this.store
+                .select(state => state.elevatorManagerSettings.defaultElevator.wallColor)
                 .subscribe(color => this.wallColor = color),
-            this.store.select(state => state.elevatorManagerSettings.defaultElevator.wallOpacity)
+            this.store
+                .select(state => state.elevatorManagerSettings.defaultElevator.wallOpacity)
                 .subscribe(opacity => this.wallOpacity = opacity),
-            this.store.select(state => state.elevatorManagerSettings.defaultElevator.wallTransparent)
+            this.store
+                .select(state => state.elevatorManagerSettings.defaultElevator.wallTransparent)
                 .subscribe(value => this.wallTransparent = value),
-            this.store.select(state => state.elevatorManagerSettings.defaultElevator.capacity)
+            this.store
+                .select(state => state.elevatorManagerSettings.defaultElevator.capacity)
                 .subscribe(capacity => this.elevatorCapacity = capacity),
-            this.store.select(state => state.elevatorManagerSettings.defaultElevator.speed)
+            this.store
+                .select(state => state.elevatorManagerSettings.defaultElevator.speed)
                 .subscribe(speed => this.elevatorSpeed = speed),
-            this.store.select(state => state.elevatorManagerSettings.defaultElevator.coveredFloors)
+            this.store
+                .select(state => state.elevatorManagerSettings.defaultElevator.coveredFloors)
                 .subscribe(coveredFloors => this.elevatorCoveredFloors = coveredFloors),
-            this.store.select(state => state.elevatorManagerSettings.defaultElevator.currentFloor)
+            this.store
+                .select(state => state.elevatorManagerSettings.defaultElevator.currentFloor)
                 .subscribe(floor => this.elevatorCurrentFloor = floor),
-            this.store.select(state => state.elevatorManagerSettings.wireframes.isWireframesShowed)
+            this.store
+                .select(state => state.elevatorManagerSettings.wireframes.isWireframesShowed)
                 .subscribe(isWireframesShowed => this.isWireframesShowed = isWireframesShowed),
-            this.store.select(state => state.elevatorManagerSettings.wireframes.color)
-                .subscribe(color => this.wireframesColor = color),
+            this.store
+                .select(state => state.elevatorManagerSettings.wireframes.color)
+                .subscribe(color => this.wireframesColor = color)
         );
     }
 
@@ -73,13 +83,10 @@ export class ElevatorsManagerComponent implements OnInit {
         // this.store.dispatch(new elevatorManagerSettingsActions.CreateNewElevator(null));
     }
 
-    public onDeleteElevator(): void {
-
-    }
+    public onDeleteElevator(): void {}
 
     public onWallColorChange(color: string): void {
         if (this.selectedElevator) {
-
         } else {
             this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallColor(color));
         }
@@ -87,7 +94,6 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public onWallOpacityChange(opacity: number): void {
         if (this.selectedElevator) {
-
         } else {
             this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallOpacity(opacity));
         }
@@ -95,7 +101,6 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public onWallTransparentChange(): void {
         if (this.selectedElevator) {
-
         } else {
             this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallTransparent(this.wallTransparent));
         }
@@ -103,7 +108,6 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public onElevatorCapacityChange(capacity: number): void {
         if (this.selectedElevator) {
-
         } else {
             this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCapacity(capacity));
         }
@@ -111,7 +115,6 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public onElevatorSpeedChange(speed: number): void {
         if (this.selectedElevator) {
-
         } else {
             this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorSpeed(speed));
         }
@@ -119,7 +122,6 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public onElevatorCoveredFloorsChange(coveredFloors: number): void {
         if (this.selectedElevator) {
-
         } else {
             this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCoveredFloors(coveredFloors));
         }
@@ -127,7 +129,6 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public onElevatorCurrentFloorChange(floor: number): void {
         if (this.selectedElevator) {
-
         } else {
             this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCurrentFloor(floor));
         }
@@ -142,14 +143,14 @@ export class ElevatorsManagerComponent implements OnInit {
             wallColor: this.wallColor,
             wallOpacity: this.wallOpacity,
             wallTransparent: this.wallTransparent
-        }
+        };
     }
 
-    private getWireframesConfiguration(): Wireframes {
+    private getWireframesConfiguration(): IWireframes {
         return {
             isWireframesShowed: this.isWireframesShowed,
             color: this.wireframesColor
-        }
+        };
     }
 
     public onResetAllSettings(): void {

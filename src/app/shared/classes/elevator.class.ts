@@ -1,7 +1,10 @@
 import elevatorManagerSettings from 'app/constants/elevator-manager-settings.constants';
-import { IElevator } from '../elevator.model';
+import { IElevator } from '../Elevator/elevator.model';
 import * as THREE from 'three';
-import { Wireframes } from '../wireframes.model';
+import { IWireframes } from '../Elevator/childs/wireframes.model';
+import { ISize } from '../Elevator/childs/size.model';
+import { IEsteticWall } from '../Elevator/childs/estetic-wall.model';
+import { ITechProps } from '../Elevator/childs/tech-props.model';
 
 const angle90: number = 1.5707963267948966;
 
@@ -11,7 +14,7 @@ const angle90: number = 1.5707963267948966;
 //     object.rotateZ(THREE.Math.degToRad(degreeZ));
 //  }
 
-export default class Elevator implements IElevator{
+export default class Elevator implements IEsteticWall, ITechProps, ISize {
     public wallColor: THREE.Color | string;
     public wallOpacity: number;
     public wallTransparent: boolean;
@@ -22,10 +25,10 @@ export default class Elevator implements IElevator{
     public speed: number;
     public coveredFloors: number;
     public currentFloor: number;
-    public wireframes: Wireframes;
+    public wireframes?: IWireframes;
     public geometry: any = [];
 
-    constructor(config: IElevator, wireframes: Wireframes) {
+    constructor(config: IElevator, wireframes: IWireframes) {
         this.wallColor = config.wallColor;
         this.wallOpacity = config.wallOpacity;
         this.wallTransparent = config.wallTransparent;
@@ -66,8 +69,10 @@ export default class Elevator implements IElevator{
     }
 
     private createPane(name: string, isWall: boolean = true): THREE.Mesh {
-        const geometry = isWall ? new THREE.PlaneGeometry(this.length, this.height) : new THREE.PlaneGeometry(this.length, this.width);
-        const material = new THREE.MeshBasicMaterial({color: this.wallColor, side: THREE.DoubleSide});
+        const geometry = isWall
+            ? new THREE.PlaneGeometry(this.length, this.height)
+            : new THREE.PlaneGeometry(this.length, this.width);
+        const material = new THREE.MeshBasicMaterial({ color: this.wallColor, side: THREE.DoubleSide });
         const plane = new THREE.Mesh(geometry, material);
 
         if (isWall) {
@@ -83,12 +88,12 @@ export default class Elevator implements IElevator{
 
     private createWireframe(object: THREE.Mesh): THREE.LineSegments {
         const edges = new THREE.EdgesGeometry(object.geometry);
-        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color: this.wireframes.color}));
+        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: this.wireframes.color }));
 
         ['x', 'y', 'z'].forEach(axis => {
             line.position[axis] = object.position[axis];
             line.rotation[axis] = object.rotation[axis];
-        })
+        });
         line.name = 'wireframe';
 
         return line;
