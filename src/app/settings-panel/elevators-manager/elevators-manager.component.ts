@@ -6,6 +6,7 @@ import ElevatorManagerSettingsActions from 'app/redux/elevator-manager-settings/
 import Elevator from 'app/shared/classes/elevator.class';
 import { IElevator } from 'app/shared/Elevator/elevator.model';
 import { ObjectManagerService } from 'app/services/object-manager.service';
+import { ResetKeys } from './reset-keys.model';
 
 @Component({
     selector: 'elevators-manager',
@@ -50,7 +51,8 @@ export class ElevatorsManagerComponent implements OnInit {
             this.store
                 .select(state => state.elevatorManagerSettings.wireframes.isWireframesShowed)
                 .subscribe(isWireframesShowed => this.isWireframesShowed = isWireframesShowed),
-            this.store.select(state => state.elevatorManagerSettings.wireframes.color).subscribe(color => this.wireframesColor = color)
+            this.store.select(state => state.elevatorManagerSettings.wireframes.color).subscribe(color => this.wireframesColor = color),
+            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => console.log('elevators', elevators))
         );
     }
 
@@ -61,7 +63,7 @@ export class ElevatorsManagerComponent implements OnInit {
     public onAddElevator(): void {
         const elevatorConfig = this.getElevatorConfiguration();
         const elevator = this.objectManager.createElevatorConfiguration(elevatorConfig);
-        const object = this.objectManager.buildElevator(elevator);
+        const object = this.objectManager.buildElevatorObject(elevator);
 
         this.objectManager.addToScene(object);
         this.store.dispatch(new ElevatorManagerSettingsActions.AddNewElevator(elevator));
@@ -134,7 +136,24 @@ export class ElevatorsManagerComponent implements OnInit {
         };
     }
 
-    public onResetAllSettings(): void {
-        this.store.dispatch(new ElevatorManagerSettingsActions.ResetAllSettings());
+    public onResetAllSettings(key: number): void {
+        switch (key) {
+            case ResetKeys.TAB_ELEVATORS_PLUS_SETTINGS:
+                this.store.dispatch(new ElevatorManagerSettingsActions.ResetAllSettings());
+                this.objectManager.getElevators().forEach(elevator => this.objectManager.removeObject(this.objectManager.getObjectById(elevator.id)));
+                this.objectManager.setElevators([]);
+                break;
+            case ResetKeys.TAB_SETTINGS:
+                this.store.dispatch(new ElevatorManagerSettingsActions.ResetAllSettings());
+                this.objectManager
+                    .getElevators()
+                    .forEach(elevator => this.store.dispatch(new ElevatorManagerSettingsActions.AddNewElevator(elevator)));
+                break;
+            case ResetKeys.TAB_ELEVATORS:
+                this.objectManager.getElevators().forEach(elevator => this.objectManager.removeObject(this.objectManager.getObjectById(elevator.id)));
+                this.objectManager.setElevators([]);
+                this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators([]));
+                break;
+        }
     }
 }

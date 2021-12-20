@@ -37,7 +37,7 @@ export class ObjectManagerService {
         return this.building.createElevator(elevatorConfig);
     }
 
-    public buildElevator(elevator: Elevator): THREE.Object3D {
+    public buildElevatorObject(elevator: Elevator): THREE.Object3D {
         const object = new THREE.Object3D();
 
         elevator.id = object.id;
@@ -65,9 +65,17 @@ export class ObjectManagerService {
         return this.engine.getObjectById(id);
     }
 
+    public getElevators(): Elevator[] {
+        return this.building.getElevators();
+    }
+
     public getIdByObject(): object {
         // TODO: implement it
         return;
+    }
+
+    public setElevators(elevators: Elevator[]): void {
+        return this.building.setElevators(elevators);
     }
 
     public getNewId(): number {

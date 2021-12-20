@@ -1,0 +1,5 @@
+export enum ResetKeys {
+    TAB_ELEVATORS_PLUS_SETTINGS,
+    TAB_SETTINGS,
+    TAB_ELEVATORS
+}

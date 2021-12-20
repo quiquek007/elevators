@@ -1,6 +1,5 @@
 создать формы для elevatorConfiguration: sizes ect.
-create selected elevator table
-реинициализация элеваторов
+position for 2+ elevators
 селект элеватора
 добавление др элеваторов
 

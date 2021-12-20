@@ -41,7 +41,6 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         this.coveredFloors = config.coveredFloors;
         this.currentFloor = config.currentFloor;
         this.wireframes = config.wireframes;
-        this.name = config.name || 'elevator';
     }
 
     public getGeometry(): (THREE.LineSegments | THREE.Mesh)[] {

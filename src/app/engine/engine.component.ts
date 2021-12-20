@@ -1,17 +1,16 @@
-import { Subscription, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import * as THREE from 'three';
-import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { take } from 'rxjs/operators';
+import { Subscription, combineLatest } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { EngineService } from '../services/engine.service';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { AppState } from '../redux/root-interface';
-import { ObjectManagerService } from '../services/object-manager.service';
 import GridUpdateSettings from './engine.interfaces';
-import { IElevator } from '../shared/Elevator/elevator.model';
 import Elevator from '../shared/classes/elevator.class';
-import elevatorManagerSettingsActions from '../redux/elevator-manager-settings/elevator-manager-settings.actions';
-import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
+import { EngineService } from '../services/engine.service';
 import cameraSettings from 'app/constants/camera-settings.constants';
+import { ObjectManagerService } from '../services/object-manager.service';
+import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
+import ElevatorManagerSettingsActions from 'app/redux/elevator-manager-settings/elevator-manager-settings.actions';
 
 @Component({
     selector: 'app-engine',
@@ -23,9 +22,7 @@ export class EngineComponent implements OnInit, OnDestroy {
     private grid: THREE.GridHelper = null;
     private rendererAlpha: boolean;
     private rendererAntialias: boolean;
-    private allElevators: Elevator[] = [];
     private cameraSettings: CameraSettings = { ...cameraSettings };
-    private distanceBetweenElevators: number;
 
     @ViewChild('rendererCanvas', { static: true })
     public rendererCanvas: ElementRef<HTMLCanvasElement>;
@@ -64,10 +61,6 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.subscribtions.push(
             this.store.select(state => state.generalSettings.renderer.rendererAlpha).subscribe(alpha => this.rendererAlpha = alpha),
             this.store.select(state => state.generalSettings.renderer.rendererAntialias).subscribe(antialias => this.rendererAntialias = antialias),
-            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => this.allElevators = [...elevators]),
-            this.store
-                .select(state => state.elevatorManagerSettings.distanceBetweenElevators)
-                .subscribe(distance => this.distanceBetweenElevators = distance),
             this.store
                 .select(state => state.cameraSettings.cameraPosition)
                 .subscribe(cameraPosition => this.cameraSettings.cameraPosition = cameraPosition),
@@ -95,10 +88,11 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .subscribe(distance => this.engServ.controls.minDistance = distance),
             this.store
                 .select(state => state.generalSettings.controls.cameraMaxDistance)
-                .subscribe(distance => this.engServ.controls.maxDistance = distance)
-            // this.store.select(state => state.elevatorManagerSettings.createNewElevator)
-            //     .pipe(filter(newElevator => newElevator !== null))
-            //     .subscribe(config => this.createNewElevator(config)),
+                .subscribe(distance => this.engServ.controls.maxDistance = distance),
+            this.store
+                .select(state => state.elevatorManagerSettings.elevators)
+                .pipe(take(1))
+                .subscribe(elevators => this.reInitiateElevators(elevators))
         );
     }
 
@@ -115,13 +109,12 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.objectManager.addToScene(this.grid);
     }
 
-    private createNewElevator(config: IElevator): void {
-        // const elevator = this.objectManager.createElevatorConfiguration(config);
-        // console.log('elevator', elevator);
-        // this.allElevators.push(elevator);
-        // return;
-        // this.store.dispatch(new elevatorManagerSettingsActions.SetElevators(this.allElevators));
-        // elevator.createGeometry();
-        // elevator.geometry.forEach(element => this.objectManager.addToScene(element));
+    private reInitiateElevators(elevators: Elevator[]): void {
+        elevators.forEach(elevator => {
+            const config = this.objectManager.createElevatorConfiguration(elevator);
+            this.objectManager.addToScene(this.objectManager.buildElevatorObject(config));
+        });
+
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(elevators));
     }
 }

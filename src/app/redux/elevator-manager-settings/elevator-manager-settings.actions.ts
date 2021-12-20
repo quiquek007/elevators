@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 import Elevator from 'app/shared/classes/elevator.class';
 
 const ADD_NEW_ELEVATOR = 'ADD_NEW_ELEVATOR';
+const SET_ALL_ELEVATORS = 'SET_ALL_ELEVATORS';
 
 const SET_ELEVATOR_WALL_COLOR = 'SET_ELEVATOR_WALL_COLOR';
 const SET_ELEVATOR_WALL_OPACITY = 'SET_ELEVATOR_WALL_OPACITY';
@@ -20,6 +21,11 @@ const RESET_ELEVATOR_MANAGER_SETTINGS_ALL_SETTINGS = 'RESET_ELEVATOR_MANAGER_SET
 class AddNewElevator implements Action {
     type = ADD_NEW_ELEVATOR;
     constructor(public payload: Elevator) {}
+}
+
+class SetAllElevators implements Action {
+    type = SET_ALL_ELEVATORS;
+    constructor(public payload: Elevator[]) {}
 }
 
 class SetElevatorWallColor implements Action {
@@ -79,6 +85,7 @@ class ResetAllSettings implements Action {
 
 export default {
     ADD_NEW_ELEVATOR,
+    SET_ALL_ELEVATORS,
     SET_ELEVATOR_WALL_COLOR,
     SET_ELEVATOR_WALL_OPACITY,
     SET_ELEVATOR_WALL_TRANSPARENT,
@@ -92,6 +99,7 @@ export default {
     RESET_ELEVATOR_MANAGER_SETTINGS_ALL_SETTINGS,
 
     AddNewElevator,
+    SetAllElevators,
     SetElevatorWallColor,
     SetElevatorWallOpacity,
     SetElevatorWallTransparent,

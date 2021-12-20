@@ -19,9 +19,9 @@ const elevatorManagerSettings = {
 
     wireframes: {
         wireframesSettingsExpanded: false,
-        isWireframesShowed: false,
+        isWireframesShowed: true,
         color: '#fff'
-    },
-}
+    }
+};
 
 export default elevatorManagerSettings;

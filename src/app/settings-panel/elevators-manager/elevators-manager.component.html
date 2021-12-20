@@ -114,11 +114,27 @@
 <wireframes-settings></wireframes-settings>
 <section class="option-line">
     <span>Reset tab settings:</span>
-    <button kendoButton
-        kendoTooltip
-        title="Reset tab settings"
-        [position]="getTooltipPosition()"
-        [iconClass]="'k-icon k-i-reload'"
-        (click)="onResetAllSettings()">
-    </button>
+    <div>
+        <button kendoButton
+            kendoTooltip
+            title="Reset tab settings and all elevators"
+            [position]="getTooltipPosition()"
+            [iconClass]="'k-icon k-i-reload'"
+            (click)="onResetAllSettings(0)">
+        </button>
+        <button kendoButton
+            kendoTooltip
+            title="Reset, but save elevators"
+            [position]="getTooltipPosition()"
+            [iconClass]="'k-icon k-i-reload'"
+            (click)="onResetAllSettings(1)">!
+        </button>
+        <button kendoButton
+            kendoTooltip
+            title="Remove only elevators"
+            [position]="getTooltipPosition()"
+            [iconClass]="'k-icon k-i-reload'"
+            (click)="onResetAllSettings(2)">!!
+        </button>
+    </div>
 </section>

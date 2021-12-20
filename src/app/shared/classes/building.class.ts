@@ -19,6 +19,14 @@ export default class Building {
         return elevator;
     }
 
+    public setElevators(elevators: Elevator[]): void {
+        this.elevators = elevators;
+    }
+
+    public getElevators(): Elevator[] {
+        return this.elevators;
+    }
+
     public removeElevator(elevator: Elevator): void {
         // for(let i = 0; i < count; i++) {
         //     const element = new Elevator(elevatorConfiguration);

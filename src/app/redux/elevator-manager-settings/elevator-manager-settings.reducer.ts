@@ -11,6 +11,9 @@ export function elevatorManagerReducer(state: ElevatorManagerSettings = defaultS
         case ElevatorManagerActions.ADD_NEW_ELEVATOR:
             return { ...state, elevators: [...state.elevators, action.payload] };
 
+        case ElevatorManagerActions.SET_ALL_ELEVATORS:
+            return { ...state, elevators: [...action.payload] };
+
         case ElevatorManagerActions.SET_ELEVATOR_WALL_COLOR:
             return { ...state, defaultElevator: { ...state.defaultElevator, wallColor: action.payload } };
 
