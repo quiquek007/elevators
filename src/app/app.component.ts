@@ -11,6 +11,7 @@ import { EngineService } from 'app/services/engine.service';
 import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
 import cameraSettings from 'app/constants/camera-settings.constants';
 import ElevatorManagerSettingsActions from './redux/elevator-manager-settings/elevator-manager-settings.actions';
+import { ObjectManagerService } from './services/object-manager.service';
 
 @Component({
     selector: 'app-root',
@@ -47,7 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
         {
             text: 'Favourites',
             icon: 'k-i-star-outline'
-        },
+        }
         // {
         //     separator: true
         // },
@@ -62,25 +63,26 @@ export class AppComponent implements OnInit, OnDestroy {
         localStorage.setItem(localStorageProject, JSON.stringify(this.plainStore));
     }
 
-    constructor(private store: Store<AppState>, private engServ: EngineService) {}
+    constructor(private store: Store<AppState>, private engServ: EngineService, private objectManager: ObjectManagerService) {}
 
     public ngOnInit(): void {
         this.subscribtions.push(
             this.store.select(state => state).subscribe(x => this.plainStore = x),
-            this.store.select(state => state.settingsPanel.formPosition)
-                .subscribe(position => this.panelOnRightSide = position === 'right'),
-            this.store.select(state => state.settingsPanel.formOpened)
-                .subscribe(formOpened => this.contentExpanded = formOpened),
-            this.store.select(state => state.settingsPanel.selectedTab)
+            this.store.select(state => state.settingsPanel.formPosition).subscribe(position => this.panelOnRightSide = position === 'right'),
+            this.store.select(state => state.settingsPanel.formOpened).subscribe(formOpened => this.contentExpanded = formOpened),
+            this.store
+                .select(state => state.settingsPanel.selectedTab)
                 .subscribe(selectedTab => {
                     this.selectedTab = selectedTab;
                     this.items.forEach(item => item.selected = false);
                     this.items.find(({ text }) => text === selectedTab).selected = true;
                 }),
-            this.store.select(state => state.cameraSettings.cameraPosition)
+            this.store
+                .select(state => state.cameraSettings.cameraPosition)
                 .subscribe(cameraPosition => this.cameraSettings.cameraPosition = cameraPosition),
-            this.store.select(state => state.cameraSettings.controlsTarget)
-                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget),
+            this.store
+                .select(state => state.cameraSettings.controlsTarget)
+                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget)
         );
     }
 
@@ -108,6 +110,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public onResetAllSettings(): void {
         this.store.dispatch(new ElevatorManagerSettingsActions.ResetAllSettings());
+        this.objectManager.getElevators().forEach(elevator => this.store.dispatch(new ElevatorManagerSettingsActions.AddNewElevator(elevator)));
         this.store.dispatch(new GeneralSettingsActions.ResetAllSettings());
         this.store.dispatch(new CameraSettingsActions.ResetCameraPosition());
         this.store.dispatch(new CameraSettingsActions.ResetControlsTarget());
