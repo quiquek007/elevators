@@ -40,8 +40,9 @@ export class ObjectManagerService {
     public buildElevator(elevator: Elevator): THREE.Object3D {
         const object = new THREE.Object3D();
 
+        elevator.id = object.id;
         object.name = 'elevator';
-        object.add(...elevator.geometry);
+        object.add(...elevator.getGeometry());
 
         return object;
     }
@@ -50,28 +51,27 @@ export class ObjectManagerService {
         this.engine.addToScene(object);
     }
 
-    public addToStorerage(obj: any): void {
-        return;
-    }
-
     public removeObject(object: any): void {
         this.engine.removeFromScene(object);
         return;
     }
 
     public hasObjectInScene(): boolean {
+        // TODO: implement it
         return;
     }
 
-    public getObjectById(): number {
-        return;
+    public getObjectById(id: number): THREE.Object3D {
+        return this.engine.getObjectById(id);
     }
 
     public getIdByObject(): object {
+        // TODO: implement it
         return;
     }
 
     public getNewId(): number {
+        // TODO: implement it
         return;
     }
 }

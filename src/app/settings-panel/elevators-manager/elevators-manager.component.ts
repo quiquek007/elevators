@@ -6,7 +6,6 @@ import ElevatorManagerSettingsActions from 'app/redux/elevator-manager-settings/
 import Elevator from 'app/shared/classes/elevator.class';
 import { IElevator } from 'app/shared/Elevator/elevator.model';
 import { ObjectManagerService } from 'app/services/object-manager.service';
-import { IWireframes } from 'app/shared/Elevator/childs/wireframes.model';
 
 @Component({
     selector: 'elevators-manager',
@@ -62,14 +61,10 @@ export class ElevatorsManagerComponent implements OnInit {
     public onAddElevator(): void {
         const elevatorConfig = this.getElevatorConfiguration();
         const elevator = this.objectManager.createElevatorConfiguration(elevatorConfig);
-        const elevatorObj = this.objectManager.buildElevator(elevator);
+        const object = this.objectManager.buildElevator(elevator);
 
-        console.log('elevator', elevatorObj);
-
-        this.objectManager.addToScene(elevatorObj);
-        // this.store.dispatch(new elevatorManagerSettingsActions.CreateNewElevator(newElevator));
-        // // to nullify store
-        // this.store.dispatch(new elevatorManagerSettingsActions.CreateNewElevator(null));
+        this.objectManager.addToScene(object);
+        this.store.dispatch(new ElevatorManagerSettingsActions.AddNewElevator(elevator));
     }
 
     public onDeleteElevator(): void {}

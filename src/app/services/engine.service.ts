@@ -2,12 +2,7 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbitcontrols';
 import { fromEvent } from 'rxjs';
 import { debounceTime, skip } from 'rxjs/operators';
-import {
-    Injectable,
-    ElementRef,
-    OnDestroy,
-    NgZone
-} from '@angular/core';
+import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/root-interface';
 import CameraSettingsActions from '../redux/camera-settings/camera-settings.actions';
@@ -21,7 +16,7 @@ export class EngineService implements OnDestroy {
     private light: THREE.AmbientLight;
     private container: HTMLElement;
     private frameId: number = null;
-    
+
     public controls: OrbitControls;
 
     constructor(private ngZone: NgZone, private store: Store<AppState>) {}
@@ -30,10 +25,7 @@ export class EngineService implements OnDestroy {
         if (this.frameId != null) cancelAnimationFrame(this.frameId);
     }
 
-    public createScene(
-            settings: THREE.WebGLRendererParameters,
-            container: ElementRef<HTMLDivElement>,
-            cameraSettings: CameraSettings): void {
+    public createScene(settings: THREE.WebGLRendererParameters, container: ElementRef<HTMLDivElement>, cameraSettings: CameraSettings): void {
         // The first step is to get the reference of the canvas element from our HTML document
         this.renderer = new THREE.WebGLRenderer(settings);
         this.renderer.setSize(container.nativeElement.clientWidth, container.nativeElement.clientHeight);
@@ -62,21 +54,16 @@ export class EngineService implements OnDestroy {
         // We have to run this outside angular zones,
         // because it could trigger heavy changeDetection cycles.
         this.ngZone.runOutsideAngular(() => {
-                if (document.readyState !== 'loading') {
-                    this.render();
-                } else {
-                    window.addEventListener('DOMContentLoaded', () => this.render());
-                }
-                window.addEventListener('resize', () => this.resize());
-            }
-        );
+            document.readyState !== 'loading' ? this.render() : window.addEventListener('DOMContentLoaded', () => this.render());
+            window.addEventListener('resize', () => this.resize());
+        });
     }
 
     public render(): void {
         this.frameId = requestAnimationFrame(() => this.render());
         // animation
         // this.cube.rotation.x += 0.01;
-        // this.cube.rotation.y += 0.01;        
+        // this.cube.rotation.y += 0.01;
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
@@ -94,31 +81,37 @@ export class EngineService implements OnDestroy {
     public setColorBackground(color: string): void {
         this.scene.background = new THREE.Color(color);
     }
-    
+
     public addToScene(obj: any): void {
         this.scene.add(obj);
     }
 
-	public removeFromScene(obj: any): void {
-		this.scene.remove(obj);
-	}
+    public removeFromScene(obj: any): void {
+        this.scene.remove(obj);
+    }
 
-    public setInitialCameraPosition(cameraSettings: CameraSettings): void {        
+    public getObjectById(id: number): THREE.Object3D {
+        return this.scene.getObjectById(id);
+    }
+
+    public setInitialCameraPosition(cameraSettings: CameraSettings): void {
         if (!cameraSettings) return;
 
         ['x', 'y', 'z'].forEach(axis => {
             this.camera.position[axis] = cameraSettings.cameraPosition[axis];
             this.controls.target[axis] = cameraSettings.controlsTarget[axis];
-        })
+        });
     }
 
     private subscribeOnCameraMovement(): void {
-        fromEvent(this.controls, 'change').pipe(skip(1), debounceTime(250)).subscribe(() => {
-            const { position } = this.camera;
-            const { target } = this.controls;
-            
-            this.store.dispatch(new CameraSettingsActions.SetCameraPostion({x: position.x, y: position.y, z: position.z}));
-            this.store.dispatch(new CameraSettingsActions.SetControlsTarget({x: target.x, y: target.y, z: target.z}));
-        });
+        fromEvent(this.controls, 'change')
+            .pipe(skip(1), debounceTime(250))
+            .subscribe(() => {
+                const { position } = this.camera;
+                const { target } = this.controls;
+
+                this.store.dispatch(new CameraSettingsActions.SetCameraPostion({ x: position.x, y: position.y, z: position.z }));
+                this.store.dispatch(new CameraSettingsActions.SetControlsTarget({ x: target.x, y: target.y, z: target.z }));
+            });
     }
 }

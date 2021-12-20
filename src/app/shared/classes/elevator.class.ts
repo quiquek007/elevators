@@ -26,7 +26,8 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
     public coveredFloors: number;
     public currentFloor: number;
     public wireframes?: IWireframes;
-    public geometry: any = [];
+    public id?: number;
+    public name?: string;
 
     constructor(config: IElevator) {
         this.wallColor = config.wallColor;
@@ -40,11 +41,15 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         this.coveredFloors = config.coveredFloors;
         this.currentFloor = config.currentFloor;
         this.wireframes = config.wireframes;
-        this.createGeometry();
-        if (this.wireframes.isWireframesShowed) this.addWireframes();
+        this.name = config.name || 'elevator';
     }
 
-    private createGeometry(): void {
+    public getGeometry(): (THREE.LineSegments | THREE.Mesh)[] {
+        return this.createGeometry();
+    }
+
+    private createGeometry(): (THREE.LineSegments | THREE.Mesh)[] {
+        const geometry = [];
         const floor = this.createPane('floor', false);
         const ceiling = this.createPane('ceiling', false);
         const wallLeft = this.createPane('wall-left');
@@ -60,12 +65,11 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         wallBack.translateZ(-this.length / 2);
 
         // TODO: draw the doors
-        this.geometry.push(floor, ceiling, wallLeft, wallRight, wallBack);
-    }
+        geometry.push(floor, ceiling, wallLeft, wallRight, wallBack);
 
-    private addWireframes() {
-        const wireframes = this.geometry.map(geometry => this.createWireframe(geometry));
-        this.geometry.push(...wireframes);
+        if (this.wireframes.isWireframesShowed) geometry.push(...geometry.map(element => this.createWireframe(element)));
+
+        return geometry;
     }
 
     private createPane(name: string, isWall: boolean = true): THREE.Mesh {

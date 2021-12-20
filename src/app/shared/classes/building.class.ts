@@ -2,7 +2,6 @@ import Elevator from './elevator.class';
 import Floor from './floor.class';
 import { IElevator } from '../Elevator/elevator.model';
 import * as THREE from 'three';
-import { IWireframes } from '../Elevator/childs/wireframes.model';
 
 export default class Building {
     private elevators: Elevator[] = [];

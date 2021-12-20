@@ -33,11 +33,7 @@ export class EngineComponent implements OnInit, OnDestroy {
     @ViewChild('canvasContainer', { static: true })
     public canvasContainer: ElementRef<HTMLDivElement>;
 
-    constructor(
-        private engServ: EngineService,
-        private objectManager: ObjectManagerService,
-        private store: Store<AppState>
-    ) {}
+    constructor(private engServ: EngineService, private objectManager: ObjectManagerService, private store: Store<AppState>) {}
 
     public ngOnInit(): void {
         if (!this.rendererCanvas) throw new Error('rendererCanvas is not implemented!');
@@ -66,15 +62,9 @@ export class EngineComponent implements OnInit, OnDestroy {
 
     private initPrerenderSettings(): void {
         this.subscribtions.push(
-            this.store
-                .select(state => state.generalSettings.renderer.rendererAlpha)
-                .subscribe(alpha => this.rendererAlpha = alpha),
-            this.store
-                .select(state => state.generalSettings.renderer.rendererAntialias)
-                .subscribe(antialias => this.rendererAntialias = antialias),
-            this.store
-                .select(state => state.elevatorManagerSettings.elevators)
-                .subscribe(elevators => this.allElevators = [...elevators]),
+            this.store.select(state => state.generalSettings.renderer.rendererAlpha).subscribe(alpha => this.rendererAlpha = alpha),
+            this.store.select(state => state.generalSettings.renderer.rendererAntialias).subscribe(antialias => this.rendererAntialias = antialias),
+            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => this.allElevators = [...elevators]),
             this.store
                 .select(state => state.elevatorManagerSettings.distanceBetweenElevators)
                 .subscribe(distance => this.distanceBetweenElevators = distance),
@@ -97,15 +87,9 @@ export class EngineComponent implements OnInit, OnDestroy {
                 this.store.select(state => state.generalSettings.grid.gridOpacity),
                 this.store.select(state => state.generalSettings.grid.gridEnable),
                 this.store.select(state => state.generalSettings.grid.gridSize)
-            ]).subscribe(([gridColor, gridOpacity, enable, gridSize]) =>
-                this.updateGrid({ gridColor, gridOpacity, gridSize }, enable)
-            ),
-            this.store
-                .select(state => state.generalSettings.controls.enableDamping)
-                .subscribe(flag => this.engServ.controls.enableDamping = flag),
-            this.store
-                .select(state => state.generalSettings.controls.dampingFactor)
-                .subscribe(dump => this.engServ.controls.dampingFactor = dump),
+            ]).subscribe(([gridColor, gridOpacity, enable, gridSize]) => this.updateGrid({ gridColor, gridOpacity, gridSize }, enable)),
+            this.store.select(state => state.generalSettings.controls.enableDamping).subscribe(flag => this.engServ.controls.enableDamping = flag),
+            this.store.select(state => state.generalSettings.controls.dampingFactor).subscribe(dump => this.engServ.controls.dampingFactor = dump),
             this.store
                 .select(state => state.generalSettings.controls.cameraMinDistance)
                 .subscribe(distance => this.engServ.controls.minDistance = distance),
