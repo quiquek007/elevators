@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/root-interface';
@@ -7,6 +7,7 @@ import Elevator from 'app/shared/classes/elevator.class';
 import { IElevator } from 'app/shared/Elevator/elevator.model';
 import { ObjectManagerService } from 'app/services/object-manager.service';
 import { ResetKeys } from './reset-keys.model';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'elevators-manager',
@@ -14,6 +15,10 @@ import { ResetKeys } from './reset-keys.model';
     styleUrls: ['./elevators-manager.component.less']
 })
 export class ElevatorsManagerComponent implements OnInit {
+    private tooltipPosition: string = 'right';
+    private subscriptions: Subscription[] = [];
+    private elevatorObject: THREE.Object3D;
+
     public selectedElevator: Elevator;
     public wallColor: THREE.Color | string;
     public wallOpacity: number;
@@ -23,12 +28,9 @@ export class ElevatorsManagerComponent implements OnInit {
     public elevatorCoveredFloors: number;
     public elevatorCurrentFloor: number;
     public isWireframesShowed: boolean;
-    public wireframesColor: THREE.Color | number | string;
+    public wireframesColor: THREE.Color;
 
-    private tooltipPosition: string = 'right';
-    private subscriptions: Subscription[] = [];
-
-    constructor(private store: Store<AppState>, private objectManager: ObjectManagerService) {}
+    constructor(private store: Store<AppState>, private objectManager: ObjectManagerService, private changeDetector: ChangeDetectorRef) {}
 
     public ngOnInit() {
         this.subscriptions.push(
@@ -51,7 +53,24 @@ export class ElevatorsManagerComponent implements OnInit {
             this.store
                 .select(state => state.elevatorManagerSettings.wireframes.isWireframesShowed)
                 .subscribe(isWireframesShowed => this.isWireframesShowed = isWireframesShowed),
-            this.store.select(state => state.elevatorManagerSettings.wireframes.color).subscribe(color => this.wireframesColor = color)
+            this.store.select(state => state.elevatorManagerSettings.wireframes.color).subscribe(color => this.wireframesColor = color),
+            this.store
+                .select(state => state.elevatorManagerSettings.selectedElevator)
+                .subscribe(elevator => {
+                    this.changeDetector.markForCheck();
+                    this.selectedElevator = elevator;
+
+                    if (!elevator) return;
+
+                    this.wallColor = elevator.wallColor;
+                    this.wallOpacity = elevator.wallOpacity;
+                    this.wallTransparent = elevator.wallTransparent;
+                    this.elevatorCapacity = elevator.capacity;
+                    this.elevatorSpeed = elevator.speed;
+                    this.elevatorCoveredFloors = elevator.coveredFloors;
+                    this.elevatorCurrentFloor = elevator.currentFloor;
+                    this.elevatorObject = this.objectManager.getObjectById(this.selectedElevator.id);
+                })
         );
     }
 
@@ -70,53 +89,49 @@ export class ElevatorsManagerComponent implements OnInit {
 
     public onDeleteElevator(): void {}
 
-    public onWallColorChange(color: string): void {
-        if (this.selectedElevator) {
-        } else {
-            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallColor(color));
-        }
+    public onWallColorChange(color: THREE.Color): void {
+        if (!this.selectedElevator) return;
+
+        this.getWallObjects().forEach((element: THREE.Object3D) => (<any>element).material.color.set(color));
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallColor(color));
     }
 
     public onWallOpacityChange(opacity: number): void {
-        if (this.selectedElevator) {
-        } else {
-            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallOpacity(opacity));
-        }
+        if (!this.selectedElevator) return;
+
+        this.getWallObjects().forEach((element: THREE.Object3D) => (<any>element).material.opacity = opacity);
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallOpacity(opacity));
     }
 
     public onWallTransparentChange(): void {
-        if (this.selectedElevator) {
-        } else {
-            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallTransparent(this.wallTransparent));
-        }
+        if (!this.selectedElevator) return;
+
+        this.getWallObjects().forEach((element: THREE.Object3D) => (<any>element).material.transparent = this.wallTransparent);
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallTransparent(this.wallTransparent));
     }
 
     public onElevatorCapacityChange(capacity: number): void {
-        if (this.selectedElevator) {
-        } else {
-            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCapacity(capacity));
-        }
+        if (!this.selectedElevator) return;
+
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCapacity(capacity));
     }
 
     public onElevatorSpeedChange(speed: number): void {
-        if (this.selectedElevator) {
-        } else {
-            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorSpeed(speed));
-        }
+        if (!this.selectedElevator) return;
+
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorSpeed(speed));
     }
 
     public onElevatorCoveredFloorsChange(coveredFloors: number): void {
-        if (this.selectedElevator) {
-        } else {
-            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCoveredFloors(coveredFloors));
-        }
+        if (!this.selectedElevator) return;
+
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCoveredFloors(coveredFloors));
     }
 
     public onElevatorCurrentFloorChange(floor: number): void {
-        if (this.selectedElevator) {
-        } else {
-            this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCurrentFloor(floor));
-        }
+        if (!this.selectedElevator) return;
+
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCurrentFloor(floor));
     }
 
     private getElevatorConfiguration(): IElevator {
@@ -152,5 +167,14 @@ export class ElevatorsManagerComponent implements OnInit {
                 this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators([]));
                 break;
         }
+    }
+
+    private getWallObjects(): THREE.Object3D[] {
+        const walls = this.elevatorObject.children.filter(element => element.name === 'wall');
+
+        walls.push(this.elevatorObject.children.find(element => element.name === 'floor'));
+        walls.push(this.elevatorObject.children.find(element => element.name === 'ceiling'));
+
+        return walls;
     }
 }

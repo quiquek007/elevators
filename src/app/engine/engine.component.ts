@@ -134,48 +134,52 @@ export class EngineComponent implements OnInit, OnDestroy {
         let startPointX: number = 0;
         let startPointY: number = 0;
 
-        fromEvent(this.rendererCanvas.nativeElement, 'mousedown').subscribe((event: MouseEvent) => {
-            event.preventDefault();
-            startPointX = event.x;
-            startPointY = event.y;
-        });
+        fromEvent(this.rendererCanvas.nativeElement, 'mousedown')
+            .pipe(filter((event: MouseEvent) => event.button === 0))
+            .subscribe((event: MouseEvent) => {
+                event.preventDefault();
+                startPointX = event.x;
+                startPointY = event.y;
+            });
 
-        fromEvent(this.rendererCanvas.nativeElement, 'mouseup').subscribe((event: MouseEvent) => {
-            event.preventDefault();
-            // if it's not a click
-            if (!this.isClick(startPointX, event.x) || !this.isClick(startPointY, event.y)) return;
+        fromEvent(this.rendererCanvas.nativeElement, 'mouseup')
+            .pipe(filter((event: MouseEvent) => event.button === 0))
+            .subscribe((event: MouseEvent) => {
+                event.preventDefault();
+                // if it's not a click
+                if (!this.isClick(startPointX, event.x) || !this.isClick(startPointY, event.y)) return;
 
-            const mouse3D = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
-            const raycaster = new THREE.Raycaster();
-            raycaster.setFromCamera(mouse3D, this.engServ.camera);
-            const intersects = raycaster.intersectObjects(this.engServ.scene.children, true);
-            const selectedObject = intersects.find(obj => obj.object.parent.name === 'elevator');
+                const mouse3D = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
+                const raycaster = new THREE.Raycaster();
+                raycaster.setFromCamera(mouse3D, this.engServ.camera);
+                const intersects = raycaster.intersectObjects(this.engServ.scene.children, true);
+                const selectedObject = intersects.find(obj => obj.object.parent.name === 'elevator');
 
-            // if selected is not an elevator
-            if (!selectedObject) {
-                if (this.selectedElevator) {
-                    this.objectManager.deHighlightSelectedElevator(this.selectedElevator.id);
-                    this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(null));
+                // if selected is not an elevator
+                if (!selectedObject) {
+                    if (this.selectedElevator) {
+                        this.objectManager.deHighlightSelectedElevator(this.selectedElevator.id);
+                        this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(null));
+                    }
+                    return;
                 }
-                return;
-            }
 
-            const selectedElevator = selectedObject.object.parent;
+                const selectedElevator = selectedObject.object.parent;
 
-            // if selected is the same elevator
-            if (this.selectedElevator?.id === selectedElevator.id) return;
+                // if selected is the same elevator
+                if (this.selectedElevator?.id === selectedElevator.id) return;
 
-            const elevator = this.objectManager.getElevators().find(item => item.id === selectedElevator.id);
+                const elevator = this.objectManager.getElevators().find(item => item.id === selectedElevator.id);
 
-            //TODO: if this.selectedElevator deselect current
-            // if (this.selectedElevator) this.objectManager.deHighlightSelectedElevator(this.selectedElevator.id);
+                //TODO: if this.selectedElevator deselect current
+                // if (this.selectedElevator) this.objectManager.deHighlightSelectedElevator(this.selectedElevator.id);
 
-            this.objectManager.highlightSelectedElevator(elevator.id);
+                this.objectManager.highlightSelectedElevator(elevator.id);
 
-            // painting example
-            // (<any>selectedObject.object).material.color.set(0xff0000);
-            this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(elevator));
-        });
+                // painting example
+                // (<any>selectedObject.object).material.color.set(0xff0000);
+                this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(elevator));
+            });
     }
 
     // check on click: true or shift: false

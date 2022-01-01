@@ -51,9 +51,9 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         const geometry = [];
         const floor = this.createPane('floor', false);
         const ceiling = this.createPane('ceiling', false);
-        const wallLeft = this.createPane('wall-left');
-        const wallRight = this.createPane('wall-right');
-        const wallBack = this.createPane('wall-back');
+        const wallLeft = this.createPane('wall');
+        const wallRight = this.createPane('wall');
+        const wallBack = this.createPane('wall');
 
         floor.rotateX(angle90);
         ceiling.rotateX(angle90);

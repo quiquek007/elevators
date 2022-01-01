@@ -1,4 +1,5 @@
 создать формы для elevatorConfiguration: sizes ect.
+fix bugs regarding change selected elevator properties and check properties themselves
 position for 2+ elevators
 
 *validation for localStorage data

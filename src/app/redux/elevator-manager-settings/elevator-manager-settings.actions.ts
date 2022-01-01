@@ -36,7 +36,7 @@ class SetSelectedElevator implements Action {
 
 class SetElevatorWallColor implements Action {
     type = SET_ELEVATOR_WALL_COLOR;
-    constructor(public payload: string) {}
+    constructor(public payload: THREE.Color) {}
 }
 
 class SetElevatorWallOpacity implements Action {

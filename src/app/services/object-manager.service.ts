@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
 import * as THREE from 'three';
+import { Injectable } from '@angular/core';
 import { EngineService } from './engine.service';
 import Building from '../shared/classes/building.class';
 import { IElevator } from '../shared/Elevator/elevator.model';
 import Elevator from '../shared/classes/elevator.class';
-import { IWireframes } from 'app/shared/Elevator/childs/wireframes.model';
 
 @Injectable({ providedIn: 'root' })
 export class ObjectManagerService {
