@@ -14,10 +14,9 @@ export class ObjectManagerService {
     constructor(private engine: EngineService) {}
 
     public createCube(geometry: THREE.BoxGeometry = new THREE.BoxGeometry(1, 1, 1)): THREE.Mesh {
-        const cube: any = new THREE.Mesh(geometry);
-        cube.material.color.set(this.defaultColor);
-        console.log('cube', cube);
-        cube.material.opacity = 0.3;
+        const cube = new THREE.Mesh(geometry);
+        (<any>cube.material).color.set(this.defaultColor);
+        (<any>cube.material).opacity = 0.3;
 
         return cube;
     }
@@ -25,11 +24,12 @@ export class ObjectManagerService {
     public createGrid(
         size: number,
         division: number,
-        centerLineColor: any = new THREE.Color(0x000000),
-        otherLineColor: any = new THREE.Color(0x000000)
+        centerLineColor = new THREE.Color(0x000000),
+        otherLineColor = new THREE.Color(0x000000)
     ): THREE.GridHelper {
-        const grid: any = new THREE.GridHelper(size, division, centerLineColor, otherLineColor);
-        grid.material.transparent = false;
+        const grid = new THREE.GridHelper(size, division, centerLineColor, otherLineColor);
+        (<any>grid.material).transparent = false;
+
         return grid;
     }
 
@@ -45,6 +45,22 @@ export class ObjectManagerService {
         object.add(...elevator.getGeometry());
 
         return object;
+    }
+
+    public highlightSelectedElevator(elevatorId: number): void {
+        const object = this.getObjectById(elevatorId);
+        const box = new THREE.Box3();
+        const helper = new THREE.Box3Helper(box.setFromObject(object));
+
+        helper.geometry.scale(1.1, 1.1, 1.1);
+        helper.name = 'highlight-selection';
+        object.add(helper);
+    }
+
+    public deHighlightSelectedElevator(elevatorId: number): void {
+        const object = this.getObjectById(elevatorId);
+
+        object.remove(object.getObjectByName('highlight-selection'));
     }
 
     public addToScene(object: any): void {

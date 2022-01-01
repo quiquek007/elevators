@@ -51,8 +51,7 @@ export class ElevatorsManagerComponent implements OnInit {
             this.store
                 .select(state => state.elevatorManagerSettings.wireframes.isWireframesShowed)
                 .subscribe(isWireframesShowed => this.isWireframesShowed = isWireframesShowed),
-            this.store.select(state => state.elevatorManagerSettings.wireframes.color).subscribe(color => this.wireframesColor = color),
-            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => console.log('elevators', elevators))
+            this.store.select(state => state.elevatorManagerSettings.wireframes.color).subscribe(color => this.wireframesColor = color)
         );
     }
 
@@ -145,9 +144,7 @@ export class ElevatorsManagerComponent implements OnInit {
                 break;
             case ResetKeys.TAB_SETTINGS:
                 this.store.dispatch(new ElevatorManagerSettingsActions.ResetAllSettings());
-                this.objectManager
-                    .getElevators()
-                    .forEach(elevator => this.store.dispatch(new ElevatorManagerSettingsActions.AddNewElevator(elevator)));
+                this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators([...this.objectManager.getElevators()]));
                 break;
             case ResetKeys.TAB_ELEVATORS:
                 this.objectManager.getElevators().forEach(elevator => this.objectManager.removeObject(this.objectManager.getObjectById(elevator.id)));

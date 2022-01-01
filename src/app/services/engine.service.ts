@@ -6,17 +6,18 @@ import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/root-interface';
 import CameraSettingsActions from '../redux/camera-settings/camera-settings.actions';
+
 import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {
     private renderer: THREE.WebGLRenderer;
-    private camera: THREE.PerspectiveCamera;
-    private scene: THREE.Scene;
     private light: THREE.AmbientLight;
     private container: HTMLElement;
     private frameId: number = null;
 
+    public scene: THREE.Scene;
+    public camera: THREE.PerspectiveCamera;
     public controls: OrbitControls;
 
     constructor(private ngZone: NgZone, private store: Store<AppState>) {}

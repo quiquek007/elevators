@@ -1,7 +1,6 @@
 создать формы для elevatorConfiguration: sizes ect.
 position for 2+ elevators
-селект элеватора
-добавление др элеваторов
 
 *validation for localStorage data
 *make limit for generation of store
+*separate components on modules

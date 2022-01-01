@@ -12,7 +12,7 @@ import { GridSizeModel } from 'app/shared/grid-size.model';
     styleUrls: ['./grid-settings.component.less']
 })
 export class GridSettingsComponent implements OnInit {
-    public gridColor: string;
+    public gridColor: THREE.Color;
     public tooltipPosition: string = 'right';
     public gridSettingsExpanded: boolean;
     public gridEnable: boolean;

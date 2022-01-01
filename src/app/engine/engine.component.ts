@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { take } from 'rxjs/operators';
-import { Subscription, combineLatest } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { Subscription, combineLatest, fromEvent } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { AppState } from '../redux/root-interface';
@@ -21,6 +21,7 @@ export class EngineComponent implements OnInit, OnDestroy {
     private subscribtions: Subscription[] = [];
     private grid: THREE.GridHelper = null;
     private rendererAlpha: boolean;
+    private selectedElevator: Elevator;
     private rendererAntialias: boolean;
     private cameraSettings: CameraSettings = { ...cameraSettings };
 
@@ -46,6 +47,9 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.engServ.createScene(rendererSettings, this.canvasContainer, this.cameraSettings);
         this.engServ.animate();
 
+        this.subscribeOnMouseClick();
+
+        // helpers
         this.objectManager.addToScene(this.objectManager.createCube());
         var axesHelper = new THREE.AxesHelper(50);
         this.objectManager.addToScene(axesHelper);
@@ -92,7 +96,15 @@ export class EngineComponent implements OnInit, OnDestroy {
             this.store
                 .select(state => state.elevatorManagerSettings.elevators)
                 .pipe(take(1))
-                .subscribe(elevators => this.reInitiateElevators(elevators))
+                .subscribe(elevators => this.reInitiateElevators(elevators)),
+            this.store.select(state => state.elevatorManagerSettings.selectedElevator).subscribe(elevator => this.selectedElevator = elevator),
+            this.store
+                .select(state => state.elevatorManagerSettings.selectedElevator)
+                .pipe(
+                    take(1),
+                    filter(value => value != null)
+                )
+                .subscribe(elevator => this.objectManager.highlightSelectedElevator(elevator.id))
         );
     }
 
@@ -116,5 +128,58 @@ export class EngineComponent implements OnInit, OnDestroy {
         });
 
         this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(elevators));
+    }
+
+    private subscribeOnMouseClick(): void {
+        let startPointX: number = 0;
+        let startPointY: number = 0;
+
+        fromEvent(this.rendererCanvas.nativeElement, 'mousedown').subscribe((event: MouseEvent) => {
+            event.preventDefault();
+            startPointX = event.x;
+            startPointY = event.y;
+        });
+
+        fromEvent(this.rendererCanvas.nativeElement, 'mouseup').subscribe((event: MouseEvent) => {
+            event.preventDefault();
+            // if it's not a click
+            if (!this.isClick(startPointX, event.x) || !this.isClick(startPointY, event.y)) return;
+
+            const mouse3D = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse3D, this.engServ.camera);
+            const intersects = raycaster.intersectObjects(this.engServ.scene.children, true);
+            const selectedObject = intersects.find(obj => obj.object.parent.name === 'elevator');
+
+            // if selected is not an elevator
+            if (!selectedObject) {
+                if (this.selectedElevator) {
+                    this.objectManager.deHighlightSelectedElevator(this.selectedElevator.id);
+                    this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(null));
+                }
+                return;
+            }
+
+            const selectedElevator = selectedObject.object.parent;
+
+            // if selected is the same elevator
+            if (this.selectedElevator?.id === selectedElevator.id) return;
+
+            const elevator = this.objectManager.getElevators().find(item => item.id === selectedElevator.id);
+
+            //TODO: if this.selectedElevator deselect current
+            // if (this.selectedElevator) this.objectManager.deHighlightSelectedElevator(this.selectedElevator.id);
+
+            this.objectManager.highlightSelectedElevator(elevator.id);
+
+            // painting example
+            // (<any>selectedObject.object).material.color.set(0xff0000);
+            this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(elevator));
+        });
+    }
+
+    // check on click: true or shift: false
+    private isClick(startPoint: number, endPoint: number, threshold: number = 2): boolean {
+        return Math.abs(startPoint - endPoint) <= threshold;
     }
 }

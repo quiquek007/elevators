@@ -1,7 +1,7 @@
 import { GridSizeModel } from './grid-size.model';
 
 export interface Grid {
-    gridColor: string;
+    gridColor: THREE.Color;
     gridEnable: boolean;
     gridOpacity: number;
     gridSize: GridSizeModel;
