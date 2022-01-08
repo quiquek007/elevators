@@ -15,7 +15,7 @@ const angle90: number = 1.5707963267948966;
 //  }
 
 export default class Elevator implements IEsteticWall, ITechProps, ISize {
-    public wallColor: THREE.Color | string;
+    public wallColor: THREE.Color;
     public wallOpacity: number;
     public wallTransparent: boolean;
     public length: number;
@@ -25,9 +25,9 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
     public speed: number;
     public coveredFloors: number;
     public currentFloor: number;
-    public wireframes?: IWireframes;
-    public id?: number;
-    public name?: string;
+    public wireframes: IWireframes;
+    public id: number;
+    public name: string;
 
     constructor(config: IElevator) {
         this.wallColor = config.wallColor;

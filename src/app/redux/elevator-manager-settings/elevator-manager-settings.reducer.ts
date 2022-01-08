@@ -9,7 +9,7 @@ defaultState = !defaultState ? elevatorManagerSettings : defaultState[elevatorMa
 export function elevatorManagerReducer(state: ElevatorManagerSettings = defaultState, action: any) {
     switch (action.type) {
         case ElevatorManagerActions.ADD_NEW_ELEVATOR:
-            return { ...state, elevators: [...state.elevators, action.payload] };
+            return { ...state, elevators: [...state.elevators, { ...action.payload }] };
 
         case ElevatorManagerActions.SET_ALL_ELEVATORS:
             return { ...state, elevators: [...action.payload] };

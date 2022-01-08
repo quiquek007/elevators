@@ -20,7 +20,7 @@
 <section class="option-line">
     <span>Wall Color:</span>
     <div>
-        <kendo-colorpicker [value]="wallColor"
+        <kendo-colorpicker [value]="selectedElevator?.wallColor || wallColor"
             [format]="'hex'"
             [gradientSettings]="{opacity: false}"
             (valueChange)="onWallColorChange($event)">
@@ -31,7 +31,7 @@
     <span>Wall Opacity:</span>
     <div>
         <kendo-numerictextbox class="numerictext-component"
-            [value]="wallOpacity"
+            [value]="selectedElevator?.wallOpacity || wallOpacity"
             [min]="0"
             [max]="1"
             [step]="0.05"
@@ -47,15 +47,18 @@
     <div>
         <kendo-switch class="component-switch"
             [(ngModel)]="wallTransparent"
-            (click)="onWallTransparentChange()">
+            (valueChange)="onWallTransparentChange()">
         </kendo-switch>
     </div>
 </section>
+
+<wireframes-settings></wireframes-settings>
+
 <section class="option-line">
     <span>Elevator Capacity:</span>
     <div>
         <kendo-numerictextbox class="numerictext-component"
-            [value]="elevatorCapacity"
+            [value]="selectedElevator?.capacity || elevatorCapacity"
             [min]="0"
             [max]="100"
             [step]="1"
@@ -70,7 +73,7 @@
     <span>Elevator Speed(floor/sec):</span>
     <div>
         <kendo-numerictextbox class="numerictext-component"
-            [value]="elevatorSpeed"
+            [value]="selectedElevator?.speed || elevatorSpeed"
             [min]="0.1"
             [max]="100"
             [step]="1"
@@ -85,7 +88,7 @@
     <span>Covered Floors:</span>
     <div>
         <kendo-numerictextbox class="numerictext-component"
-            [value]="elevatorCoveredFloors"
+            [value]="selectedElevator?.coveredFloors || elevatorCoveredFloors"
             [min]="2"
             [max]="101"
             [step]="1"
@@ -100,9 +103,9 @@
     <span>Current Floor:</span>
     <div>
         <kendo-numerictextbox class="numerictext-component"
-            [value]="elevatorCurrentFloor"
+            [value]="selectedElevator?.currentFloor || elevatorCurrentFloor"
             [min]="0"
-            [max]="elevatorCoveredFloors"
+            [max]="selectedElevator?.coveredFloors || elevatorCoveredFloors"
             [step]="1"
             [decimals]="0"
             [format]="'n0'"
@@ -111,7 +114,6 @@
         </kendo-numerictextbox>
     </div>
 </section>
-<wireframes-settings></wireframes-settings>
 <section class="option-line">
     <span>Reset:</span>
     <div>
@@ -122,19 +124,20 @@
             [iconClass]="'k-icon k-i-reload'"
             (click)="onResetAllSettings(0)">
         </button>
-        <button kendoButton
+         <!-- TODO: maybe delete it later -->
+        <!-- <button kendoButton
             kendoTooltip
             title="Reset, but save elevators"
             [position]="getTooltipPosition()"
             [iconClass]="'k-icon k-i-reload'"
             (click)="onResetAllSettings(1)">!
-        </button>
+        </button> -->
         <button kendoButton
             kendoTooltip
             title="Remove only elevators"
             [position]="getTooltipPosition()"
             [iconClass]="'k-icon k-i-reload'"
-            (click)="onResetAllSettings(2)">!!
+            (click)="onResetAllSettings(2)">!
         </button>
     </div>
 </section>

@@ -22,6 +22,7 @@ export class EngineComponent implements OnInit, OnDestroy {
     private grid: THREE.GridHelper = null;
     private rendererAlpha: boolean;
     private selectedElevator: Elevator;
+    private allElevators: Elevator[];
     private rendererAntialias: boolean;
     private cameraSettings: CameraSettings = { ...cameraSettings };
 
@@ -98,6 +99,7 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .pipe(take(1))
                 .subscribe(elevators => this.reInitiateElevators(elevators)),
             this.store.select(state => state.elevatorManagerSettings.selectedElevator).subscribe(elevator => this.selectedElevator = elevator),
+            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => this.allElevators = elevators),
             this.store
                 .select(state => state.elevatorManagerSettings.selectedElevator)
                 .pipe(
@@ -169,7 +171,7 @@ export class EngineComponent implements OnInit, OnDestroy {
                 // if selected is the same elevator
                 if (this.selectedElevator?.id === selectedElevator.id) return;
 
-                const elevator = this.objectManager.getElevators().find(item => item.id === selectedElevator.id);
+                const elevator = this.allElevators.find(item => item.id === selectedElevator.id);
 
                 //TODO: if this.selectedElevator deselect current
                 // if (this.selectedElevator) this.objectManager.deHighlightSelectedElevator(this.selectedElevator.id);

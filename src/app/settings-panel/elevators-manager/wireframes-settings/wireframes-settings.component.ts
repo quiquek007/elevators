@@ -16,6 +16,7 @@ export class WireframesSettingsComponent implements OnInit {
     private tooltipPosition: string = 'right';
     private subscriptions: Subscription[] = [];
     private elevatorObject: THREE.Object3D;
+    private allElevators: Elevator[];
 
     public wireframesSettingsExpanded: boolean;
     public isWireframesShowed: boolean;
@@ -33,15 +34,18 @@ export class WireframesSettingsComponent implements OnInit {
                 .select(state => state.elevatorManagerSettings.wireframes.isWireframesShowed)
                 .subscribe(isWireframesShowed => this.isWireframesShowed = isWireframesShowed),
             this.store.select(state => state.elevatorManagerSettings.wireframes.color).subscribe(color => this.wireframesColor = color),
+            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => this.allElevators = elevators),
             this.store
                 .select(state => state.elevatorManagerSettings.selectedElevator)
                 .subscribe(elevator => {
                     this.selectedElevator = elevator;
 
-                    if (!elevator) return;
+                    if (!elevator) {
+                        this.elevatorObject = null;
+                        return;
+                    }
 
                     this.isWireframesShowed = elevator.wireframes.isWireframesShowed;
-                    this.wireframesColor = elevator.wireframes.color;
                     this.elevatorObject = this.objectManager.getObjectById(this.selectedElevator.id);
                 })
         );
@@ -61,24 +65,25 @@ export class WireframesSettingsComponent implements OnInit {
 
     public onShowWireframeChange(event: Event): void {
         event.stopPropagation();
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetWireframesShowed(this.isWireframesShowed));
 
         if (!this.selectedElevator) return;
-        if (this.isWireframesShowed) {
-            console.log('this.elevatorObject.', this.elevatorObject);
-
-            this.elevatorObject.children.push(...this.getWallObjects().map(element => this.createWireframe(element)));
-        } else {
-            this.getWireframesObjects().forEach((element: THREE.Object3D) => this.elevatorObject.remove(element));
-        }
-
-        this.store.dispatch(new ElevatorManagerSettingsActions.SetWireframesShowed(this.isWireframesShowed));
+        const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('isWireframesShowed', this.isWireframesShowed);
+        this.isWireframesShowed
+            ? this.elevatorObject.children.push(...this.getWallObjects().map(element => this.createWireframe(element)))
+            : this.getWireframesObjects().forEach((element: THREE.Object3D) => this.elevatorObject.remove(element));
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(modifiedElevator));
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(modifiedAllElevators));
     }
 
     public onWireframesColorChange(color: THREE.Color): void {
-        if (!this.selectedElevator) return;
-
-        this.getWireframesObjects().forEach((element: THREE.Object3D) => (<any>element).material.color.set(color));
         this.store.dispatch(new ElevatorManagerSettingsActions.SetWireframesColor(color));
+
+        if (!this.selectedElevator) return;
+        const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('color', color);
+        this.getWireframesObjects().forEach((element: THREE.Object3D) => (<any>element).material.color.set(color));
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(modifiedElevator));
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(modifiedAllElevators));
     }
 
     private getWireframesObjects(): THREE.Object3D[] {
@@ -105,5 +110,20 @@ export class WireframesSettingsComponent implements OnInit {
         line.name = 'wireframe';
 
         return line;
+    }
+
+    private getModifiedElevators(property: string, value: any): [Elevator, Elevator[]] {
+        const modifiedElevator = {
+            ...this.selectedElevator,
+            wireframes: {
+                ...this.selectedElevator.wireframes,
+                [property]: value
+            }
+        } as Elevator;
+        const idx = this.allElevators.findIndex(item => modifiedElevator.id === item.id);
+        const modifiedAllElevators = [...this.allElevators];
+        modifiedAllElevators[idx] = modifiedElevator;
+
+        return [modifiedElevator, modifiedAllElevators];
     }
 }

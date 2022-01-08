@@ -80,17 +80,9 @@ export class ObjectManagerService {
         return this.engine.getObjectById(id);
     }
 
-    public getElevators(): Elevator[] {
-        return this.building.getElevators();
-    }
-
     public getIdByObject(): object {
         // TODO: implement it
         return;
-    }
-
-    public setElevators(elevators: Elevator[]): void {
-        return this.building.setElevators(elevators);
     }
 
     public getNewId(): number {

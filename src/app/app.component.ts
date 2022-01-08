@@ -12,6 +12,7 @@ import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model'
 import cameraSettings from 'app/constants/camera-settings.constants';
 import ElevatorManagerSettingsActions from './redux/elevator-manager-settings/elevator-manager-settings.actions';
 import { ObjectManagerService } from './services/object-manager.service';
+import Elevator from './shared/classes/elevator.class';
 
 @Component({
     selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private subscribtions: Subscription[] = [];
     private plainStore: AppState;
     private cameraSettings: CameraSettings = { ...cameraSettings };
+    private allElevators: Elevator[];
 
     public contentExpanded: boolean = false;
     public panelOnRightSide: boolean = false;
@@ -82,7 +84,8 @@ export class AppComponent implements OnInit, OnDestroy {
                 .subscribe(cameraPosition => this.cameraSettings.cameraPosition = cameraPosition),
             this.store
                 .select(state => state.cameraSettings.controlsTarget)
-                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget)
+                .subscribe(controlsTarget => this.cameraSettings.controlsTarget = controlsTarget),
+            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => this.allElevators = elevators)
         );
     }
 
@@ -109,9 +112,11 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public onResetAllSettings(): void {
+        this.allElevators.forEach(elevator => this.objectManager.removeObject(this.objectManager.getObjectById(elevator.id)));
         this.store.dispatch(new ElevatorManagerSettingsActions.ResetAllSettings());
-        this.objectManager.getElevators().forEach(elevator => this.store.dispatch(new ElevatorManagerSettingsActions.AddNewElevator(elevator)));
+
         this.store.dispatch(new GeneralSettingsActions.ResetAllSettings());
+
         this.store.dispatch(new CameraSettingsActions.ResetCameraPosition());
         this.store.dispatch(new CameraSettingsActions.ResetControlsTarget());
         this.engServ.setInitialCameraPosition(this.cameraSettings);

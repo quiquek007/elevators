@@ -14,7 +14,7 @@
             <section class="option-line">
                 <span>Wireframes color:</span>
                 <div>
-                    <kendo-colorpicker [value]="wireframesColor"
+                    <kendo-colorpicker [value]="selectedElevator?.wireframes?.color || wireframesColor"
                         [format]="'hex'"
                         [gradientSettings]="{opacity: false}"
                         (valueChange)="onWireframesColorChange($event)">

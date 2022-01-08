@@ -1,5 +1,5 @@
 export interface IEsteticWall {
-    wallColor: THREE.Color | string;
+    wallColor: THREE.Color;
     wallOpacity: number;
     wallTransparent: boolean;
 }
