@@ -87,7 +87,13 @@ export class ElevatorsManagerComponent implements OnInit {
     }
 
     public onDeleteElevator(): void {
-        // TODO: implement it
+        if (!this.selectedElevator) return;
+
+        const removedElevatorId = this.allElevators.find(elevator => this.selectedElevator.id === elevator.id).id;
+        const filteredList = this.allElevators.filter(elevator => elevator.id !== removedElevatorId);
+        this.objectManager.removeObject(this.objectManager.getObjectById(removedElevatorId));
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(null));
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(filteredList));
     }
 
     public onWallColorChange(color: THREE.Color): void {

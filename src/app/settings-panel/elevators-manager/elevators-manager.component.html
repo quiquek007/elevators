@@ -3,6 +3,7 @@
         kendoTooltip
         title="Remove Elevator"
         class="delete-elevator-button"
+        [disabled]="!selectedElevator"
         [position]="getTooltipPosition()"
         [iconClass]="'k-icon k-i-minus'"
         (click)="onDeleteElevator()">
