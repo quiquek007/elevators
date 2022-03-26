@@ -7,7 +7,7 @@ import Elevator from 'app/shared/classes/elevator.class';
 import { IElevator } from 'app/shared/Elevator/elevator.model';
 import { ObjectManagerService } from 'app/services/object-manager.service';
 import { ResetKeys } from './reset-keys.model';
-import { filter } from 'rxjs/operators';
+import { Object3D } from 'three';
 
 @Component({
     selector: 'elevators-manager',
@@ -82,6 +82,8 @@ export class ElevatorsManagerComponent implements OnInit {
         const elevator = this.objectManager.createElevatorConfiguration(elevatorConfig);
         const object = this.objectManager.buildElevatorObject(elevator);
 
+        // TODO: take free place coordinates and put there an elevator
+        this.placeElevatorInFreeSpace(object);
         this.objectManager.addToScene(object);
         this.store.dispatch(new ElevatorManagerSettingsActions.AddNewElevator(elevator));
     }
@@ -216,4 +218,6 @@ export class ElevatorsManagerComponent implements OnInit {
 
         return [modifiedElevator, modifiedAllElevators];
     }
+
+    private placeElevatorInFreeSpace(elevator: Object3D): void {}
 }

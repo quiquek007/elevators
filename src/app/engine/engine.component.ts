@@ -99,14 +99,15 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .pipe(take(1))
                 .subscribe(elevators => this.reInitiateElevators(elevators)),
             this.store.select(state => state.elevatorManagerSettings.selectedElevator).subscribe(elevator => this.selectedElevator = elevator),
-            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => this.allElevators = elevators),
-            this.store
-                .select(state => state.elevatorManagerSettings.selectedElevator)
-                .pipe(
-                    take(1),
-                    filter(value => value != null)
-                )
-                .subscribe(elevator => this.objectManager.highlightSelectedElevator(elevator.id))
+            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => this.allElevators = elevators)
+            // TODO: remove it later?
+            // this.store
+            //     .select(state => state.elevatorManagerSettings.selectedElevator)
+            //     .pipe(
+            //         take(1),
+            //         filter(value => value != null)
+            //     )
+            //     .subscribe(elevator => this.objectManager.highlightSelectedElevator(elevator.id))
         );
     }
 
@@ -124,12 +125,23 @@ export class EngineComponent implements OnInit, OnDestroy {
     }
 
     private reInitiateElevators(elevators: Elevator[]): void {
+        const elevatorList: Elevator[] = [];
+
         elevators.forEach(elevator => {
             const config = this.objectManager.createElevatorConfiguration(elevator);
-            this.objectManager.addToScene(this.objectManager.buildElevatorObject(config));
+            const elevatorObject = this.objectManager.buildElevatorObject(config);
+
+            config.id = elevatorObject.id;
+            this.objectManager.addToScene(elevatorObject);
+            elevatorList.push(config);
+
+            if (this.selectedElevator?.id === elevator.id) {
+                this.objectManager.highlightSelectedElevator(config.id);
+                this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(config));
+            }
         });
 
-        this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(elevators));
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(elevatorList));
     }
 
     private subscribeOnMouseClick(): void {

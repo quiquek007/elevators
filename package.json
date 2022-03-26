@@ -1,5 +1,6 @@
 {
   "name": "elevators",
+  "author": "Andrei Saiko <quiquek007@gmail.com>",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -11,6 +12,7 @@
     "postinstall": "ngcc"
   },
   "private": true,
+  "keywords": ["Angular", "Three.js", "optimization invention"],
   "dependencies": {
     "@angular/animations": "~13.0.3",
     "@angular/common": "~13.0.3",
