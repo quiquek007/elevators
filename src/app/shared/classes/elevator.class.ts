@@ -47,6 +47,32 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         return this.createGeometry();
     }
 
+    public getFloorPanes(): THREE.Mesh[] {
+        const geometry = [];
+
+        for (let i = 0; i < this.coveredFloors; i++) {
+            const planeGeometry = new THREE.PlaneGeometry(
+                elevatorManagerSettings.defaultElevator.floorLength,
+                elevatorManagerSettings.defaultElevator.floorWidth
+            );
+            const material = new THREE.MeshBasicMaterial({
+                color: elevatorManagerSettings.defaultElevator.floorColor,
+                side: THREE.DoubleSide,
+                opacity: elevatorManagerSettings.defaultElevator.floorOpacity,
+                transparent: true
+            });
+            const floor = new THREE.Mesh(planeGeometry, material);
+
+            floor.rotateX(-angle90);
+            floor.translateZ(i * elevatorManagerSettings.defaultElevator.floorHeight);
+            floor.translateY(-(elevatorManagerSettings.defaultElevator.floorWidth + this.width) / 2);
+            floor.name = 'floorPane';
+            geometry.push(floor);
+        }
+
+        return geometry;
+    }
+
     private createGeometry(): (THREE.LineSegments | THREE.Mesh)[] {
         const geometry = [];
         const floor = this.createPane('floor', false);
@@ -73,21 +99,24 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
 
     private createPane(name: string, isWall: boolean = true): THREE.Mesh {
         const geometry = isWall ? new THREE.PlaneGeometry(this.length, this.height) : new THREE.PlaneGeometry(this.length, this.width);
-        const material = new THREE.MeshBasicMaterial({ color: this.wallColor, side: THREE.DoubleSide });
-        const plane = new THREE.Mesh(geometry, material);
+        const material = new THREE.MeshBasicMaterial({
+            color: this.wallColor,
+            side: THREE.DoubleSide,
+            opacity: this.wallOpacity,
+            transparent: this.wallTransparent
+        });
+        const pane = new THREE.Mesh(geometry, material);
 
         if (isWall) {
-            plane.translateY(this.height / 2);
-            plane.rotateY(angle90);
+            pane.translateY(this.height / 2);
+            pane.rotateY(angle90);
         }
-        plane.name = name;
-        material.opacity = this.wallOpacity;
-        material.transparent = this.wallTransparent;
+        pane.name = name;
 
-        return plane;
+        return pane;
     }
 
-    private createWireframe(object: THREE.Mesh): THREE.LineSegments {
+    private createWireframe(object: THREE.Mesh, name: string = 'wireframe'): THREE.LineSegments {
         const edges = new THREE.EdgesGeometry(object.geometry);
         const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: this.wireframes.color }));
 
@@ -95,7 +124,7 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
             line.position[axis] = object.position[axis];
             line.rotation[axis] = object.rotation[axis];
         });
-        line.name = 'wireframe';
+        line.name = name;
 
         return line;
     }

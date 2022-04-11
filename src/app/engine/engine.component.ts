@@ -51,9 +51,9 @@ export class EngineComponent implements OnInit, OnDestroy {
         this.subscribeOnMouseClick();
 
         // helpers
-        this.objectManager.addToScene(this.objectManager.createCube());
-        var axesHelper = new THREE.AxesHelper(50);
-        this.objectManager.addToScene(axesHelper);
+        // this.objectManager.addToScene(this.objectManager.createCube());
+        // var axesHelper = new THREE.AxesHelper(50);
+        // this.objectManager.addToScene(axesHelper);
 
         this.initSubscribtions();
     }
@@ -94,12 +94,13 @@ export class EngineComponent implements OnInit, OnDestroy {
             this.store
                 .select(state => state.generalSettings.controls.cameraMaxDistance)
                 .subscribe(distance => this.engServ.controls.maxDistance = distance),
+            this.store.select(state => state.elevatorManagerSettings.selectedElevator).subscribe(elevator => this.selectedElevator = elevator),
+            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => this.allElevators = elevators),
             this.store
                 .select(state => state.elevatorManagerSettings.elevators)
                 .pipe(take(1))
-                .subscribe(elevators => this.reInitiateElevators(elevators)),
-            this.store.select(state => state.elevatorManagerSettings.selectedElevator).subscribe(elevator => this.selectedElevator = elevator),
-            this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => this.allElevators = elevators)
+                .subscribe(elevators => this.reInitiateElevators(elevators))
+
             // TODO: remove it later?
             // this.store
             //     .select(state => state.elevatorManagerSettings.selectedElevator)

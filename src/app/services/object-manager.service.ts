@@ -42,6 +42,8 @@ export class ObjectManagerService {
         elevator.id = object.id;
         object.name = 'elevator';
         object.add(...elevator.getGeometry());
+        object.add(...elevator.getFloorPanes());
+        console.log('object', object);
 
         return object;
     }
@@ -51,7 +53,7 @@ export class ObjectManagerService {
         const box = new THREE.Box3();
         const helper = new THREE.Box3Helper(box.setFromObject(object));
 
-        helper.geometry.scale(1.1, 1.1, 1.1);
+        helper.geometry.scale(1.1, 1, 1.1);
         helper.name = 'highlight-selection';
         object.add(helper);
     }

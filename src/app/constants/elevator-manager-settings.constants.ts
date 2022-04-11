@@ -14,7 +14,12 @@ const elevatorManagerSettings = {
         capacity: 10,
         speed: 10,
         coveredFloors: 2,
-        currentFloor: 0
+        currentFloor: 0,
+        floorHeight: 25,
+        floorColor: 'gray',
+        floorOpacity: 0.8,
+        floorLength: 20,
+        floorWidth: 20
     },
 
     wireframes: {
