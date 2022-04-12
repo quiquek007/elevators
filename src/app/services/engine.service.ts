@@ -5,9 +5,8 @@ import { debounceTime, skip } from 'rxjs/operators';
 import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/root-interface';
-import CameraSettingsActions from '../redux/camera-settings/camera-settings.actions';
-
 import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
+import CameraSettingsActions from '../redux/camera-settings/camera-settings.actions';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {
@@ -49,21 +48,6 @@ export class EngineService implements OnDestroy {
 
         this.setInitialCameraPosition(cameraSettings);
         this.subscribeOnCameraMovement();
-
-        const loader = new THREE.FontLoader();
-
-        loader.load('assets/fonts/Lato_Light_Regular.json', font => {
-            console.log('hiii', font);
-            const geometry = new THREE.TextGeometry('Hello three.js!', {
-                font: font,
-                size: 5,
-                height: 0
-            });
-            geometry.computeBoundingBox();
-
-            const textMesh1 = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 'white' }));
-            this.scene.add(textMesh1);
-        });
     }
 
     public animate(): void {

@@ -11,6 +11,7 @@ import cameraSettings from 'app/constants/camera-settings.constants';
 import { ObjectManagerService } from '../services/object-manager.service';
 import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
 import ElevatorManagerSettingsActions from 'app/redux/elevator-manager-settings/elevator-manager-settings.actions';
+import { FontProviderService } from 'app/services/font-provider.service';
 
 @Component({
     selector: 'app-engine',
@@ -32,7 +33,12 @@ export class EngineComponent implements OnInit, OnDestroy {
     @ViewChild('canvasContainer', { static: true })
     public canvasContainer: ElementRef<HTMLDivElement>;
 
-    constructor(private engServ: EngineService, private objectManager: ObjectManagerService, private store: Store<AppState>) {}
+    constructor(
+        private engServ: EngineService,
+        private objectManager: ObjectManagerService,
+        private store: Store<AppState>,
+        private fontProvider: FontProviderService
+    ) {}
 
     public ngOnInit(): void {
         if (!this.rendererCanvas) throw new Error('rendererCanvas is not implemented!');
@@ -96,19 +102,11 @@ export class EngineComponent implements OnInit, OnDestroy {
                 .subscribe(distance => this.engServ.controls.maxDistance = distance),
             this.store.select(state => state.elevatorManagerSettings.selectedElevator).subscribe(elevator => this.selectedElevator = elevator),
             this.store.select(state => state.elevatorManagerSettings.elevators).subscribe(elevators => this.allElevators = elevators),
-            this.store
-                .select(state => state.elevatorManagerSettings.elevators)
-                .pipe(take(1))
-                .subscribe(elevators => this.reInitiateElevators(elevators))
-
-            // TODO: remove it later?
-            // this.store
-            //     .select(state => state.elevatorManagerSettings.selectedElevator)
-            //     .pipe(
-            //         take(1),
-            //         filter(value => value != null)
-            //     )
-            //     .subscribe(elevator => this.objectManager.highlightSelectedElevator(elevator.id))
+            // require loaded font before using
+            combineLatest([
+                this.store.select(state => state.elevatorManagerSettings.elevators).pipe(take(1)),
+                this.fontProvider.isLoaded.pipe(filter(value => value))
+            ]).subscribe(([elevators]) => this.reInitiateElevators(elevators))
         );
     }
 

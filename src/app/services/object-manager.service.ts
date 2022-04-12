@@ -4,13 +4,14 @@ import { EngineService } from './engine.service';
 import Building from '../shared/classes/building.class';
 import { IElevator } from '../shared/Elevator/elevator.model';
 import Elevator from '../shared/classes/elevator.class';
+import { FontProviderService } from './font-provider.service';
 
 @Injectable({ providedIn: 'root' })
 export class ObjectManagerService {
     public building = new Building();
     public defaultColor = new THREE.Color('rgb(0, 0, 255)');
 
-    constructor(private engine: EngineService) {}
+    constructor(private engine: EngineService, private fontProvider: FontProviderService) {}
 
     public createCube(geometry: THREE.BoxGeometry = new THREE.BoxGeometry(1, 1, 1)): THREE.Mesh {
         const cube = new THREE.Mesh(geometry);
@@ -42,7 +43,8 @@ export class ObjectManagerService {
         elevator.id = object.id;
         object.name = 'elevator';
         object.add(...elevator.getGeometry());
-        object.add(...elevator.getFloorPanes());
+        object.add(...elevator.getFloorPanes(this.fontProvider.getLatoLightRegular()));
+
         console.log('object', object);
 
         return object;

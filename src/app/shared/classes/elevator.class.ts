@@ -47,7 +47,7 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         return this.createGeometry();
     }
 
-    public getFloorPanes(): THREE.Mesh[] {
+    public getFloorPanes(font: THREE.Font): THREE.Mesh[] {
         const geometry = [];
 
         for (let i = 0; i < this.coveredFloors; i++) {
@@ -66,11 +66,29 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
             floor.rotateX(-angle90);
             floor.translateZ(i * elevatorManagerSettings.defaultElevator.floorHeight);
             floor.translateY(-(elevatorManagerSettings.defaultElevator.floorWidth + this.width) / 2);
+
+            const floorNumber = this.createFloorNumber(i, font);
+
+            floorNumber.translateY(-elevatorManagerSettings.defaultElevator.floorWidth / 2);
+            floorNumber.translateX(-elevatorManagerSettings.defaultElevator.floorWidth / 2);
+            floorNumber.rotateX(angle90);
+            floor.add(floorNumber);
             floor.name = 'floorPane';
+
             geometry.push(floor);
         }
 
         return geometry;
+    }
+
+    private createFloorNumber(floorNumber: number, font: THREE.Font): THREE.Mesh {
+        const geometry = new THREE.TextGeometry(`Floor ${floorNumber}`, {
+            font,
+            size: 2,
+            height: 0
+        });
+
+        return new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 'white' }));
     }
 
     private createGeometry(): (THREE.LineSegments | THREE.Mesh)[] {
