@@ -90,6 +90,10 @@ export class ElevatorsManagerComponent implements OnInit {
     public onDeleteElevator(): void {
         if (!this.selectedElevator) return;
 
+        const removedIndex = this.allElevators.findIndex(elevator => this.selectedElevator.id === elevator.id);
+        for (let i = removedIndex + 1, len = this.allElevators.length; i < len; i++) {
+            this.objectManager.getObjectById(this.allElevators[i].id).translateX(-elevatorManagerSettings.distanceBetweenElevators);
+        }
         const removedElevatorId = this.allElevators.find(elevator => this.selectedElevator.id === elevator.id).id;
         const filteredList = this.allElevators.filter(elevator => elevator.id !== removedElevatorId);
         this.objectManager.removeObject(this.objectManager.getObjectById(removedElevatorId));

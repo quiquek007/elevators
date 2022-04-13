@@ -42,7 +42,7 @@ export class ObjectManagerService {
 
         elevator.id = object.id;
         object.name = 'elevator';
-        object.add(...elevator.getGeometry());
+        object.add(...elevator.getSkeletGeometry());
         object.add(...elevator.getFloorPlatforms(this.fontProvider.getLatoLightRegular()));
 
         console.log('object', object);

@@ -43,8 +43,8 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         this.wireframes = config.wireframes;
     }
 
-    public getGeometry(): (THREE.LineSegments | THREE.Mesh)[] {
-        return this.createGeometry();
+    public getSkeletGeometry(): (THREE.LineSegments | THREE.Mesh)[] {
+        return this.createSkeletGeometry();
     }
 
     public getFloorPlatforms(font: THREE.Font): THREE.Mesh[] {
@@ -91,7 +91,7 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         return new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: 'white' }));
     }
 
-    private createGeometry(): (THREE.LineSegments | THREE.Mesh)[] {
+    private createSkeletGeometry(): (THREE.LineSegments | THREE.Mesh)[] {
         const geometry = [];
         const floor = this.createPane('floor', false);
         const ceiling = this.createPane('ceiling', false);
