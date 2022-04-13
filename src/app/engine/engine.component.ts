@@ -12,6 +12,7 @@ import { ObjectManagerService } from '../services/object-manager.service';
 import { CameraSettings } from 'app/redux/camera-settings/camera-settings.model';
 import ElevatorManagerSettingsActions from 'app/redux/elevator-manager-settings/elevator-manager-settings.actions';
 import { FontProviderService } from 'app/services/font-provider.service';
+import elevatorManagerSettings from 'app/constants/elevator-manager-settings.constants';
 
 @Component({
     selector: 'app-engine',
@@ -126,11 +127,12 @@ export class EngineComponent implements OnInit, OnDestroy {
     private reInitiateElevators(elevators: Elevator[]): void {
         const elevatorList: Elevator[] = [];
 
-        elevators.forEach(elevator => {
+        elevators.forEach((elevator, idx) => {
             const config = this.objectManager.createElevatorConfiguration(elevator);
             const elevatorObject = this.objectManager.buildElevatorObject(config);
 
             config.id = elevatorObject.id;
+            elevatorObject.translateX(idx * elevatorManagerSettings.distanceBetweenElevators);
             this.objectManager.addToScene(elevatorObject);
             elevatorList.push(config);
 
@@ -181,16 +183,11 @@ export class EngineComponent implements OnInit, OnDestroy {
 
                 // if selected is the same elevator
                 if (this.selectedElevator?.id === selectedElevator.id) return;
+                if (this.selectedElevator) this.objectManager.deHighlightSelectedElevator(this.selectedElevator.id);
 
                 const elevator = this.allElevators.find(item => item.id === selectedElevator.id);
 
-                //TODO: if this.selectedElevator deselect current
-                // if (this.selectedElevator) this.objectManager.deHighlightSelectedElevator(this.selectedElevator.id);
-
                 this.objectManager.highlightSelectedElevator(elevator.id);
-
-                // painting example
-                // (<any>selectedObject.object).material.color.set(0xff0000);
                 this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(elevator));
             });
     }

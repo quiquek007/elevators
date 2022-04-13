@@ -1,4 +1,6 @@
-position for 2+ elevators
+highlight the current elevator floor(tittle and platform)
+focus camera
+make animations
 
 *validation for localStorage data
 *make limit for generation of store

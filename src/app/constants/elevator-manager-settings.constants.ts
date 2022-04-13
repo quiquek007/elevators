@@ -2,7 +2,7 @@ const elevatorManagerSettings = {
     key: 'elevatorManagerSettings',
     elevators: [],
     selectedElevator: null,
-    distanceBetweenElevators: 20,
+    distanceBetweenElevators: 25,
 
     defaultElevator: {
         wallColor: '#75c6c6',

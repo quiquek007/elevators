@@ -47,7 +47,7 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         return this.createGeometry();
     }
 
-    public getFloorPanes(font: THREE.Font): THREE.Mesh[] {
+    public getFloorPlatforms(font: THREE.Font): THREE.Mesh[] {
         const geometry = [];
 
         for (let i = 0; i < this.coveredFloors; i++) {

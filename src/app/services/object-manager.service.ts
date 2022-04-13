@@ -43,7 +43,7 @@ export class ObjectManagerService {
         elevator.id = object.id;
         object.name = 'elevator';
         object.add(...elevator.getGeometry());
-        object.add(...elevator.getFloorPanes(this.fontProvider.getLatoLightRegular()));
+        object.add(...elevator.getFloorPlatforms(this.fontProvider.getLatoLightRegular()));
 
         console.log('object', object);
 
@@ -52,8 +52,10 @@ export class ObjectManagerService {
 
     public highlightSelectedElevator(elevatorId: number): void {
         const object = this.getObjectById(elevatorId);
-        const box = new THREE.Box3();
-        const helper = new THREE.Box3Helper(box.setFromObject(object));
+        const clone = object.clone();
+        // to avoid bug with highlight shift
+        ['x', 'y', 'z'].forEach(axes => clone.position[axes] = 0);
+        const helper = new THREE.BoxHelper(clone);
 
         helper.geometry.scale(1.1, 1, 1.1);
         helper.name = 'highlight-selection';
