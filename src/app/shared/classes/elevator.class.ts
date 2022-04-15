@@ -98,6 +98,8 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         const wallLeft = this.createPane('wall');
         const wallRight = this.createPane('wall');
         const wallBack = this.createPane('wall');
+        const doorR = this.createPane('door-right');
+        const doorL = this.createPane('door-left');
 
         floor.rotateX(angle90);
         ceiling.rotateX(angle90);
@@ -106,9 +108,16 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
         wallRight.translateZ(this.length / 2);
         wallBack.rotateY(-angle90);
         wallBack.translateZ(-this.length / 2);
+        doorR.rotateY(angle90);
+        doorR.translateZ(-this.length / 2);
+        doorR.geometry.scale(0.5, 1, 1);
+        doorR.translateX(this.length / 4);
+        doorL.rotateY(angle90);
+        doorL.translateZ(-this.length / 2);
+        doorL.geometry.scale(0.5, 1, 1);
+        doorL.translateX(-this.length / 4);
 
-        // TODO: draw the doors
-        geometry.push(floor, ceiling, wallLeft, wallRight, wallBack);
+        geometry.push(floor, ceiling, wallLeft, wallRight, wallBack, doorR, doorL);
 
         if (this.wireframes.isWireframesShowed) geometry.push(...geometry.map(element => this.createWireframe(element)));
 

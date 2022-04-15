@@ -26,6 +26,13 @@
             [gradientSettings]="{opacity: false}"
             (valueChange)="onWallColorChange($event)">
         </kendo-colorpicker>
+        <button kendoButton
+            kendoTooltip
+            title="Random color"
+            [position]="getTooltipPosition()"
+            [iconClass]="'k-icon k-i-kpi-status-open'"
+            (click)="onGetRandomColor()">
+        </button>
     </div>
 </section>
 <section class="option-line">

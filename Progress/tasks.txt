@@ -1,5 +1,6 @@
-make animations
+make animations, move/down
 highlight the current elevator floor(tittle and platform)
+add passengers
 focus camera
 
 *validation for localStorage data

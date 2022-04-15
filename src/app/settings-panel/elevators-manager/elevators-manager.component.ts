@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -111,6 +112,18 @@ export class ElevatorsManagerComponent implements OnInit {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(modifiedAllElevators));
     }
 
+    public onGetRandomColor(): void {
+        const color = new THREE.Color(Math.random() * 0xffffff);
+        const newColor: any = '#' + color.getHexString();
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallColor(newColor));
+
+        if (!this.selectedElevator) return;
+        const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('wallColor', newColor);
+        this.getWallObjects().forEach((element: THREE.Object3D) => (<any>element).material.color.set(newColor));
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(modifiedElevator));
+        this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(modifiedAllElevators));
+    }
+
     public onWallOpacityChange(opacity: number): void {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallOpacity(opacity));
 
@@ -209,6 +222,8 @@ export class ElevatorsManagerComponent implements OnInit {
 
         walls.push(this.elevatorObject.children.find(element => element.name === 'floor'));
         walls.push(this.elevatorObject.children.find(element => element.name === 'ceiling'));
+        walls.push(this.elevatorObject.children.find(element => element.name === 'door-right'));
+        walls.push(this.elevatorObject.children.find(element => element.name === 'door-left'));
 
         return walls;
     }
