@@ -1,8 +1,8 @@
-make animations, move/down
+make animation - open/close doors
 highlight the current elevator floor(tittle and platform)
-add passengers
-focus camera
+focus/centrate camera
 
+*get the same properties and fns from common class(extends)
 *validation for localStorage data
 *make limit for generation of store
 *separate components on modules

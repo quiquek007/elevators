@@ -129,11 +129,9 @@ export class EngineComponent implements OnInit, OnDestroy {
 
         elevators.forEach((elevator, idx) => {
             const config = this.objectManager.createElevatorConfiguration(elevator);
-            const elevatorObject = this.objectManager.buildElevatorObject(config);
+            const elevatorObject = this.objectManager.buildElevatorObject(config, idx);
 
             config.id = elevatorObject.id;
-            elevatorObject.translateX(idx * elevatorManagerSettings.distanceBetweenElevators);
-            this.objectManager.addToScene(elevatorObject);
             elevatorList.push(config);
 
             if (this.selectedElevator?.id === elevator.id) {
@@ -168,7 +166,7 @@ export class EngineComponent implements OnInit, OnDestroy {
                 const raycaster = new THREE.Raycaster();
                 raycaster.setFromCamera(mouse3D, this.engServ.camera);
                 const intersects = raycaster.intersectObjects(this.engServ.scene.children, true);
-                const selectedObject = intersects.find(obj => obj.object.parent.name === 'elevator');
+                const selectedObject = intersects.find(obj => obj.object.parent.userData.isElevator);
 
                 // if selected is not an elevator
                 if (!selectedObject) {

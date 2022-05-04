@@ -1,29 +1,14 @@
 <div *ngIf="selectedOption === 'GlobalSettings'">
     <general-settings></general-settings>
 </div>
+<div id="Passangers" *ngIf="selectedOption === 'Passangers'">
+    <passengers-manager></passengers-manager>
+</div>
 <div id="ElevatorsManager" *ngIf="selectedOption === 'ElevatorsManager'">
     <elevators-manager></elevators-manager>
 </div>
-<div id="Calendar" *ngIf="selectedOption === 'Calendar'">
-    <ul>
-        <li>
-            <h6>11/5 Monday</h6>
-            <p>Martha Birthday</p>
-        </li>
-        <li>
-            <h6>15/6 Sunday</h6>
-            <p>Job interview for internal position</p>
-        </li>
-    </ul>
-</div>
-<div id="Attachments" *ngIf="selectedOption === 'Attachments'">
-    <ul>
-        <li>Build enterprise apps</li>
-        <li>Fw: Regarding Multiline textbox</li>
-        <li>Away next week</li>
-        <li>Fw: Your Costume is ready</li>
-        <li>Update completed</li>
-    </ul>
+<div id="SmartDumbManager" *ngIf="selectedOption === 'SmartDumbManager'">
+    <smart-dumb-manager></smart-dumb-manager>
 </div>
 <div id="Favourites" *ngIf="selectedOption === 'Favourites'">
     <ul>

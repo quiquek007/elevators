@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/root-interface';
@@ -11,7 +11,7 @@ import { GridSizeModel } from 'app/shared/grid-size.model';
     templateUrl: './grid-settings.component.html',
     styleUrls: ['./grid-settings.component.less']
 })
-export class GridSettingsComponent implements OnInit {
+export class GridSettingsComponent implements OnInit, OnDestroy {
     public gridColor: THREE.Color;
     public tooltipPosition: string = 'right';
     public gridSettingsExpanded: boolean;

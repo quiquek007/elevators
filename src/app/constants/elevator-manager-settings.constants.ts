@@ -18,8 +18,13 @@ const elevatorManagerSettings = {
         floorHeight: 25,
         floorColor: 'gray',
         floorOpacity: 0.8,
-        floorLength: 20,
-        floorWidth: 20
+        floorLength: 25,
+        floorWidth: 25
+    },
+
+    animationTime: {
+        startEndSmooth: 1,
+        linear: 3
     },
 
     wireframes: {

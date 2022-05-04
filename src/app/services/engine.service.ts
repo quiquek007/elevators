@@ -14,10 +14,12 @@ export class EngineService implements OnDestroy {
     private light: THREE.AmbientLight;
     private container: HTMLElement;
     private frameId: number = null;
+    private clock = new THREE.Clock();
 
     public scene: THREE.Scene;
     public camera: THREE.PerspectiveCamera;
     public controls: OrbitControls;
+    public mixers: THREE.AnimationMixer[] = [];
 
     constructor(private ngZone: NgZone, private store: Store<AppState>) {}
 
@@ -64,6 +66,13 @@ export class EngineService implements OnDestroy {
         // animation
         // this.cube.rotation.x += 0.01;
         // this.cube.rotation.y += 0.01;
+
+        if (this.mixers[0]) {
+            const delta = this.clock.getDelta();
+
+            this.mixers.forEach(mixer => mixer.update(delta));
+        }
+
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
@@ -92,6 +101,10 @@ export class EngineService implements OnDestroy {
 
     public getObjectById(id: number): THREE.Object3D {
         return this.scene.getObjectById(id);
+    }
+
+    public getObjectByName(name: string): THREE.Object3D {
+        return this.scene.getObjectByName(name);
     }
 
     public setInitialCameraPosition(cameraSettings: CameraSettings): void {

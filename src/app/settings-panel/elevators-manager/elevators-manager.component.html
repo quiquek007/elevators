@@ -8,7 +8,7 @@
         [iconClass]="'k-icon k-i-minus'"
         (click)="onDeleteElevator()">
     </button>
-    Elevator manager
+    {{ elevatorObject?.name || 'Elevator manager'}}
     <button kendoButton
         kendoTooltip
         title="Add Elevator"

@@ -35,17 +35,17 @@ export class AppComponent implements OnInit, OnDestroy {
             icon: 'k-i-plus-outline'
         },
         {
+            text: 'Passangers',
+            icon: 'k-i-myspace-box'
+        },
+        {
             text: 'GlobalSettings',
             icon: 'k-i-gear',
             selected: true
         },
         {
-            text: 'Calendar',
-            icon: 'k-i-calendar'
-        },
-        {
-            text: 'Attachments',
-            icon: 'k-i-hyperlink-email'
+            text: 'SmartDumbManager',
+            icon: 'k-i-hyperlink'
         },
         {
             text: 'Favourites',

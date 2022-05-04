@@ -1,0 +1,18 @@
+<h2 class="option-title">Smart Dumb Manager</h2>
+<div class="column-names">
+    <span>Dumb</span>
+    <span>Smart</span>
+</div>
+<section class="option-line">
+    <kendo-listbox kendoListBoxDataBinding
+        class="kendo-listbox--large"
+        [data]="dumbElevators"
+        [toolbar]="toolbarSettings"
+        [connectedWith]="asia"
+        (actionClick)="onChangeElevatorType()">
+    </kendo-listbox>
+    <kendo-listbox #asia
+        [data]="smartElevators"
+        [toolbar]="false">
+    </kendo-listbox>
+</section>

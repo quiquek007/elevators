@@ -6,6 +6,7 @@ import { AppState } from 'app/redux/root-interface';
 import Elevator from 'app/shared/classes/elevator.class';
 import ElevatorManagerSettingsActions from 'app/redux/elevator-manager-settings/elevator-manager-settings.actions';
 import { ObjectManagerService } from 'app/services/object-manager.service';
+import { ElevatorAnimationManagerService } from 'app/services/elevator-animation-manager.service';
 
 @Component({
     selector: 'wireframes-settings',
@@ -23,7 +24,11 @@ export class WireframesSettingsComponent implements OnInit {
     public wireframesColor: THREE.Color;
     public selectedElevator: Elevator;
 
-    constructor(private store: Store<AppState>, private objectManager: ObjectManagerService) {}
+    constructor(
+        private store: Store<AppState>,
+        private objectManager: ObjectManagerService,
+        private animationService: ElevatorAnimationManagerService
+    ) {}
 
     public ngOnInit(): void {
         this.subscriptions.push(
@@ -70,7 +75,7 @@ export class WireframesSettingsComponent implements OnInit {
         if (!this.selectedElevator) return;
         const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('isWireframesShowed', this.isWireframesShowed);
         this.isWireframesShowed
-            ? this.elevatorObject.children.push(...this.getWallObjects().map(element => this.createWireframe(element)))
+            ? this.elevatorObject.add(...this.getWallObjects().map(element => this.createWireframe(element)))
             : this.getWireframesObjects().forEach((element: THREE.Object3D) => this.elevatorObject.remove(element));
         this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(modifiedElevator));
         this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(modifiedAllElevators));
@@ -86,6 +91,10 @@ export class WireframesSettingsComponent implements OnInit {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(modifiedAllElevators));
     }
 
+    public test(): void {
+        this.animationService.start();
+    }
+
     private getWireframesObjects(): THREE.Object3D[] {
         return this.elevatorObject.children.filter(element => element.name === 'wireframe');
     }
@@ -95,12 +104,14 @@ export class WireframesSettingsComponent implements OnInit {
 
         walls.push(this.elevatorObject.children.find(element => element.name === 'floor'));
         walls.push(this.elevatorObject.children.find(element => element.name === 'ceiling'));
+        walls.push(this.elevatorObject.children.find(element => element.name === 'door-right'));
+        walls.push(this.elevatorObject.children.find(element => element.name === 'door-left'));
 
         return walls;
     }
 
-    private createWireframe(object): THREE.LineSegments {
-        const edges = new THREE.EdgesGeometry(object.geometry);
+    private createWireframe(object: THREE.Object3D): THREE.LineSegments {
+        const edges = new THREE.EdgesGeometry((<any>object).geometry);
         const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: this.wireframesColor }));
 
         ['x', 'y', 'z'].forEach(axis => {

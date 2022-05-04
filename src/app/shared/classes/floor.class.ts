@@ -1,6 +1,9 @@
-export default class Floor {
-    public passengers = [];
+import Passenger from './passenger.class';
 
-    constructor() {
+export default class Floor {
+    public passengers: Passenger[] = [];
+
+    constructor(passengers: Passenger[] = []) {
+        this.passengers = passengers;
     }
 }

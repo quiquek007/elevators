@@ -1,0 +1,68 @@
+<h2 class="option-title">
+    <button kendoButton
+        kendoTooltip
+        title="Clear all floors"
+        [position]="getTooltipPosition()"
+        [iconClass]="'k-icon k-i-cancel'"
+        (click)="onClearAllFloors()">
+    </button>
+    Passengers manager
+</h2>
+<div *ngIf="selectedElevator; else emptyTemplate"
+    class="passengers-manager">
+    <div *ngFor="let floor of selectedElevator.supportedFloors; trackBy: trackByMethod; let floorNumber = index;"
+        class="floor-container">
+        <div>Floor {{floorNumber}}</div>
+        <div class="passengers-container">
+            <button kendoButton
+                kendoTooltip
+                class="button--small"
+                title="Clear the floor"
+                [position]="getTooltipPosition()"
+                [iconClass]="'k-icon k-i-cancel'"
+                (click)="onClearPassengers(floorNumber)">
+            </button>
+            <button kendoButton
+                kendoTooltip
+                class="button--small"
+                title="Add a passenger"
+                [position]="getTooltipPosition()"
+                [iconClass]="'k-icon k-i-plus'"
+                (click)="onAddPassenger(floorNumber)">
+            </button>
+            <span *ngFor="let passenger of floor.passengers; trackBy: trackByMethod; let passengerIndex = index; let isLastPassenger = last;">
+                <button kendoButton
+                    kendoTooltip
+                    class="button--small--shifted"
+                    title="Remove the passenger"
+                    [disabled]="!selectedElevator"
+                    [position]="getTooltipPosition()"
+                    [iconClass]="'k-icon k-i-minus'"
+                    (click)="onRemovePassenger(floorNumber, passengerIndex)">
+                </button>
+                <kendo-numerictextbox #ntextbox
+                    kendoTooltip
+                    class="numerictext-component"
+                    rounded="small"
+                    min="0"
+                    [title]="'Index: ' + passengerIndex"
+                    [position]="getTooltipPosition()"
+                    [value]="passenger.destinationFloor"
+                    [max]="selectedElevator.coveredFloors - 1"
+                    [step]="1"
+                    [spinners]="false"
+                    [decimals]="0"
+                    [format]="'n0'"
+                    [autoCorrect]="true"
+                    (valueChange)="onChangeDestinationFloor(ntextbox, $event, floorNumber, passengerIndex)">
+                </kendo-numerictextbox>
+                <span *ngIf="!isLastPassenger">,</span>
+            </span>
+        </div>
+    </div>
+</div>
+<ng-template #emptyTemplate>
+    <span>Choose an elevator, first!</span>
+</ng-template>
+
+

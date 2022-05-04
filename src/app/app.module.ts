@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@progress/kendo-angular-layout';
 import { TooltipModule } from '@progress/kendo-angular-tooltip';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+import { ListBoxModule } from '@progress/kendo-angular-listbox';
 
 import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -21,6 +22,8 @@ import { AttentionSignComponent } from './resouces/attention-sign/attention-sign
 import { ControlsSettingsComponent } from './settings-panel/general-settings/controls-settings/controls-settings.component';
 import { ElevatorsManagerComponent } from './settings-panel/elevators-manager/elevators-manager.component';
 import { WireframesSettingsComponent } from './settings-panel/elevators-manager/wireframes-settings/wireframes-settings.component';
+import { PassengersManagerComponent } from './settings-panel/passengers-manager/passengers-manager.component';
+import { SmartDumbManagerComponent } from './settings-panel/smart-dumb-manager/smart-dumb-manager.component';
 
 @NgModule({
     declarations: [
@@ -33,6 +36,8 @@ import { WireframesSettingsComponent } from './settings-panel/elevators-manager/
         GridSettingsComponent,
         RendererSettingsComponent,
         ControlsSettingsComponent,
+        PassengersManagerComponent,
+        SmartDumbManagerComponent,
 
         ElevatorsManagerComponent,
         WireframesSettingsComponent,
@@ -47,6 +52,7 @@ import { WireframesSettingsComponent } from './settings-panel/elevators-manager/
         LayoutModule,
         TooltipModule,
         InputsModule,
+        ListBoxModule,
         FormsModule,
         StoreModule.forRoot(rootReducer)
     ],
