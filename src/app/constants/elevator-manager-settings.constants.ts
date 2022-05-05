@@ -12,7 +12,7 @@ const elevatorManagerSettings = {
         width: 10,
         height: 15,
         capacity: 10,
-        speed: 10,
+        speed: 0.2,
         coveredFloors: 2,
         currentFloor: 0,
         floorHeight: 25,
@@ -24,8 +24,8 @@ const elevatorManagerSettings = {
 
     animationTime: {
         doorOpenClose: 1,
-        startEndSmooth: 1,
-        linear: 3
+        startEndSmooth: 0.25,
+        linear: 0.5
     },
 
     wireframes: {

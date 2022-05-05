@@ -92,7 +92,7 @@ export class WireframesSettingsComponent implements OnInit {
     }
 
     public test(): void {
-        this.animationService.start(this.elevatorObject);
+        this.animationService.start(this.elevatorObject, this.selectedElevator.speed);
     }
 
     private getWireframesObjects(): THREE.Object3D[] {

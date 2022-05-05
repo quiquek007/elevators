@@ -1,5 +1,5 @@
-make elevator animations up/down
 highlight the current elevator floor(title and platform)
+add animation control panel(start/stop/timer)
 focus/centrate camera
 
 *get the same properties and fns from common class(extends)

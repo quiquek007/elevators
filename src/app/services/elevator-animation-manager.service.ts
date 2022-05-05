@@ -7,63 +7,55 @@ import elevatorManagerSettings from 'app/constants/elevator-manager-settings.con
 export class ElevatorAnimationManagerService {
     constructor(private engineService: EngineService) {}
 
-    public start(object3d: THREE.Object3D): void {
-        // TODO: at first add passangers
-        // let passangers = 2;
-        // while(passangers--) {
-        // }
-        // let r, k;
-        // r = this.moveStartSmooth(this.elevatorObject, 0, 25);
-        // r.addEventListener('finished', e => {
-        //     console.log('123');
-        //     k = this.moveLinear(this.elevatorObject, 25, 50);
-        // });
+    public start(object3d: THREE.Object3D, speed: number): void {
+        const promiseStart = this.moveSmooth(object3d, speed);
+        promiseStart.then(() => this.moveLinear(object3d, speed)).then(() => this.moveSmooth(object3d, speed, true));
     }
 
-    public moveStartSmooth(object3d: THREE.Object3D, startPoint: number, endPoint: number): THREE.AnimationMixer {
-        const { startEndSmooth } = elevatorManagerSettings.animationTime;
-        // name, time keyframes, position keyframe
-        const positionKF = new THREE.VectorKeyframeTrack('.position', [0, startEndSmooth], [25, startPoint, 0, 25, endPoint, 0]);
-        const clip = new THREE.AnimationClip('moveStartSmooth', startEndSmooth, [positionKF]);
-        const mixer = new THREE.AnimationMixer(object3d);
-        const clipAction = mixer.clipAction(clip);
-
-        clipAction.loop = THREE.LoopOnce;
-        clipAction.clampWhenFinished = true;
-        clipAction.play();
-        this.engineService.mixers.push(mixer);
-
-        return mixer;
+    public pause(): void {
+        throw new Error('Not implemented!');
     }
 
-    public moveLinear(object3d: THREE.Object3D, startPoint: number, endPoint: number): THREE.AnimationMixer {
-        const { linear } = elevatorManagerSettings.animationTime;
-        const positionKF = new THREE.VectorKeyframeTrack('.position', [0, linear], [25, startPoint, 0, 25, endPoint, 0]);
-        const clip = new THREE.AnimationClip('moveLinear', linear, [positionKF]);
-        const mixer = new THREE.AnimationMixer(object3d);
-        const clipAction = mixer.clipAction(clip);
+    public moveSmooth(object3d: THREE.Object3D, speed: number, isEnd: boolean = false): Promise<void> {
+        return new Promise(resolve => {
+            const { position } = object3d;
+            const { startEndSmooth } = elevatorManagerSettings.animationTime;
+            const distance = elevatorManagerSettings.defaultElevator.floorHeight * startEndSmooth;
+            const points = this.getSmoothCurve(position.y, position.y + distance, speed * startEndSmooth, isEnd).getPoints(10);
+            const timeArray = [].map.call(points, point => point.y);
+            const distanceArray = [];
+            [].forEach.call(points, point => distanceArray.push(position.x, point.x, position.z));
+            // name, time keyframes, position keyframe
+            const positionKF = new THREE.VectorKeyframeTrack('.position', timeArray, distanceArray);
+            const clip = new THREE.AnimationClip('moveStartSmooth', speed * startEndSmooth, [positionKF]);
+            const mixer = new THREE.AnimationMixer(object3d);
+            const clipAction = mixer.clipAction(clip);
 
-        clipAction.loop = THREE.LoopOnce;
-        clipAction.clampWhenFinished = true;
-        clipAction.play();
-        this.engineService.mixers.push(mixer);
-
-        return mixer;
+            clipAction.loop = THREE.LoopOnce;
+            clipAction.clampWhenFinished = true;
+            clipAction.play();
+            this.engineService.mixers.push(mixer);
+            mixer.addEventListener('finished', () => resolve());
+        });
     }
 
-    public moveEndSmooth(object3d: THREE.Object3D, startPoint: number, endPoint: number): THREE.AnimationMixer {
-        const { startEndSmooth } = elevatorManagerSettings.animationTime;
-        const positionKF = new THREE.VectorKeyframeTrack('.position', [0, startEndSmooth], [25, startPoint, 0, 25, endPoint, 0]);
-        const clip = new THREE.AnimationClip('moveEndSmooth', startEndSmooth, [positionKF]);
-        const mixer = new THREE.AnimationMixer(object3d);
-        const clipAction = mixer.clipAction(clip);
+    public moveLinear(object3d: THREE.Object3D, speed: number): Promise<void> {
+        return new Promise(resolve => {
+            const { position: pos } = object3d;
+            const { linear } = elevatorManagerSettings.animationTime;
+            const distance = elevatorManagerSettings.defaultElevator.floorHeight * linear;
+            // name, time keyframes, position keyframe
+            const positionKF = new THREE.VectorKeyframeTrack('.position', [0, speed * linear], [pos.x, pos.y, pos.z, pos.x, pos.y + distance, pos.z]);
+            const clip = new THREE.AnimationClip('moveStartSmooth', speed * linear, [positionKF]);
+            const mixer = new THREE.AnimationMixer(object3d);
+            const clipAction = mixer.clipAction(clip);
 
-        clipAction.loop = THREE.LoopOnce;
-        clipAction.clampWhenFinished = true;
-        clipAction.play();
-        this.engineService.mixers.push(mixer);
-
-        return mixer;
+            clipAction.loop = THREE.LoopOnce;
+            clipAction.clampWhenFinished = true;
+            clipAction.play();
+            this.engineService.mixers.push(mixer);
+            mixer.addEventListener('finished', () => resolve());
+        });
     }
 
     /* example:
@@ -93,16 +85,19 @@ export class ElevatorAnimationManagerService {
         this.engineService.mixers.push(mixer);
     }
 
-    private calculateDiff(): THREE.QuadraticBezierCurve {
-        const {
-            animationTime: { startEndSmooth, linear },
-            defaultElevator: { floorHeight }
-        } = elevatorManagerSettings;
-
-        return new THREE.QuadraticBezierCurve(
-            new THREE.Vector2(0, 0),
-            new THREE.Vector2(12, startEndSmooth * 0.6),
-            new THREE.Vector2(25, startEndSmooth)
-        );
+    private getSmoothCurve(startPoint: number, endPoint: number, animationTime: number, useReverse: boolean = false): THREE.QuadraticBezierCurve {
+        return useReverse
+            ? new THREE.CubicBezierCurve(
+                  new THREE.Vector2(startPoint, 0),
+                  new THREE.Vector2((endPoint - startPoint) * 0.5 + startPoint, animationTime * 0.5),
+                  new THREE.Vector2(endPoint, animationTime * 0.5),
+                  new THREE.Vector2(endPoint, animationTime)
+              )
+            : new THREE.CubicBezierCurve(
+                  new THREE.Vector2(startPoint, 0),
+                  new THREE.Vector2(startPoint, animationTime * 0.5),
+                  new THREE.Vector2((endPoint - startPoint) * 0.5 + startPoint, animationTime * 0.5),
+                  new THREE.Vector2(endPoint, animationTime)
+              );
     }
 }
