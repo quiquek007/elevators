@@ -7,7 +7,7 @@ import elevatorManagerSettings from 'app/constants/elevator-manager-settings.con
 export class ElevatorAnimationManagerService {
     constructor(private engineService: EngineService) {}
 
-    public start(): void {
+    public start(object3d: THREE.Object3D): void {
         // TODO: at first add passangers
         // let passangers = 2;
         // while(passangers--) {
@@ -64,6 +64,33 @@ export class ElevatorAnimationManagerService {
         this.engineService.mixers.push(mixer);
 
         return mixer;
+    }
+
+    /* example:
+        this.openCloseDoor(object3d.getObjectByName('door-left'), true);
+        this.openCloseDoor(object3d.getObjectByName('door-right'), false);
+        setTimeout(() => {
+            this.openCloseDoor(object3d.getObjectByName('door-left'), true, true);
+            this.openCloseDoor(object3d.getObjectByName('door-right'), false, true);
+        }, 2500);
+    */
+    public openCloseDoor(door: THREE.Object3D, isDoorleft: boolean, close: boolean = false): void {
+        let distance = isDoorleft ? elevatorManagerSettings.defaultElevator.length : elevatorManagerSettings.defaultElevator.length / 2;
+        const { doorOpenClose } = elevatorManagerSettings.animationTime;
+        if (close) distance *= -1;
+        const positionKF = new THREE.VectorKeyframeTrack(
+            '.position',
+            [0, doorOpenClose],
+            [door.position.x, door.position.y, door.position.z, door.position.x - distance, door.position.y, door.position.z]
+        );
+        const clip = new THREE.AnimationClip('moveEndSmooth', doorOpenClose, [positionKF]);
+        const mixer = new THREE.AnimationMixer(door);
+        const clipAction = mixer.clipAction(clip);
+
+        clipAction.loop = THREE.LoopOnce;
+        clipAction.clampWhenFinished = true;
+        clipAction.play();
+        this.engineService.mixers.push(mixer);
     }
 
     private calculateDiff(): THREE.QuadraticBezierCurve {

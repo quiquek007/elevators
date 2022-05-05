@@ -23,6 +23,7 @@ const elevatorManagerSettings = {
     },
 
     animationTime: {
+        doorOpenClose: 1,
         startEndSmooth: 1,
         linear: 3
     },

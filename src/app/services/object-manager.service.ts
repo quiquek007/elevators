@@ -54,6 +54,7 @@ export class ObjectManagerService {
         object.add(this.getElevatorTitle(allElevators));
         this.addToScene(object);
         object.translateX(allElevators * elevatorManagerSettings.distanceBetweenElevators);
+
         console.log('object', object);
 
         return object;
@@ -140,6 +141,14 @@ export class ObjectManagerService {
         return floor;
     }
 
+    public createWireframe(elevator: Elevator, object: THREE.Mesh | THREE.Object3D, name: string = 'wireframe'): void {
+        const edges = new THREE.EdgesGeometry((<any>object).geometry);
+        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: elevator.wireframes.color }));
+
+        line.name = name;
+        object.add(line);
+    }
+
     private createFloorNumber(title: string, color: string, font: THREE.Font = this.fontProvider.getLatoLightRegular()): THREE.Mesh {
         const geometry = new THREE.TextGeometry(title, {
             font,
@@ -178,7 +187,7 @@ export class ObjectManagerService {
 
         geometry.push(floor, ceiling, wallLeft, wallRight, wallBack, doorR, doorL);
 
-        if (elevator.wireframes.isWireframesShowed) geometry.push(...geometry.map(element => this.createWireframe(elevator, element)));
+        if (elevator.wireframes.isWireframesShowed) geometry.forEach(element => this.createWireframe(elevator, element));
 
         return geometry;
     }
@@ -202,18 +211,5 @@ export class ObjectManagerService {
         pane.name = name;
 
         return pane;
-    }
-
-    private createWireframe(elevator: Elevator, object: THREE.Mesh, name: string = 'wireframe'): THREE.LineSegments {
-        const edges = new THREE.EdgesGeometry(object.geometry);
-        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: elevator.wireframes.color }));
-
-        ['x', 'y', 'z'].forEach(axis => {
-            line.position[axis] = object.position[axis];
-            line.rotation[axis] = object.rotation[axis];
-        });
-        line.name = name;
-
-        return line;
     }
 }

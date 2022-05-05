@@ -75,8 +75,8 @@ export class WireframesSettingsComponent implements OnInit {
         if (!this.selectedElevator) return;
         const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('isWireframesShowed', this.isWireframesShowed);
         this.isWireframesShowed
-            ? this.elevatorObject.add(...this.getWallObjects().map(element => this.createWireframe(element)))
-            : this.getWireframesObjects().forEach((element: THREE.Object3D) => this.elevatorObject.remove(element));
+            ? this.getWallObjects().forEach(element => this.objectManager.createWireframe(modifiedElevator, element))
+            : this.getWireframesObjects().forEach((element: THREE.Object3D) => element.parent.remove(element));
         this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(modifiedElevator));
         this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(modifiedAllElevators));
     }
@@ -92,14 +92,14 @@ export class WireframesSettingsComponent implements OnInit {
     }
 
     public test(): void {
-        this.animationService.start();
+        this.animationService.start(this.elevatorObject);
     }
 
     private getWireframesObjects(): THREE.Object3D[] {
-        return this.elevatorObject.children.filter(element => element.name === 'wireframe');
+        return this.getWallObjects().map(elem => elem.getObjectByName('wireframe'));
     }
 
-    private getWallObjects(): THREE.Object3D[] {
+    private getWallObjects(): Array<THREE.Mesh | THREE.Object3D> {
         const walls = this.elevatorObject.children.filter(element => element.name === 'wall');
 
         walls.push(this.elevatorObject.children.find(element => element.name === 'floor'));
@@ -108,19 +108,6 @@ export class WireframesSettingsComponent implements OnInit {
         walls.push(this.elevatorObject.children.find(element => element.name === 'door-left'));
 
         return walls;
-    }
-
-    private createWireframe(object: THREE.Object3D): THREE.LineSegments {
-        const edges = new THREE.EdgesGeometry((<any>object).geometry);
-        const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: this.wireframesColor }));
-
-        ['x', 'y', 'z'].forEach(axis => {
-            line.position[axis] = object.position[axis];
-            line.rotation[axis] = object.rotation[axis];
-        });
-        line.name = 'wireframe';
-
-        return line;
     }
 
     private getModifiedElevators(property: string, value: any): [Elevator, Elevator[]] {

@@ -1,5 +1,5 @@
-make animation - open/close doors
-highlight the current elevator floor(tittle and platform)
+make elevator animations up/down
+highlight the current elevator floor(title and platform)
 focus/centrate camera
 
 *get the same properties and fns from common class(extends)
