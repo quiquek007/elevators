@@ -1,4 +1,3 @@
-highlight the current elevator floor(title and platform)
 add animation control panel(start/stop/timer)
 focus/centrate camera
 

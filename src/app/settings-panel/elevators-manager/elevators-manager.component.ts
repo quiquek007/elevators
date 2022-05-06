@@ -108,8 +108,7 @@ export class ElevatorsManagerComponent implements OnInit {
         const removedElevatorId = this.allElevators.find(elevator => this.selectedElevator.id === elevator.id).id;
         const filteredList = this.allElevators.filter(elevator => elevator.id !== removedElevatorId);
         this.objectManager.removeObject(this.objectManager.getObjectById(removedElevatorId));
-        this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(null));
-        this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(filteredList));
+        this.staticDispatch(null, filteredList);
         this.renameAllElevators(filteredList);
     }
 
@@ -117,9 +116,8 @@ export class ElevatorsManagerComponent implements OnInit {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallColor(color));
 
         if (!this.selectedElevator) return;
-        const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('wallColor', color);
         this.getWallObjects().forEach((element: THREE.Object3D) => (<any>element).material.color.set(color));
-        this.staticDispatch(modifiedElevator, modifiedAllElevators);
+        this.staticDispatch(...this.getModifiedElevators('wallColor', color));
     }
 
     public onGetRandomColor(): void {
@@ -128,43 +126,38 @@ export class ElevatorsManagerComponent implements OnInit {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallColor(newColor));
 
         if (!this.selectedElevator) return;
-        const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('wallColor', newColor);
         this.getWallObjects().forEach((element: THREE.Object3D) => (<any>element).material.color.set(newColor));
-        this.staticDispatch(modifiedElevator, modifiedAllElevators);
+        this.staticDispatch(...this.getModifiedElevators('wallColor', newColor));
     }
 
     public onWallOpacityChange(opacity: number): void {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallOpacity(opacity));
 
         if (!this.selectedElevator) return;
-        const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('wallOpacity', opacity);
         this.getWallObjects().forEach((element: THREE.Object3D) => (<any>element).material.opacity = opacity);
-        this.staticDispatch(modifiedElevator, modifiedAllElevators);
+        this.staticDispatch(...this.getModifiedElevators('wallOpacity', opacity));
     }
 
     public onWallTransparentChange(): void {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorWallTransparent(this.wallTransparent));
 
         if (!this.selectedElevator) return;
-        const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('wallTransparent', this.wallTransparent);
         this.getWallObjects().forEach((element: THREE.Object3D) => (<any>element).material.transparent = this.wallTransparent);
-        this.staticDispatch(modifiedElevator, modifiedAllElevators);
+        this.staticDispatch(...this.getModifiedElevators('wallTransparent', this.wallTransparent));
     }
 
     public onElevatorCapacityChange(capacity: number): void {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCapacity(capacity));
 
         if (!this.selectedElevator) return;
-        const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('capacity', capacity);
-        this.staticDispatch(modifiedElevator, modifiedAllElevators);
+        this.staticDispatch(...this.getModifiedElevators('capacity', capacity));
     }
 
     public onElevatorSpeedChange(speed: number): void {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorSpeed(speed));
 
         if (!this.selectedElevator) return;
-        const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('speed', speed);
-        this.staticDispatch(modifiedElevator, modifiedAllElevators);
+        this.staticDispatch(...this.getModifiedElevators('speed', speed));
     }
 
     public onElevatorCoveredFloorsChange(coveredFloors: number): void {
@@ -211,8 +204,7 @@ export class ElevatorsManagerComponent implements OnInit {
 
         if (!this.selectedElevator) return;
         this.changeElevatorPosition(floor);
-        const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('currentFloor', floor);
-        this.staticDispatch(modifiedElevator, modifiedAllElevators);
+        this.staticDispatch(...this.getModifiedElevators('currentFloor', floor));
     }
 
     private getElevatorConfiguration(): IElevator {
@@ -295,6 +287,18 @@ export class ElevatorsManagerComponent implements OnInit {
 
     private changeElevatorPosition(floor: number): void {
         const elevator = this.elevatorObject.getObjectByName('elevatorSelf');
+        const paneCurr = this.elevatorObject.getObjectByName(`floorPane${floor}`);
+        const textCurr = paneCurr.getObjectByName('floorText');
+        const panePrev = this.elevatorObject.getObjectByName(`floorPane${this.selectedElevator.currentFloor}`);
+
         elevator.position.y = elevatorManagerSettings.defaultElevator.floorHeight * floor;
+        (<any>paneCurr).material.color.set(elevatorManagerSettings.defaultElevator.floorColorArrived);
+        (<any>textCurr).material.color.set(elevatorManagerSettings.defaultElevator.floorTextArrived);
+
+        if (!panePrev) return;
+
+        const textPrev = panePrev.getObjectByName('floorText');
+        (<any>panePrev).material.color.set(elevatorManagerSettings.defaultElevator.floorColor);
+        (<any>textPrev).material.color.set(elevatorManagerSettings.defaultElevator.floorText);
     }
 }

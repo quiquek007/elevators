@@ -17,6 +17,9 @@ const elevatorManagerSettings = {
         currentFloor: 0,
         floorHeight: 25,
         floorColor: 'gray',
+        floorColorArrived: 'lightgreen',
+        floorTextArrived: 'black',
+        floorText: 'white',
         floorOpacity: 0.8,
         floorLength: 25,
         floorWidth: 25

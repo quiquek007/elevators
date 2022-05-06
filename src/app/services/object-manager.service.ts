@@ -56,8 +56,14 @@ export class ObjectManagerService {
         elevatorSelf.add(this.getElevatorTitle(allElevators));
         elevatorSelf.position.y = elevatorManagerSettings.defaultElevator.floorHeight * elevator.currentFloor;
         object.add(elevatorSelf);
-        this.addToScene(object);
         object.translateX(allElevators * elevatorManagerSettings.distanceBetweenElevators);
+
+        const pane = object.getObjectByName(`floorPane${elevator.currentFloor}`);
+        const text = pane.getObjectByName('floorText');
+
+        (<any>pane).material.color.set(elevatorManagerSettings.defaultElevator.floorColorArrived);
+        (<any>text).material.color.set(elevatorManagerSettings.defaultElevator.floorTextArrived);
+        this.addToScene(object);
 
         console.log('object', object);
 
@@ -134,7 +140,7 @@ export class ObjectManagerService {
         floor.translateZ(floorNumber * elevatorManagerSettings.defaultElevator.floorHeight);
         floor.translateY(-(elevatorManagerSettings.defaultElevator.floorWidth + elevator.width) / 2);
 
-        const floorNumberMesh = this.createFloorNumber(`Floor ${floorNumber}`, 'white', font);
+        const floorNumberMesh = this.createFloorNumber(`Floor ${floorNumber}`, elevatorManagerSettings.defaultElevator.floorText, font);
 
         floorNumberMesh.translateY(-elevatorManagerSettings.defaultElevator.floorWidth / 2);
         floorNumberMesh.translateX(-elevatorManagerSettings.defaultElevator.floorWidth / 2);
