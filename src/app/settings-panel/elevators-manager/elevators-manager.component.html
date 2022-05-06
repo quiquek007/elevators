@@ -113,7 +113,7 @@
         <kendo-numerictextbox class="numerictext-component"
             [value]="selectedElevator?.currentFloor || elevatorCurrentFloor"
             [min]="0"
-            [max]="selectedElevator?.coveredFloors || elevatorCoveredFloors"
+            [max]="(selectedElevator?.coveredFloors || elevatorCoveredFloors) - 1"
             [step]="1"
             [decimals]="0"
             [format]="'n0'"

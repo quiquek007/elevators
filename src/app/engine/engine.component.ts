@@ -166,7 +166,7 @@ export class EngineComponent implements OnInit, OnDestroy {
                 const raycaster = new THREE.Raycaster();
                 raycaster.setFromCamera(mouse3D, this.engServ.camera);
                 const intersects = raycaster.intersectObjects(this.engServ.scene.children, true);
-                const selectedObject = intersects.find(obj => obj.object.parent.userData.isElevator);
+                const selectedObject = intersects.find(obj => this.getElevatorParent(obj.object));
 
                 // if selected is not an elevator
                 if (!selectedObject) {
@@ -177,7 +177,7 @@ export class EngineComponent implements OnInit, OnDestroy {
                     return;
                 }
 
-                const selectedElevator = selectedObject.object.parent;
+                const selectedElevator = this.getElevatorParent(selectedObject.object);
 
                 // if selected is the same elevator
                 if (this.selectedElevator?.id === selectedElevator.id) return;
@@ -193,5 +193,16 @@ export class EngineComponent implements OnInit, OnDestroy {
     // check on click: true or shift: false
     private isClick(startPoint: number, endPoint: number, threshold: number = 2): boolean {
         return Math.abs(startPoint - endPoint) <= threshold;
+    }
+
+    private getElevatorParent(object: THREE.Object3D): THREE.Object3D {
+        let elem = object;
+
+        while (elem) {
+            elem = elem.parent;
+            if (elem.userData.isElevatorParent) break;
+        }
+
+        return elem;
     }
 }

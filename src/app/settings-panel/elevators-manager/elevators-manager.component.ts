@@ -34,7 +34,17 @@ export class ElevatorsManagerComponent implements OnInit {
     public isWireframesShowed: boolean;
     public wireframesColor: THREE.Color;
 
-    constructor(private store: Store<AppState>, private objectManager: ObjectManagerService, private changeDetector: ChangeDetectorRef) {}
+    constructor(private store: Store<AppState>, private objectManager: ObjectManagerService, private changeDetector: ChangeDetectorRef) {
+        // TODO: remove the example
+        // setInterval(() => {
+        //     const pane = this.elevatorObject.getObjectByName('floorPane0');
+        //     const text = pane.children[0];
+        //     console.log('text', text);
+        //     const color = new THREE.Color(Math.random() * 0xffffff);
+        //     const newColor: any = '#' + color.getHexString();
+        //     (<any>text).material.color.set(newColor);
+        // }, 2000);
+    }
 
     public ngOnInit() {
         this.subscriptions.push(
@@ -165,6 +175,7 @@ export class ElevatorsManagerComponent implements OnInit {
         if (this.selectedElevator.coveredFloors > coveredFloors) {
             for (let i = this.selectedElevator.coveredFloors - 1; i >= coveredFloors; i--)
                 this.elevatorObject.remove(this.elevatorObject.getObjectByName(`floorPane${i}`));
+            if (this.selectedElevator.currentFloor >= coveredFloors) this.changeElevatorPosition(coveredFloors - 1);
         } else {
             for (let i = this.selectedElevator.coveredFloors; i < coveredFloors; i++)
                 this.elevatorObject.add(this.objectManager.createFloor(this.selectedElevator, i));
@@ -172,35 +183,34 @@ export class ElevatorsManagerComponent implements OnInit {
         this.objectManager.deHighlightSelectedElevator(this.selectedElevator.id);
         this.objectManager.highlightSelectedElevator(this.selectedElevator.id);
 
-        const [modifiedElevator0, modifiedAllElevators0] = this.getModifiedElevators(
-            'coveredFloors',
+        const modifiedElevator = {
+            ...this.selectedElevator,
             coveredFloors,
-            this.selectedElevator,
-            this.allElevators
-        );
-        const [modifiedElevator1, modifiedAllElevators1] = this.getModifiedElevators(
-            'supportedFloors',
-            this.selectedElevator.coveredFloors > coveredFloors
-                ? modifiedElevator0.supportedFloors.slice(0, coveredFloors)
-                : modifiedElevator0.supportedFloors.concat(new Floor()),
-            modifiedElevator0,
-            modifiedAllElevators0
-        );
-        modifiedElevator1.supportedFloors = modifiedElevator1.supportedFloors.map(floor => {
+            supportedFloors:
+                this.selectedElevator.coveredFloors > coveredFloors
+                    ? this.selectedElevator.supportedFloors.slice(0, coveredFloors)
+                    : this.selectedElevator.supportedFloors.concat(new Floor()),
+            currentFloor: this.selectedElevator.currentFloor >= coveredFloors ? coveredFloors - 1 : this.selectedElevator.currentFloor
+        };
+        modifiedElevator.supportedFloors = modifiedElevator.supportedFloors.map(floor => {
             const passengers = floor.passengers.map(passenger =>
                 passenger.destinationFloor >= coveredFloors ? new Passenger(passenger.currentFloor, coveredFloors - 1) : passenger
             );
 
             return new Floor(passengers);
         });
+        const idx = this.allElevators.findIndex(item => modifiedElevator.id === item.id);
+        const modifiedAllElevators = [...this.allElevators];
+        modifiedAllElevators[idx] = modifiedElevator;
 
-        this.staticDispatch(modifiedElevator1, modifiedAllElevators1);
+        this.staticDispatch(modifiedElevator, modifiedAllElevators);
     }
 
     public onElevatorCurrentFloorChange(floor: number): void {
         this.store.dispatch(new ElevatorManagerSettingsActions.SetElevatorCurrentFloor(floor));
 
         if (!this.selectedElevator) return;
+        this.changeElevatorPosition(floor);
         const [modifiedElevator, modifiedAllElevators] = this.getModifiedElevators('currentFloor', floor);
         this.staticDispatch(modifiedElevator, modifiedAllElevators);
     }
@@ -243,12 +253,13 @@ export class ElevatorsManagerComponent implements OnInit {
     }
 
     private getWallObjects(): THREE.Object3D[] {
-        const walls = this.elevatorObject.children.filter(element => element.name === 'wall');
+        const elevatorSelf = this.elevatorObject.getObjectByName('elevatorSelf');
+        const walls = elevatorSelf.children.filter(element => element.name === 'wall');
 
-        walls.push(this.elevatorObject.children.find(element => element.name === 'floor'));
-        walls.push(this.elevatorObject.children.find(element => element.name === 'ceiling'));
-        walls.push(this.elevatorObject.children.find(element => element.name === 'door-right'));
-        walls.push(this.elevatorObject.children.find(element => element.name === 'door-left'));
+        walls.push(elevatorSelf.children.find(element => element.name === 'floor'));
+        walls.push(elevatorSelf.children.find(element => element.name === 'ceiling'));
+        walls.push(elevatorSelf.children.find(element => element.name === 'door-right'));
+        walls.push(elevatorSelf.children.find(element => element.name === 'door-left'));
 
         return walls;
     }
@@ -280,5 +291,10 @@ export class ElevatorsManagerComponent implements OnInit {
             elevatorObj.remove(elevatorObj.getObjectByName('elevator-title'));
             elevatorObj.add(this.objectManager.getElevatorTitle(index));
         });
+    }
+
+    private changeElevatorPosition(floor: number): void {
+        const elevator = this.elevatorObject.getObjectByName('elevatorSelf');
+        elevator.position.y = elevatorManagerSettings.defaultElevator.floorHeight * floor;
     }
 }

@@ -45,13 +45,17 @@ export class ObjectManagerService {
 
     public buildElevatorObject(elevator: Elevator, allElevators: number): THREE.Object3D {
         const object = new THREE.Object3D();
+        const elevatorSelf = new THREE.Object3D();
 
         elevator.id = object.id;
-        object.userData = { isElevator: true };
+        object.userData = { isElevatorParent: true };
         object.name = `elevator${allElevators}`;
-        object.add(...this.getSkeletGeometry(elevator));
         object.add(...this.getFloorPlatforms(elevator));
-        object.add(this.getElevatorTitle(allElevators));
+        elevatorSelf.name = 'elevatorSelf';
+        elevatorSelf.add(...this.getSkeletGeometry(elevator));
+        elevatorSelf.add(this.getElevatorTitle(allElevators));
+        elevatorSelf.position.y = elevatorManagerSettings.defaultElevator.floorHeight * elevator.currentFloor;
+        object.add(elevatorSelf);
         this.addToScene(object);
         object.translateX(allElevators * elevatorManagerSettings.distanceBetweenElevators);
 
@@ -135,6 +139,7 @@ export class ObjectManagerService {
         floorNumberMesh.translateY(-elevatorManagerSettings.defaultElevator.floorWidth / 2);
         floorNumberMesh.translateX(-elevatorManagerSettings.defaultElevator.floorWidth / 2);
         floorNumberMesh.rotateX(angle90);
+        floorNumberMesh.name = 'floorText';
         floor.add(floorNumberMesh);
         floor.name = `floorPane${floorNumber}`;
 

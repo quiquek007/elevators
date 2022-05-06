@@ -100,12 +100,13 @@ export class WireframesSettingsComponent implements OnInit {
     }
 
     private getWallObjects(): Array<THREE.Mesh | THREE.Object3D> {
-        const walls = this.elevatorObject.children.filter(element => element.name === 'wall');
+        const elevatorSelf = this.elevatorObject.getObjectByName('elevatorSelf');
+        const walls = elevatorSelf.children.filter(element => element.name === 'wall');
 
-        walls.push(this.elevatorObject.children.find(element => element.name === 'floor'));
-        walls.push(this.elevatorObject.children.find(element => element.name === 'ceiling'));
-        walls.push(this.elevatorObject.children.find(element => element.name === 'door-right'));
-        walls.push(this.elevatorObject.children.find(element => element.name === 'door-left'));
+        walls.push(elevatorSelf.children.find(element => element.name === 'floor'));
+        walls.push(elevatorSelf.children.find(element => element.name === 'ceiling'));
+        walls.push(elevatorSelf.children.find(element => element.name === 'door-right'));
+        walls.push(elevatorSelf.children.find(element => element.name === 'door-left'));
 
         return walls;
     }
