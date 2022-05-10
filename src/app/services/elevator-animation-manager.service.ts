@@ -13,7 +13,7 @@ export class ElevatorAnimationManagerService {
     }
 
     public pause(): void {
-        throw new Error('Not implemented!');
+        this.engineService.clipActions.forEach(clipA => clipA.stop());
     }
 
     public moveSmooth(object3d: THREE.Object3D, speed: number, isEnd: boolean = false): Promise<void> {
@@ -34,8 +34,11 @@ export class ElevatorAnimationManagerService {
             clipAction.loop = THREE.LoopOnce;
             clipAction.clampWhenFinished = true;
             clipAction.play();
-            this.engineService.mixers.push(mixer);
-            mixer.addEventListener('finished', () => resolve());
+            this.engineService.clipActions.push(clipAction);
+            mixer.addEventListener('finished', () => {
+                this.removeMixer(clipAction);
+                resolve();
+            });
         });
     }
 
@@ -53,8 +56,11 @@ export class ElevatorAnimationManagerService {
             clipAction.loop = THREE.LoopOnce;
             clipAction.clampWhenFinished = true;
             clipAction.play();
-            this.engineService.mixers.push(mixer);
-            mixer.addEventListener('finished', () => resolve());
+            this.engineService.clipActions.push(clipAction);
+            mixer.addEventListener('finished', () => {
+                this.removeMixer(clipAction);
+                resolve();
+            });
         });
     }
 
@@ -66,23 +72,29 @@ export class ElevatorAnimationManagerService {
             this.openCloseDoor(object3d.getObjectByName('door-right'), false, true);
         }, 2500);
     */
-    public openCloseDoor(door: THREE.Object3D, isDoorleft: boolean, close: boolean = false): void {
-        let distance = isDoorleft ? elevatorManagerSettings.defaultElevator.length : elevatorManagerSettings.defaultElevator.length / 2;
-        const { doorOpenClose } = elevatorManagerSettings.animationTime;
-        if (close) distance *= -1;
-        const positionKF = new THREE.VectorKeyframeTrack(
-            '.position',
-            [0, doorOpenClose],
-            [door.position.x, door.position.y, door.position.z, door.position.x - distance, door.position.y, door.position.z]
-        );
-        const clip = new THREE.AnimationClip('moveEndSmooth', doorOpenClose, [positionKF]);
-        const mixer = new THREE.AnimationMixer(door);
-        const clipAction = mixer.clipAction(clip);
+    public openCloseDoor(door: THREE.Object3D, isDoorleft: boolean, close: boolean = false): Promise<void> {
+        return new Promise(resolve => {
+            let distance = isDoorleft ? elevatorManagerSettings.defaultElevator.length : elevatorManagerSettings.defaultElevator.length / 2;
+            const { doorOpenClose } = elevatorManagerSettings.animationTime;
+            if (close) distance *= -1;
+            const positionKF = new THREE.VectorKeyframeTrack(
+                '.position',
+                [0, doorOpenClose],
+                [door.position.x, door.position.y, door.position.z, door.position.x - distance, door.position.y, door.position.z]
+            );
+            const clip = new THREE.AnimationClip('moveEndSmooth', doorOpenClose, [positionKF]);
+            const mixer = new THREE.AnimationMixer(door);
+            const clipAction = mixer.clipAction(clip);
 
-        clipAction.loop = THREE.LoopOnce;
-        clipAction.clampWhenFinished = true;
-        clipAction.play();
-        this.engineService.mixers.push(mixer);
+            clipAction.loop = THREE.LoopOnce;
+            clipAction.clampWhenFinished = true;
+            clipAction.play();
+            this.engineService.clipActions.push(clipAction);
+            mixer.addEventListener('finished', () => {
+                this.removeMixer(clipAction);
+                resolve();
+            });
+        });
     }
 
     private getSmoothCurve(startPoint: number, endPoint: number, animationTime: number, useReverse: boolean = false): THREE.QuadraticBezierCurve {
@@ -99,5 +111,11 @@ export class ElevatorAnimationManagerService {
                   new THREE.Vector2((endPoint - startPoint) * 0.5 + startPoint, animationTime * 0.5),
                   new THREE.Vector2(endPoint, animationTime)
               );
+    }
+
+    private removeMixer(usedClipActions: THREE.AnimationAction): void {
+        const idx = this.engineService.clipActions.findIndex(clipAction => clipAction === usedClipActions);
+
+        this.engineService.clipActions.splice(idx, 1);
     }
 }

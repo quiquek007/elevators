@@ -23,6 +23,8 @@ export default class Elevator implements IEsteticWall, ITechProps, ISize {
     public name: string;
     public supportedFloors: Floor[];
     public isSmart: boolean = false;
+    public isGoingUp: boolean = false;
+    public isGoingDown: boolean = false;
 
     constructor(config: IElevator) {
         this.wallColor = config.wallColor;

@@ -20,7 +20,7 @@ import elevatorManagerSettings from 'app/constants/elevator-manager-settings.con
     styleUrls: ['./engine.component.less']
 })
 export class EngineComponent implements OnInit, OnDestroy {
-    private subscribtions: Subscription[] = [];
+    private subscriptions: Subscription[] = [];
     private grid: THREE.GridHelper = null;
     private rendererAlpha: boolean;
     private selectedElevator: Elevator;
@@ -62,15 +62,15 @@ export class EngineComponent implements OnInit, OnDestroy {
         // var axesHelper = new THREE.AxesHelper(50);
         // this.objectManager.addToScene(axesHelper);
 
-        this.initSubscribtions();
+        this.initSubscriptions();
     }
 
     public ngOnDestroy(): void {
-        this.subscribtions.forEach(sub => sub.unsubscribe());
+        this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
     private initPrerenderSettings(): void {
-        this.subscribtions.push(
+        this.subscriptions.push(
             this.store.select(state => state.generalSettings.renderer.rendererAlpha).subscribe(alpha => this.rendererAlpha = alpha),
             this.store.select(state => state.generalSettings.renderer.rendererAntialias).subscribe(antialias => this.rendererAntialias = antialias),
             this.store
@@ -82,8 +82,8 @@ export class EngineComponent implements OnInit, OnDestroy {
         );
     }
 
-    private initSubscribtions(): void {
-        this.subscribtions.push(
+    private initSubscriptions(): void {
+        this.subscriptions.push(
             this.store
                 .select(state => state.generalSettings.backgroundColor)
                 .subscribe(backgroundColor => this.engServ.setColorBackground(backgroundColor)),

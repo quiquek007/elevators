@@ -2,8 +2,8 @@
     <button kendoButton
         kendoTooltip
         title="Clear all floors"
+        iconClass="k-icon k-i-cancel"
         [position]="getTooltipPosition()"
-        [iconClass]="'k-icon k-i-cancel'"
         (click)="onClearAllFloors()">
     </button>
     Passengers manager
@@ -18,16 +18,16 @@
                 kendoTooltip
                 class="button--small"
                 title="Clear the floor"
+                iconClass="k-icon k-i-cancel"
                 [position]="getTooltipPosition()"
-                [iconClass]="'k-icon k-i-cancel'"
                 (click)="onClearPassengers(floorNumber)">
             </button>
             <button kendoButton
                 kendoTooltip
                 class="button--small"
                 title="Add a passenger"
+                iconClass="k-icon k-i-plus"
                 [position]="getTooltipPosition()"
-                [iconClass]="'k-icon k-i-plus'"
                 (click)="onAddPassenger(floorNumber)">
             </button>
             <span *ngFor="let passenger of floor.passengers; trackBy: trackByMethod; let passengerIndex = index; let isLastPassenger = last;">
@@ -35,9 +35,9 @@
                     kendoTooltip
                     class="button--small--shifted"
                     title="Remove the passenger"
+                    iconClass="k-icon k-i-minus"
                     [disabled]="!selectedElevator"
                     [position]="getTooltipPosition()"
-                    [iconClass]="'k-icon k-i-minus'"
                     (click)="onRemovePassenger(floorNumber, passengerIndex)">
                 </button>
                 <kendo-numerictextbox #ntextbox

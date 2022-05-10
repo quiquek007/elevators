@@ -1,7 +1,7 @@
 {
   "name": "elevators",
   "author": "Andrei Saiko <quiquek007@gmail.com>",
-  "version": "0.0.0",
+  "version": "0.80.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o",

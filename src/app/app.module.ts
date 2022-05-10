@@ -24,6 +24,7 @@ import { ElevatorsManagerComponent } from './settings-panel/elevators-manager/el
 import { WireframesSettingsComponent } from './settings-panel/elevators-manager/wireframes-settings/wireframes-settings.component';
 import { PassengersManagerComponent } from './settings-panel/passengers-manager/passengers-manager.component';
 import { SmartDumbManagerComponent } from './settings-panel/smart-dumb-manager/smart-dumb-manager.component';
+import { AnimationPlayerComponent } from './settings-panel/animation-player/animation-player.component';
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import { SmartDumbManagerComponent } from './settings-panel/smart-dumb-manager/s
         ControlsSettingsComponent,
         PassengersManagerComponent,
         SmartDumbManagerComponent,
+        AnimationPlayerComponent,
 
         ElevatorsManagerComponent,
         WireframesSettingsComponent,

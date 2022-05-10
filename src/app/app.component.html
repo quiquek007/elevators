@@ -15,8 +15,8 @@
                 kendoTooltip
                 title="Reset all settings"
                 class="reset-button"
+                iconClass="k-icon k-i-reload"
                 [position]="getTooltipPosition()"
-                [iconClass]="'k-icon k-i-reload'"
                 (click)="onResetAllSettings()">
             </button>
           </ng-template>
@@ -46,5 +46,9 @@
                 class="k-icon k-i-logout">
             </span>
         </button>
+    </div>
+
+    <div [ngClass]="{'opposite-side': panelOnRightSide, 'opposite-side--right-side': !panelOnRightSide }">
+        <animation-player></animation-player>
     </div>
 </kendo-drawer-container>

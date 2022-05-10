@@ -3,9 +3,9 @@
         kendoTooltip
         title="Remove Elevator"
         class="delete-elevator-button"
+        iconClass="k-icon k-i-minus"
         [disabled]="!selectedElevator"
         [position]="getTooltipPosition()"
-        [iconClass]="'k-icon k-i-minus'"
         (click)="onDeleteElevator()">
     </button>
     {{ elevatorObject?.name || 'Elevator manager'}}
@@ -13,8 +13,8 @@
         kendoTooltip
         title="Add Elevator"
         class="add-elevator-button"
+        iconClass="k-icon k-i-plus"
         [position]="getTooltipPosition()"
-        [iconClass]="'k-icon k-i-plus'"
         (click)="onAddElevator()">
     </button>
 </h2>
@@ -29,8 +29,8 @@
         <button kendoButton
             kendoTooltip
             title="Random color"
+            iconClass="k-icon k-i-kpi-status-open"
             [position]="getTooltipPosition()"
-            [iconClass]="'k-icon k-i-kpi-status-open'"
             (click)="onGetRandomColor()">
         </button>
     </div>
@@ -111,9 +111,9 @@
     <span>Current Floor:</span>
     <div>
         <kendo-numerictextbox class="numerictext-component"
-            [value]="selectedElevator?.currentFloor || elevatorCurrentFloor"
+            [value]="selectedElevator?.currentFloor ?? elevatorCurrentFloor"
             [min]="0"
-            [max]="(selectedElevator?.coveredFloors || elevatorCoveredFloors) - 1"
+            [max]="(selectedElevator?.coveredFloors ?? elevatorCoveredFloors) - 1"
             [step]="1"
             [decimals]="0"
             [format]="'n0'"
@@ -128,23 +128,23 @@
         <button kendoButton
             kendoTooltip
             title="Reset tab settings and all elevators"
+            iconClass="k-icon k-i-reload"
             [position]="getTooltipPosition()"
-            [iconClass]="'k-icon k-i-reload'"
             (click)="onResetAllSettings(0)">
         </button>
          <!-- TODO: maybe delete it later -->
         <!-- <button kendoButton
             kendoTooltip
             title="Reset, but save elevators"
+            iconClass="k-icon k-i-reload"
             [position]="getTooltipPosition()"
-            [iconClass]="'k-icon k-i-reload'"
             (click)="onResetAllSettings(1)">!
         </button> -->
         <button kendoButton
             kendoTooltip
             title="Remove only elevators"
+            iconClass="k-icon k-i-reload"
             [position]="getTooltipPosition()"
-            [iconClass]="'k-icon k-i-reload'"
             (click)="onResetAllSettings(2)">!
         </button>
     </div>

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'app/redux/root-interface';
@@ -17,7 +17,7 @@ import Passenger from 'app/shared/classes/passenger.class';
     templateUrl: './elevators-manager.component.html',
     styleUrls: ['./elevators-manager.component.less']
 })
-export class ElevatorsManagerComponent implements OnInit {
+export class ElevatorsManagerComponent implements OnInit, OnDestroy {
     private tooltipPosition: string = 'right';
     private subscriptions: Subscription[] = [];
     private allElevators: Elevator[];
@@ -84,6 +84,10 @@ export class ElevatorsManagerComponent implements OnInit {
                     this.elevatorObject = this.objectManager.getObjectById(this.selectedElevator.id);
                 })
         );
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
     public getTooltipPosition(): string {

@@ -1,0 +1,18 @@
+
+<button *ngIf="isInPause; else pauseBtn"
+    kendoButton
+    kendoTooltip
+    title="Play"
+    iconClass="k-icon k-i-play"
+    [position]="getTooltipPosition()"
+    (click)="onPlay()">
+</button>
+<ng-template #pauseBtn>
+    <button kendoButton
+        kendoTooltip
+        title="Pause"
+        iconClass="k-icon k-i-pause"
+        [position]="getTooltipPosition()"
+        (click)="onPause()">
+    </button>
+</ng-template>

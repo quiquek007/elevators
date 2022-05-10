@@ -21,7 +21,7 @@ import Elevator from './shared/classes/elevator.class';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, OnDestroy {
-    private subscribtions: Subscription[] = [];
+    private subscriptions: Subscription[] = [];
     private plainStore: AppState;
     private cameraSettings: CameraSettings = { ...cameraSettings };
     private allElevators: Elevator[];
@@ -68,7 +68,7 @@ export class AppComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>, private engServ: EngineService, private objectManager: ObjectManagerService) {}
 
     public ngOnInit(): void {
-        this.subscribtions.push(
+        this.subscriptions.push(
             this.store.select(state => state).subscribe(x => this.plainStore = x),
             this.store.select(state => state.settingsPanel.formPosition).subscribe(position => this.panelOnRightSide = position === 'right'),
             this.store.select(state => state.settingsPanel.formOpened).subscribe(formOpened => this.contentExpanded = formOpened),
@@ -90,7 +90,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.subscribtions.forEach(sub => sub.unsubscribe());
+        this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
     public getTooltipPosition(): string {

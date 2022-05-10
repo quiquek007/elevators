@@ -1,4 +1,7 @@
 add animation control panel(start/stop/timer)
+draw passengers
+animate passengers
+change color floor according its elevator color
 focus/centrate camera
 
 *get the same properties and fns from common class(extends)

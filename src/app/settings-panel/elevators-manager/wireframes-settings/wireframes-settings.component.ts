@@ -6,7 +6,6 @@ import { AppState } from 'app/redux/root-interface';
 import Elevator from 'app/shared/classes/elevator.class';
 import ElevatorManagerSettingsActions from 'app/redux/elevator-manager-settings/elevator-manager-settings.actions';
 import { ObjectManagerService } from 'app/services/object-manager.service';
-import { ElevatorAnimationManagerService } from 'app/services/elevator-animation-manager.service';
 
 @Component({
     selector: 'wireframes-settings',
@@ -24,11 +23,7 @@ export class WireframesSettingsComponent implements OnInit {
     public wireframesColor: THREE.Color;
     public selectedElevator: Elevator;
 
-    constructor(
-        private store: Store<AppState>,
-        private objectManager: ObjectManagerService,
-        private animationService: ElevatorAnimationManagerService
-    ) {}
+    constructor(private store: Store<AppState>, private objectManager: ObjectManagerService) {}
 
     public ngOnInit(): void {
         this.subscriptions.push(
@@ -89,10 +84,6 @@ export class WireframesSettingsComponent implements OnInit {
         this.getWireframesObjects().forEach((element: THREE.Object3D) => (<any>element).material.color.set(color));
         this.store.dispatch(new ElevatorManagerSettingsActions.SetSelectedElevator(modifiedElevator));
         this.store.dispatch(new ElevatorManagerSettingsActions.SetAllElevators(modifiedAllElevators));
-    }
-
-    public test(): void {
-        this.animationService.start(this.elevatorObject, this.selectedElevator.speed);
     }
 
     private getWireframesObjects(): THREE.Object3D[] {

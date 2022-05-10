@@ -19,7 +19,7 @@ export class EngineService implements OnDestroy {
     public scene: THREE.Scene;
     public camera: THREE.PerspectiveCamera;
     public controls: OrbitControls;
-    public mixers: THREE.AnimationMixer[] = [];
+    public clipActions: THREE.AnimationAction[] = [];
 
     constructor(private ngZone: NgZone, private store: Store<AppState>) {}
 
@@ -67,10 +67,10 @@ export class EngineService implements OnDestroy {
         // this.cube.rotation.x += 0.01;
         // this.cube.rotation.y += 0.01;
 
-        if (this.mixers[0]) {
+        if (this.clipActions[0]) {
             const delta = this.clock.getDelta();
 
-            this.mixers.forEach(mixer => mixer.update(delta));
+            this.clipActions.forEach(clipAction => clipAction.getMixer().update(delta));
         }
 
         this.controls.update();
