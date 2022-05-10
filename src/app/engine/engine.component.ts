@@ -200,7 +200,7 @@ export class EngineComponent implements OnInit, OnDestroy {
 
         while (elem) {
             elem = elem.parent;
-            if (elem.userData.isElevatorParent) break;
+            if (elem?.userData?.isElevatorParent) break;
         }
 
         return elem;
